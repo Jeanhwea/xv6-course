@@ -146,6 +146,19 @@ ubuntu 分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持�
 #+END_SRC
 
 * QEMU 模拟器
+** 制定磁盘
+-fda 第一个软盘
+-hda 第一个硬盘
+#+BEGIN_SRC sh
+  qemu-system-i386 -hda ~/vm/disks/minix_x86.img
+#+END_SRC
+
+** 启动次序
+-boot 制定启动次序
+#+BEGIN_SRC sh
+  qemu-system-i386 -boot a -fda Image -hda ~/vm/disks/hdc-0.11.img
+#+END_SRC
+
 * BIOS 启动
 ** 分段
 8086 寄存器是 16 位的, 真实地址 = 段地址 << 4 + address
