@@ -32,7 +32,7 @@
   layout reg
 #+END_EXAMPLE
 
-** 栈 ebp/esp
+** 栈操作
 1. esp 指向栈的顶端
 2. ebp 指向栈的基地址
 3. push 操作时, esp = esp - 4, ebp 不变
