@@ -4,11 +4,11 @@
 #+DATE: <2023-10-23 Mon 13:24:49>
 #+STARTUP: overview num indent
 
-XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且在 MIT 的操作系统课程 6.828 中使用
-- 它源自 Dennis Ritchie 和 Ken Thompson 的 Unix Version 6 (v6)
-- 通过阅读并理解 XV6 的代码，可以清楚地了解操作系统中众多核心的概念 (1w)
-- 目前 MIT XV6 操作系统支持 x86 和 riscv 两种体系结构，这里以 x86 版本为基础，对其源代码进行讲解
-  - x86 2018
+XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且在 MIT 的操作系统课程
+6.828 中使用
+1. 它源自 Dennis Ritchie 和 Ken Thompson 的 Unix Version 6 (v6)
+2. 通过阅读并理解 XV6 的代码，可以清楚地了解操作系统中众多核心的概念 (1w)
+3. 目前 MIT XV6 操作系统支持 x86 和 riscv 两种体系结构
 
 * 相关话题
 1. [[file:01-prelude/readme.org][序章]]

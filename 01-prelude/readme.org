@@ -145,8 +145,8 @@ ubuntu 分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持�
       11e0:	c3                      ret
 #+END_SRC
 
+* QEMU 模拟器
 * BIOS 启动
-
 ** 分段
 8086 寄存器是 16 位的, 真实地址 = 段地址 << 4 + address
 #+BEGIN_SRC asm
@@ -243,5 +243,3 @@ ubuntu 分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持�
 
       call BEGIN_PM               ; 7. Call a well-known label with useful code
 #+END_SRC
-
-* QEMU 模拟器
