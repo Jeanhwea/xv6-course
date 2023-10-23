@@ -25,9 +25,12 @@
 
 [[file:../lab/01-registers/main.S]]
 
-使用示例
+操作示例
 #+BEGIN_EXAMPLE
   info reg
+  info reg eax
+  p $esp
+
   layout asm
   layout reg
 #+END_EXAMPLE
