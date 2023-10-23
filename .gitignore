@@ -1,3 +1,5 @@
 *.o
 *.out
 .gdb_history
+*.log
+*.txt

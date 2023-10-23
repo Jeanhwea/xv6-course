@@ -7,6 +7,7 @@ GDB    = gdb
 all: start
 
 start: a.out
+	-rm gdb.log
 	$(GDB) ./a.out
 
 main.o: main.S

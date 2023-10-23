@@ -8,15 +8,15 @@
 ** 寄存器及编译流程
 | 分类         | 名称 | 全称                |
 |--------------+------+---------------------|
-| 通用寄存器   | ax   | Accumulator         |
-| 通用寄存器   | bx   | Base                |
-| 通用寄存器   | cx   | Counter             |
-| 通用寄存器   | dx   | Data                |
-| 指针寄存器   | sp   | Stack Pointer       |
-| 指针寄存器   | bp   | Base Pointer        |
-| 变地址寄存器 | si   | Source Index        |
-| 变地址寄存器 | di   | Destination Index   |
-| 控制寄存器   | ip   | Instruction Pointer |
+| 通用寄存器   | eax  | Accumulator         |
+| 通用寄存器   | ebx  | Base                |
+| 通用寄存器   | ecx  | Counter             |
+| 通用寄存器   | edx  | Data                |
+| 指针寄存器   | esp  | Stack Pointer       |
+| 指针寄存器   | ebp  | Base Pointer        |
+| 变地址寄存器 | esi  | Source Index        |
+| 变地址寄存器 | edi  | Destination Index   |
+| 控制寄存器   | eip  | Instruction Pointer |
 | 控制寄存器   | flag | Flag                |
 | 段寄存器     | cs   | Code Segment        |
 | 段寄存器     | ds   | Data Segment        |
@@ -25,53 +25,20 @@
 
 [[file:../lab/01-registers/]]
 
+使用示例
+#+BEGIN_EXAMPLE
+  info reg
+  layout asm
+  layout reg
+#+END_EXAMPLE
+
 ** x86 汇编
-*** 栈 bp/sp
-1. sp 指向栈的顶端 stack pointer
-2. bp 指向栈的基地址 base pointer
-3. push 操作时, sp = sp - 2, bp 不变
-4. pop 操作时, sp = sp + 2, bp 不变
+*** 栈 ebp/esp
+1. esp 指向栈的顶端
+2. ebp 指向栈的基地址
+3. push 操作时, esp = esp - 4, ebp 不变
+4. pop 操作时,  esp = esp + 4, ebp 不变
 
-#+BEGIN_SRC asm
-  .code16                         ; 16 bits mode
-
-  ;;; 初始化栈指针
-  mov bp, 0x8000
-  mov sp, bp                      ; sp = bp 时, 栈为空
-
-  ;;; 压入 3 个测试数据
-  ;;; sp = 0x8000, bp = 0x8000
-  push 'A'
-  ;;; sp = 0x7ffe, bp = 0x8000
-  push 'B'
-  ;;; sp = 0x7ffc, bp = 0x8000
-  push 'C'
-
-  ;;; 查看数据
-  mov bx, bp
-  mov al, [bx-2]
-  int 0x10                        ; 打印 A
-
-  mov bx, spp
-  mov al, [bx]
-  int 0x10                        ; 打印 C
-
-  ;;; 弹出数据
-  pop bx
-  ;;; sp = 0x7ffc, bp = 0x8000
-  mov al, bl
-  int 0x10                        ; 打印 C
-
-  pop bx
-  ;;; sp = 0x7ffe, bp = 0x8000
-  mov al, bl
-  int 0x10                        ; 打印 B
-
-  pop bx
-  ;;; sp = 0x8000, bp = 0x8000
-  mov al, bl
-  int 0x10                        ; 打印 A
-#+END_SRC
 
 *** 控制流：分支跳转及函数调用
 通常汇编的跳转通过 ~cmp~, ~je~, ~jmp~ 等指令配合实现，例如
