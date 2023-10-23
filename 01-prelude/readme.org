@@ -6,22 +6,22 @@
 
 * x86 体系结构
 ** 寄存器及编译流程
-| 分类        | 英文全称              | 16 位 | 32 位 | 64 位 |
-|------------+---------------------+------+------+------|
-| 通用寄存器   | Accumulator         | ax   | eax  | rax  |
-| 通用寄存器   | Base                | bx   | ebx  | rbx  |
-| 通用寄存器   | Counter             | cx   | ecx  | rcx  |
-| 通用寄存器   | Data                | dx   | edx  | rdx  |
-| 指针寄存器   | Stack Pointer       | sp   | esp  | rsp  |
-| 指针寄存器   | Base Pointer        | bp   | ebp  | rbp  |
-| 变地址寄存器 | Source Index        | si   | esi  | rsi  |
-| 变地址寄存器 | Destination Index   | di   | edi  | rdi  |
-| 控制寄存器   | Instruction Pointer | ip   | eip  | rip  |
-| 控制寄存器   | Flag                | flag | flag | flag |
-| 段寄存器     | Code Segment        | cs   | cs   | cs   |
-| 段寄存器     | Data Segment        | ds   | ds   | ds   |
-| 段寄存器     | Stack Segment       | ss   | ss   | ss   |
-| 段寄存器     | Extra Segment       | es   | es   | es   |
+| 分类         | 英文全称            | 16 位 | 32 位 | 64 位 |
+|--------------+---------------------+-------+-------+-------|
+| 通用寄存器   | Accumulator         | ax    | eax   | rax   |
+| 通用寄存器   | Base                | bx    | ebx   | rbx   |
+| 通用寄存器   | Counter             | cx    | ecx   | rcx   |
+| 通用寄存器   | Data                | dx    | edx   | rdx   |
+| 指针寄存器   | Stack Pointer       | sp    | esp   | rsp   |
+| 指针寄存器   | Base Pointer        | bp    | ebp   | rbp   |
+| 变地址寄存器 | Source Index        | si    | esi   | rsi   |
+| 变地址寄存器 | Destination Index   | di    | edi   | rdi   |
+| 控制寄存器   | Instruction Pointer | ip    | eip   | rip   |
+| 控制寄存器   | Flag                | flag  | flag  | flag  |
+| 段寄存器     | Code Segment        | cs    | cs    | cs    |
+| 段寄存器     | Data Segment        | ds    | ds    | ds    |
+| 段寄存器     | Stack Segment       | ss    | ss    | ss    |
+| 段寄存器     | Extra Segment       | es    | es    | es    |
 
 [[file:../lab/01-register/main.S]]
 
@@ -102,7 +102,6 @@
       ret
 #+END_SRC
 
-另外 ~jmp $~, $ 表示当前标号, 该指令会死循环
 
 ** 分段
 8086 寄存器是 16 位的, 真实地址 = 段地址 << 4 + address
