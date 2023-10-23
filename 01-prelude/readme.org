@@ -32,8 +32,7 @@
   layout reg
 #+END_EXAMPLE
 
-** x86 汇编
-*** 栈 ebp/esp
+** 栈 ebp/esp
 1. esp 指向栈的顶端
 2. ebp 指向栈的基地址
 3. push 操作时, esp = esp - 4, ebp 不变
@@ -41,7 +40,7 @@
 
 [[file:../lab/02-stacks/main.S]]
 
-*** 控制流：分支跳转及函数调用
+** 控制流：分支跳转及函数调用
 通常汇编的跳转通过 ~cmp~, ~je~, ~jmp~ 等指令配合实现，例如
 #+BEGIN_SRC asm
   cmp ax, 4      ; if ax = 4
@@ -85,7 +84,7 @@
 
 另外 ~jmp $~, $ 表示当前标号, 该指令会死循环
 
-*** 分段
+** 分段
 8086 寄存器是 16 位的, 真实地址 = 段地址 << 4 + address
 #+BEGIN_SRC asm
   ;;; 设置 ds 段寄存器
@@ -102,8 +101,7 @@
   int 0x10
 #+END_SRC
 
-** 实模式 vs 保护模式
-*** GDT
+** GDT
 1. GDT 主要保护以下信息, 总共 64 位, [[https://files.osdev.org/mirrors/geezer/os/pm.htm][link]]
    - base  = low(16) + middle(8) + high(8)
    - limit = low(16) + high(4)
@@ -147,7 +145,7 @@
   DATA_SEG equ gdt_data - gdt_start
 #+END_SRC
 
-*** 实模式到保护模式切换
+** 实模式到保护模式切换
 1. 关闭中断
 2. 加载 gdt
 3. 设置控制寄存器 ~cr0~
@@ -183,6 +181,6 @@
       call BEGIN_PM               ; 7. Call a well-known label with useful code
 #+END_SRC
 
-* BIOS
+* BIOS 启动
 
-* QEMU
+* QEMU 模拟器
