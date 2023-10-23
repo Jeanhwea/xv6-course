@@ -1,0 +1,7 @@
+#+TITLE: x86 体系结构及系统启动
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-10-23 Mon 13:26:59>
+#+STARTUP: overview num indent
+
+* BIOS

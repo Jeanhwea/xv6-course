@@ -1,0 +1,20 @@
+#+TITLE: XV6
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-10-23 Mon 13:24:49>
+#+STARTUP: overview num indent
+
+
+* 主题索引
+
+1. [[file:01-prelude/readme.org][序章]]
+   - x86 汇编
+   - BIOS 原理
+   - qemu 模拟器
+2. 内存管理
+   - 页表
+   - 内存分配流程
+3. 进程管理
+   - 中断
+   - 进程调度
+3. 文件系统
