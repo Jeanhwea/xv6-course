@@ -40,7 +40,7 @@ ubuntu 分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持�
   apt install gcc-multilib
 #+END_SRC
 
-** 栈操作
+** 栈操作 push/pop
 1. esp 指向栈的顶端
 2. ebp 指向栈的基地址
 3. push 操作时, esp = esp - 4, ebp 不变 (32b)
@@ -89,7 +89,7 @@ ubuntu 分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持�
   watch $esp
 #+END_EXAMPLE
 
-** jmp 分支跳转
+** 分支跳转 jmp
 通常汇编的跳转通过 ~cmp~, ~je~, ~jmp~ 等指令配合实现，例如
 #+BEGIN_SRC asm
   jmp label
@@ -97,7 +97,7 @@ ubuntu 分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持�
 
 [[file:../lab/03-control-flow/jump.S]]
 
-** 函数调用
+** 函数调用 call/ret
 函数调用也属于简单的跳转指令, 例如
 - call 调用函数
 - ret 函数返回
