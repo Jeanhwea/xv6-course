@@ -39,6 +39,7 @@
 3. push 操作时, esp = esp - 4, ebp 不变
 4. pop 操作时,  esp = esp + 4, ebp 不变
 
+[[file:../lab/02-stacks/main.S]]
 
 *** 控制流：分支跳转及函数调用
 通常汇编的跳转通过 ~cmp~, ~je~, ~jmp~ 等指令配合实现，例如

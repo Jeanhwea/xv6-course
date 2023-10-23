@@ -3,3 +3,4 @@
 .gdb_history
 *.log
 *.txt
+*.asm
