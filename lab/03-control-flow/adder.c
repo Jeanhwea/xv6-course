@@ -5,7 +5,7 @@ int add(int a, int b) {
 
 int main(int argc, char *argv[])
 {
-	int a, b;
+	int a, b, c;
 	a = 3;
 	b = 4;
 	c = add(a, b);
