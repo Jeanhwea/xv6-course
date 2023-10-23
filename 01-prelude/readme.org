@@ -23,6 +23,8 @@
 | 段寄存器     | ss   | Stack Segment       |
 | 段寄存器     | es   | Extra Segment       |
 
+[[file:../lab/01-registers/]]
+
 ** x86 汇编
 *** 栈 bp/sp
 1. sp 指向栈的顶端 stack pointer
