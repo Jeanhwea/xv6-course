@@ -40,6 +40,21 @@
 
 [[file:../lab/02-stacks/main.S]]
 
+.gdbinit 定义 hook, 设置 watch point
+#+BEGIN_EXAMPLE
+  define hook-stepi
+    if $ebp > 0
+      # printf "ebp=%p, esp=%p\n", $ebp, $esp
+      x/4x $ebp-16
+      x/i $eip
+    end
+  end
+
+  starti
+  watch $ebp
+  watch $esp
+#+END_EXAMPLE
+
 ** 控制流：分支跳转及函数调用
 通常汇编的跳转通过 ~cmp~, ~je~, ~jmp~ 等指令配合实现，例如
 #+BEGIN_SRC asm
