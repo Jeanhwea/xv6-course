@@ -4,4 +4,215 @@
 #+DATE: <2023-10-23 Mon 13:26:59>
 #+STARTUP: overview num indent
 
+* x86 体系结构
+** 寄存器
+| 分类         | 名称 | 全称                |
+|--------------+------+---------------------|
+| 通用寄存器   | ax   | Accumulator         |
+| 通用寄存器   | bx   | Base                |
+| 通用寄存器   | cx   | Counter             |
+| 通用寄存器   | dx   | Data                |
+| 指针寄存器   | sp   | Stack Pointer       |
+| 指针寄存器   | bp   | Base Pointer        |
+| 变地址寄存器 | si   | Source Index        |
+| 变地址寄存器 | di   | Destination Index   |
+| 控制寄存器   | ip   | Instruction Pointer |
+| 控制寄存器   | flag | Flag                |
+| 段寄存器     | cs   | Code Segment        |
+| 段寄存器     | ds   | Data Segment        |
+| 段寄存器     | ss   | Stack Segment       |
+| 段寄存器     | es   | Extra Segment       |
+
+** x86 汇编
+*** 栈 bp/sp
+1. sp 指向栈的顶端 stack pointer
+2. bp 指向栈的基地址 base pointer
+3. push 操作时, sp = sp - 2, bp 不变
+4. pop 操作时, sp = sp + 2, bp 不变
+
+#+BEGIN_SRC asm
+  .code16                         ; 16 bits mode
+
+  ;;; 初始化栈指针
+  mov bp, 0x8000
+  mov sp, bp                      ; sp = bp 时, 栈为空
+
+  ;;; 压入 3 个测试数据
+  ;;; sp = 0x8000, bp = 0x8000
+  push 'A'
+  ;;; sp = 0x7ffe, bp = 0x8000
+  push 'B'
+  ;;; sp = 0x7ffc, bp = 0x8000
+  push 'C'
+
+  ;;; 查看数据
+  mov bx, bp
+  mov al, [bx-2]
+  int 0x10                        ; 打印 A
+
+  mov bx, spp
+  mov al, [bx]
+  int 0x10                        ; 打印 C
+
+  ;;; 弹出数据
+  pop bx
+  ;;; sp = 0x7ffc, bp = 0x8000
+  mov al, bl
+  int 0x10                        ; 打印 C
+
+  pop bx
+  ;;; sp = 0x7ffe, bp = 0x8000
+  mov al, bl
+  int 0x10                        ; 打印 B
+
+  pop bx
+  ;;; sp = 0x8000, bp = 0x8000
+  mov al, bl
+  int 0x10                        ; 打印 A
+#+END_SRC
+
+*** 控制流：分支跳转及函数调用
+通常汇编的跳转通过 ~cmp~, ~je~, ~jmp~ 等指令配合实现，例如
+#+BEGIN_SRC asm
+  cmp ax, 4      ; if ax = 4
+  je ax_is_four  ; do something (by jumping to that label)
+  jmp else       ; else, do another thing
+  jmp endif      ; finally, resume the normal flow
+
+  ax_is_four:
+      .....
+      jmp endif
+
+  else:
+      .....
+      jmp endif  ; not actually necessary but printed here for completeness
+
+  endif:
+#+END_SRC
+
+函数调用也属于简单的跳转指令, 例如
+#+BEGIN_SRC asm
+  mov al, 'X'
+  jmp print
+  endprint:
+
+  print:
+      mov ah, 0x0e                ; tty code
+      int 0x10                    ; 打印 al 的字符
+      jmp endprint                ; 返回
+#+END_SRC
+
+由于函数调用非常常见, 会有一些指令来简化函数调用实现过程
+#+BEGIN_SRC asm
+  mov al, 'X'
+  call print
+
+  print:
+      mov ah, 0x0e                ; tty code
+      int 0x10                    ; 打印 al 的字符
+      ret
+#+END_SRC
+
+另外 ~jmp $~, $ 表示当前标号, 该指令会死循环
+
+*** 分段
+8086 寄存器是 16 位的, 真实地址 = 段地址 << 4 + address
+#+BEGIN_SRC asm
+  ;;; 设置 ds 段寄存器
+  mov bx, 0x7c0
+  mov ds, bx
+  ;;; 默认使用 ds 段寄存器作为基地址
+  mov al, [msg]
+  int 0x10
+
+  ;;; 使用 es 段寄存器进行寻址
+  mov bx, 0x7c0
+  mov es, bx
+  mov al, [es:the_secret]
+  int 0x10
+#+END_SRC
+
+** 实模式 vs 保护模式
+*** GDT
+1. GDT 主要保护以下信息, 总共 64 位, [[https://files.osdev.org/mirrors/geezer/os/pm.htm][link]]
+   - base  = low(16) + middle(8) + high(8)
+   - limit = low(16) + high(4)
+   - flags = (12)
+2. GDT 的第一项必须全是 ~0x00~
+3. GDT 加载通过 ~lgdt~ 指令
+
+下面是一个初始化的 gdt 内存定义，这里先将代码段和数据段合并在一起
+#+BEGIN_SRC asm
+  gdt_start: ; don't remove the labels, they're needed to compute sizes and jumps
+      ; the GDT starts with a null 8-byte
+      dd 0x0 ; 4 byte
+      dd 0x0 ; 4 byte
+
+  ; GDT for code segment. base = 0x00000000, length = 0xfffff
+  gdt_code:
+      dw 0xffff    ; segment length, bits 0-15                    | limit_low(16)
+      dw 0x0       ; segment base, bits 0-15                      | base_low(16)
+      db 0x0       ; segment base, bits 16-23                     | base_middle(8)
+      db 10011010b ; flags (8 bits)                               | flags1(8)
+      db 11001111b ; flags (4 bits) + segment length, bits 16-19  | limit_high(4), flags2(4)
+      db 0x0       ; segment base, bits 24-31                     | base_high(8)
+
+  gdt_data:
+      dw 0xffff
+      dw 0x0
+      db 0x0
+      db 10010010b
+      db 11001111b
+      db 0x0
+
+  gdt_end:
+
+  ; GDT descriptor, via lgdt [gdt_descriptor]
+  gdt_descriptor:
+      dw gdt_end - gdt_start - 1 ; size (16 bit), always one less of its true size
+      dd gdt_start               ; address (32 bit)
+
+  ; define some constants for later use
+  CODE_SEG equ gdt_code - gdt_start
+  DATA_SEG equ gdt_data - gdt_start
+#+END_SRC
+
+*** 实模式到保护模式切换
+1. 关闭中断
+2. 加载 gdt
+3. 设置控制寄存器 ~cr0~
+4. 通过远程调整来 flush 流水线
+5. 更新所以的段寄存器
+6. 更新系统栈
+7. 跳转到 32 位指令出执行
+
+#+BEGIN_SRC asm
+  ;;; real mode
+  [bits 16]
+  switch_to_pm:
+      cli                         ; 1. disable interrupts
+      lgdt [gdt_descriptor]       ; 2. load the GDT descriptor
+      mov eax, cr0
+      or eax, 0x1                 ; 3. set 32-bit mode bit in cr0
+      mov cr0, eax
+      jmp CODE_SEG:init_pm        ; 4. far jump by using a different segment
+
+  ;;; protected mode is enabled
+  [bits 32]
+  init_pm:
+      mov ax, DATA_SEG            ; 5. update the segment registers
+      mov ds, ax
+      mov ss, ax
+      mov es, ax
+      mov fs, ax
+      mov gs, ax
+
+      mov ebp, 0x90000            ; 6. update the stack right at the top of the free space
+      mov esp, ebp
+
+      call BEGIN_PM               ; 7. Call a well-known label with useful code
+#+END_SRC
+
 * BIOS
+
+* QEMU
