@@ -1,11 +1,9 @@
-#+TITLE: XV6
+#+TITLE: XV6 操作系统实践
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-10-23 Mon 13:24:49>
 #+STARTUP: overview num indent
 
-
-* 主题索引
 
 1. [[file:01-prelude/readme.org][序章]]
    - x86 汇编
