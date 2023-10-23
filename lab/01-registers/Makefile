@@ -7,5 +7,8 @@ main.o: main.S
 a.out: main.o
 	ld -m elf_i386 main.o
 
+clean:
+	rm *.o *.out
+
 
 
