@@ -1,14 +1,18 @@
-all: adder.asm simple-jump.out
+all: adder.asm jump.out fcall.out
 
 adder.asm: adder.out
 	objdump -d $< > $@
 
-%.out: %.c
-	gcc -O0 $< -o $@
+adder.out: adder.c
+	gcc -m32 adder.c -o adder.out
 
-simple-jump.out: simple-jump.S
-	gcc -m32 -c simple-jump.S
-	ld -m elf_i386 simple-jump.o -o simple-jump.out
+jump.out: jump.S
+	gcc -m32 -c jump.S
+	ld -m elf_i386 jump.o -o jump.out
+
+fcall.out: fcall.S
+	gcc -m32 -c fcall.S
+	ld -m elf_i386 fcall.o -o fcall.out
 
 clean:
 	-rm *.out *.asm *.o

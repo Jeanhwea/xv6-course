@@ -35,6 +35,11 @@
   layout reg
 #+END_EXAMPLE
 
+分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持库
+#+BEGIN_SRC sh
+  apt install gcc-multilib
+#+END_SRC
+
 ** 栈操作
 1. esp 指向栈的顶端
 2. ebp 指向栈的基地址
@@ -58,50 +63,63 @@
   watch $esp
 #+END_EXAMPLE
 
-** 控制流：分支跳转及函数调用
-*** jmp 跳转
+** jmp 分支跳转
 通常汇编的跳转通过 ~cmp~, ~je~, ~jmp~ 等指令配合实现，例如
 #+BEGIN_SRC asm
-  cmp ax, 4      ; if ax = 4
-  je  ax_is_four ; do something (by jumping to that label)
-  jmp else       ; else, do another thing
-  jmp endif      ; finally, resume the normal flow
-
-  ax_is_four:
-      .....
-      jmp endif
-
-  else:
-      .....
-      jmp endif  ; not actually necessary but printed here for completeness
-
-  endif:
+  jmp label
 #+END_SRC
 
-*** 函数调用
+[[file:../lab/03-control-flow/jump.S]]
+
+** 函数调用
 函数调用也属于简单的跳转指令, 例如
-#+BEGIN_SRC asm
-  mov al, 'X'
-  jmp print
-  endprint:
+- call 调用函数
+- ret 函数返回
 
-  print:
-      mov ah, 0x0e                ; tty code
-      int 0x10                    ; 打印 al 的字符
-      jmp endprint                ; 返回
+[[file:../lab/03-control-flow/fcall.S]]
+
+使用 gcc 编译的真实函数调用
+#+BEGIN_SRC sh
+  gcc -m32 -O0 adder.c -o adder.out
+  objdump -d adder.out > adder.asm
 #+END_SRC
 
-由于函数调用非常常见, 会有一些指令来简化函数调用实现过程
-#+BEGIN_SRC asm
-  mov al, 'X'
-  call print
+[[file:../lab/03-control-flow/adder.c]]
 
-  print:
-      mov ah, 0x0e                ; tty code
-      int 0x10                    ; 打印 al 的字符
-      ret
+#+BEGIN_SRC asm
+  0000118d <add>:
+      118d:	55                      push   %ebp
+      118e:	89 e5                   mov    %esp,%ebp
+      1190:	83 ec 10                sub    $0x10,%esp
+      1193:	e8 49 00 00 00          call   11e1 <__x86.get_pc_thunk.ax>
+      1198:	05 44 2e 00 00          add    $0x2e44,%eax
+      119d:	8b 55 08                mov    0x8(%ebp),%edx
+      11a0:	8b 45 0c                mov    0xc(%ebp),%eax
+      11a3:	01 d0                   add    %edx,%eax
+      11a5:	89 45 fc                mov    %eax,-0x4(%ebp)
+      11a8:	8b 45 fc                mov    -0x4(%ebp),%eax
+      11ab:	c9                      leave
+      11ac:	c3                      ret
+
+  000011ad <main>:
+      11ad:	55                      push   %ebp
+      11ae:	89 e5                   mov    %esp,%ebp
+      11b0:	83 ec 10                sub    $0x10,%esp
+      11b3:	e8 29 00 00 00          call   11e1 <__x86.get_pc_thunk.ax>
+      11b8:	05 24 2e 00 00          add    $0x2e24,%eax
+      11bd:	c7 45 f4 03 00 00 00    movl   $0x3,-0xc(%ebp)
+      11c4:	c7 45 f8 04 00 00 00    movl   $0x4,-0x8(%ebp)
+      11cb:	ff 75 f8                push   -0x8(%ebp)
+      11ce:	ff 75 f4                push   -0xc(%ebp)
+      11d1:	e8 b7 ff ff ff          call   118d <add>
+      11d6:	83 c4 08                add    $0x8,%esp
+      11d9:	89 45 fc                mov    %eax,-0x4(%ebp)
+      11dc:	8b 45 fc                mov    -0x4(%ebp),%eax
+      11df:	c9                      leave
+      11e0:	c3                      ret
 #+END_SRC
 
+* BIOS 启动
 
 ** 分段
 8086 寄存器是 16 位的, 真实地址 = 段地址 << 4 + address
@@ -199,7 +217,5 @@
 
       call BEGIN_PM               ; 7. Call a well-known label with useful code
 #+END_SRC
-
-* BIOS 启动
 
 * QEMU 模拟器
