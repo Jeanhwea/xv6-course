@@ -35,7 +35,7 @@
   layout reg
 #+END_EXAMPLE
 
-分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持库
+ubuntu 分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持库
 #+BEGIN_SRC sh
   apt install gcc-multilib
 #+END_SRC
@@ -43,8 +43,33 @@
 ** 栈操作
 1. esp 指向栈的顶端
 2. ebp 指向栈的基地址
-3. push 操作时, esp = esp - 4, ebp 不变
+3. push 操作时, esp = esp - 4, ebp 不变 (32b)
 4. pop 操作时,  esp = esp + 4, ebp 不变
+
+   8 | 0x1 |
+   7 | 0x2 | <- ebp  <-esp
+   6 | 0x2 |
+   5 | 0x2 |
+   4 | 0x2 |
+   3 | 0x2 |
+
+push
+
+   8 | 0x1 |
+   7 | 0x2 | <- ebp
+   6 | 0x0 |
+   5 | 0x1 |
+   4 | 0x0 |
+   3 | 0x0 |        <-esp
+
+pop
+
+   8 | 0x1 |
+   7 | 0x2 | <- ebp  <-esp
+   6 | 0x0 |
+   5 | 0x1 |
+   4 | 0x0 |
+   8 | 0x0 |
 
 [[file:../lab/02-stack/main.S]]
 

@@ -13,6 +13,6 @@ watch $esp
 # layout asm
 # layout reg
 
-# set disassemble-next-line on
-set logging file gdb.log
-set logging enabled
+set disassemble-next-line on
+# set logging file gdb.log
+# set logging enabled

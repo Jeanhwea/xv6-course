@@ -9,6 +9,7 @@ _start:
 	push	$0xb
 	push	$0xc
 	pop	%eax
+
 	push	$4
 	pop	%eax
 	pop	%eax
