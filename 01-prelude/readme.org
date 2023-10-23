@@ -63,7 +63,7 @@
 通常汇编的跳转通过 ~cmp~, ~je~, ~jmp~ 等指令配合实现，例如
 #+BEGIN_SRC asm
   cmp ax, 4      ; if ax = 4
-  je ax_is_four  ; do something (by jumping to that label)
+  je  ax_is_four ; do something (by jumping to that label)
   jmp else       ; else, do another thing
   jmp endif      ; finally, resume the normal flow
 
