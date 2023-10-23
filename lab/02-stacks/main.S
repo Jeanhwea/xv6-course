@@ -1,10 +1,14 @@
 .global _start
 
-	.text
+.text
 _start:
-	mov	$1, %eax
-	mov	$2, %ebx
-	add	%ebx, %eax
+	push	%ebp
+	mov	%esp, %ebp
+
+	push	$1
+	push	$2
+	push	$3
+	push	$4
 
 loop:
 	jmp	loop
