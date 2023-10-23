@@ -23,7 +23,7 @@
 | 段寄存器     | Stack Segment       | ss    | ss    | ss    |
 | 段寄存器     | Extra Segment       | es    | es    | es    |
 
-[[file:../lab/01-registers/main.S]]
+[[file:../lab/01-register/main.S]]
 
 操作示例
 #+BEGIN_EXAMPLE
@@ -41,7 +41,7 @@
 3. push 操作时, esp = esp - 4, ebp 不变
 4. pop 操作时,  esp = esp + 4, ebp 不变
 
-[[file:../lab/02-stacks/main.S]]
+[[file:../lab/02-stack/main.S]]
 
 .gdbinit 定义 hook, 设置 watch point
 #+BEGIN_EXAMPLE
