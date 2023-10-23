@@ -6,24 +6,24 @@
 
 * x86 体系结构
 ** 寄存器及编译流程
-| 分类         | 名称 | 全称                |
-|--------------+------+---------------------|
-| 通用寄存器   | eax  | Accumulator         |
-| 通用寄存器   | ebx  | Base                |
-| 通用寄存器   | ecx  | Counter             |
-| 通用寄存器   | edx  | Data                |
-| 指针寄存器   | esp  | Stack Pointer       |
-| 指针寄存器   | ebp  | Base Pointer        |
-| 变地址寄存器 | esi  | Source Index        |
-| 变地址寄存器 | edi  | Destination Index   |
-| 控制寄存器   | eip  | Instruction Pointer |
-| 控制寄存器   | flag | Flag                |
-| 段寄存器     | cs   | Code Segment        |
-| 段寄存器     | ds   | Data Segment        |
-| 段寄存器     | ss   | Stack Segment       |
-| 段寄存器     | es   | Extra Segment       |
+| 分类         | 英文全称            | 16 位 | 32 位 | 64 位 |
+|--------------+---------------------+-------+-------+-------|
+| 通用寄存器   | Accumulator         | ax    | eax   | rax   |
+| 通用寄存器   | Base                | bx    | ebx   | rbx   |
+| 通用寄存器   | Counter             | cx    | ecx   | rcx   |
+| 通用寄存器   | Data                | dx    | edx   | rdx   |
+| 指针寄存器   | Stack Pointer       | sp    | esp   | rsp   |
+| 指针寄存器   | Base Pointer        | bp    | ebp   | rbp   |
+| 变地址寄存器 | Source Index        | si    | esi   | rsi   |
+| 变地址寄存器 | Destination Index   | di    | edi   | rdi   |
+| 控制寄存器   | Instruction Pointer | ip    | eip   | rip   |
+| 控制寄存器   | Flag                | flag  | flag  | flag  |
+| 段寄存器     | Code Segment        | cs    | cs    | cs    |
+| 段寄存器     | Data Segment        | ds    | ds    | ds    |
+| 段寄存器     | Stack Segment       | ss    | ss    | ss    |
+| 段寄存器     | Extra Segment       | es    | es    | es    |
 
-[[file:../lab/01-registers/]]
+[[file:../lab/01-registers/main.S]]
 
 使用示例
 #+BEGIN_EXAMPLE
