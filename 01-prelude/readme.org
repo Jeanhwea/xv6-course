@@ -149,6 +149,12 @@ ubuntu 分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持�
 ** 制定磁盘
 -fda 第一个软盘
 -hda 第一个硬盘
+-cdrom 制定光盘介质
+
+#+BEGIN_SRC sh
+  man qemu
+#+END_SRC
+
 #+BEGIN_SRC sh
   qemu-system-i386 -hda ~/vm/disks/minix_x86.img
 #+END_SRC
