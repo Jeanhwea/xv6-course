@@ -1,7 +1,7 @@
 #+TITLE: XV6 操作系统实践
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
-#+DATE: <2023-10-23 Mon 13:24:49>
+#+DATE: <2023-10-24 Tue>
 #+STARTUP: overview num indent
 
 XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且在 MIT 的操作系统课程
