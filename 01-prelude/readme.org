@@ -285,6 +285,24 @@ qemu 通过 gdb server 来支持 gdb 调试，启动时需要添加下面选项�
    - 模拟器性能会有一些损耗
 
 * 编写最小操作系统
+** 中断，陷阱和系统调用
+中断(Interrupt) 是指 CPU 停下当前的工作任务，去处理其他事情，处理完后回来继续执
+行刚才的任务
+1. 中断是硬件实现的基础功能
+2. x86 架构中有中断描述符表 IDT
+3. BIOS 提供了一些基础中断，可以类似函数功能调用
+   - 读写磁盘 ~int 0x13~, 其中详细的中断参数见 [[https://stanislavs.org/helppc/int_13-2.html][link]]
+   - 输出字符
+
+陷阱(Trap)：是一种有意的，预先安排的异常事件
+1. 一般是在编写程序时故意设下的陷阱指令，而后执行到陷阱指令后，CPU 将会调用特定程
+   序进行相应的处理，处理结束后返回到陷阱指令的下一条指令
+2. 如系统调用，程序调试功能等, 最常见的就是 Linux 系统调用的实现，使用中断指令
+   ~int 0x80~
+
+系统调用(SYSCALL) 指操作系统提供给应用的一组 API 函数
+1. Linux 系统调用见 arch/x86/entry/syscalls/syscall_32.tbl
+
 ** 分段
 8086 寄存器是 16 位的, 真实地址 = 段地址 << 4 + address
 #+BEGIN_SRC asm
@@ -302,8 +320,6 @@ qemu 通过 gdb server 来支持 gdb 调试，启动时需要添加下面选项�
   int 0x10
 #+END_SRC
 
-** 中断
-** BIOS
 ** GDT
 1. GDT 主要保护以下信息, 总共 64 位, [[https://files.osdev.org/mirrors/geezer/os/pm.htm][link]]
    - base  = low(16) + middle(8) + high(8)
