@@ -187,7 +187,7 @@ initrd 全称是 initial RAM disk ，它提供一种让核心可以简单使用 
 2. 加载文件系统内容到 Ramdisk
 3. 将 Ramdisk 作为根文件系统
 
-minix 3 的 ram 启动
+MINIX 3 的 initrd 启动
 #+BEGIN_SRC sh
   cd /data/os/minix/obj.i386/work
 
@@ -198,6 +198,27 @@ minix 3 的 ram 启动
       -append "bootramdisk=1" \
       -initrd "mod01_ds,mod02_rs,mod03_pm,mod04_sched,mod05_vfs,mod06_memory,mod07_tty,mod08_mib,mod09_vm,mod10_pfs,mod11_mfs,mod12_init"
 #+END_SRC
+
+Linux 内核启动方式
+#+BEGIN_SRC sh
+  cd /data/os/x86_64/buildroot-2023.02.5/output/images
+  qemu-system-x86_64 \
+      -M pc \
+      -kernel bzImage \
+      -drive file=rootfs.ext2,if=virtio,format=raw \
+      -append "rootwait root=/dev/vda console=tty1 console=ttyS0" \
+      -net nic,model=virtio -net user
+#+END_SRC
+
+** 优缺点
+1. 优点
+   - 方便快捷，无需重启电脑
+   - 可以作为 gdb server 来调试
+   - 提供了丰富的调试命令, info regs, info tlb
+   - 支持多架构 x86, riscv, arm, mips 等
+   - 开源免费
+2. 缺点
+   - 性能相较于实体机弱
 
 * BIOS 启动
 ** 分段
