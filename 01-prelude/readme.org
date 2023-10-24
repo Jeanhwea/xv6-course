@@ -192,6 +192,39 @@ ubuntu 分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持�
   +============================================+
 #+END_EXAMPLE
 
+** 操作系统启动过程
+1. ~启动 BIOS~ Basic Input/Output System，基本输入输出系统。
+  - =供电初始化= 按下电源开关后，电源就开始给主板和其他设备供电，CPU 会把所有寄
+    存器的值都设为默认值，即恢复初始状态。随后 CPU 会执行初始位置的指令，跳转到
+    BIOS 启动代码位置，开始启动 BIOS。
+  - =POST 硬件自检= BIOS 首先进行 POST（Power On Self Test，硬件自检），检查计算
+    机硬件是否满足运行的基本条件，并完成相应的初始化工作。如果发现了问题，主板会
+    发出不同的蜂鸣声表示不同的问题。
+  - =搜索可引导的存储设备= BIOS 按照启动顺序开始搜索可引导的存储设备，找到后，会
+    将存储设备中的引导扇区读入物理内存，并执行引导扇区中的程序，开始系统引导。
+  - BIOS 是按照顺序依次搜索可引导的存储设备的，这个顺序就叫启动顺序（Boot
+    Sequence），可以在 BIOS 中进行查看和修改。
+2. ~系统引导~
+  - =读取 MBR= 读取并执行硬盘的第一个扇区，即 MBR（Master Boot Record，主引导记
+    录，大小为 512 字节）。其作用为告诉计算机到硬盘的哪一个位置去找操作系统。MBR
+    的结构如下：
+     + 第 1-446 字节：调用操作系统的机器码，可以被 CPU 直接执行
+     + 第 447-510 字节：分区表（Partition Table），将硬盘分为了若干个分区
+     + 第 511-512 字节：记录签名（0x55 和 0xAA），表示设备可以用于启动
+  - =查找活动分区= 搜索 MBR 中的分区表，找到唯一的活动分区（Active Partition），
+    并将活动分区的第一个扇区中的引导扇区（称为 卷引导记录，Volume Boot Record，
+    VBR）读入内存，就能找到操作系统在这个分区中的位置。然后，计算机就会开始加载
+    操作系统了。
+3. ~启动系统~ 由于一台计算机中可以安装多个操作系统，所以启动系统时也会有不同的情
+   况。当有多个操作系统时，会运行启动管理器（Boot Loader），让用户选择启动操作系
+   统； 当只有一个操作系统时，就会直接从激活分区中启动操作系统（当然也可以选择将
+   控制权交 给启动管理器，boot loader 可以存在 MBR 中，也可以存在主分区的引导扇
+   区中）。
+4. ~初始化系统~ 操作系统启动后，控制权就从 boot loader 转交给了操作系统，之后，
+   操作系统的内核首先被载入缓存，随后会运行初始化进程进行操作系统的初始化。
+
+至此，整个计算机的启动过程就完成了。
+
 ** 普通启动
 存储设备
 1. 软盘 -fda
@@ -300,8 +333,32 @@ qemu 通过 gdb server 来支持 gdb 调试，启动时需要添加下面选项�
 2. 如系统调用，程序调试功能等, 最常见的就是 Linux 系统调用的实现，使用中断指令
    ~int 0x80~
 
-系统调用(SYSCALL) 指操作系统提供给应用的一组 API 函数
-1. Linux 系统调用见 arch/x86/entry/syscalls/syscall_32.tbl
+系统调用(System Call) 指操作系统提供给应用的一组 API 函数， Linux 系统调用见
+arch/x86/entry/syscalls/syscall_32.tbl
+#+BEGIN_EXAMPLE
+  #
+  # 32-bit system call numbers and entry vectors
+  #
+  # The format is:
+  # <number> <abi> <name> <entry point> <compat entry point>
+  #
+  # The __ia32_sys and __ia32_compat_sys stubs are created on-the-fly for
+  # sys_*() system calls and compat_sys_*() compat system calls if
+  # IA32_EMULATION is defined, and expect struct pt_regs *regs as their only
+  # parameter.
+  #
+  # The abi is always "i386" for this file.
+  #
+  0	i386	restart_syscall		sys_restart_syscall
+  1	i386	exit			sys_exit
+  2	i386	fork			sys_fork
+  3	i386	read			sys_read
+  4	i386	write			sys_write
+  5	i386	open			sys_open			compat_sys_open
+  6	i386	close			sys_close
+
+  .....
+#+END_EXAMPLE
 
 ** 分段
 8086 寄存器是 16 位的, 真实地址 = 段地址 << 4 + address
