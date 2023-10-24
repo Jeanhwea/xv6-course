@@ -146,7 +146,7 @@ ubuntu 分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持�
 #+END_SRC
 
 * QEMU 模拟器
-** 模拟器是什么
+** 什么是模拟器
 1. [[https://www.qemu.org/][qemu]]
 2. [[https://bochs.sourceforge.io/][bochs]]
 
