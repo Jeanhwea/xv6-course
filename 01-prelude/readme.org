@@ -146,32 +146,49 @@ ubuntu 分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持�
 #+END_SRC
 
 * QEMU 模拟器
-** 制定磁盘
--fda 第一个软盘
--hda 第一个硬盘
--cdrom 制定光盘介质
-
+** 普通启动
+存储设备
+1. 软盘 -fda
+2. 硬盘 -hda
+3. 光盘介质 -cdrom
 #+BEGIN_SRC sh
   man qemu
 #+END_SRC
 
+启动 linux 0.11 系统
+1. 指定软盘 Image
+2. 指定硬盘 hdc-0.11.img
+3. -boot a 表示从软盘启动,  man qemu ... /-boot
 #+BEGIN_SRC sh
-  qemu-system-i386 -hda ~/vm/disks/minix_x86.img
+  qemu-system-i386 -boot a -fda Image -hda hdc-0.11.img
 #+END_SRC
 
-** 启动次序
--boot 制定启动次序
+启动 xv6, 控制系统硬件参数
+1. -smp CPU 数据
+2. -m   内存大小
+3. -nographic 表示不启动图形界面, 无图形界面的常用快捷键如下：
+   + =ctrl-a x= 退出 qemu
+   + =ctrl-a c= 切换串口
+   + =ctrl-a h= 帮助
 #+BEGIN_SRC sh
-  qemu-system-i386 -boot a -fda Image -hda ~/vm/disks/hdc-0.11.img
+  qemu-system-i386 -smp 2 -m 512 -nographic -hda xv6.img -hdb fs.img
+#+END_SRC
+
+另外存储驱动也可以使用下面方法指定
+#+BEGIN_SRC sh
+  qemu-system-i386 -smp 2 -m 512 -nographic \
+      -drive file=fs.img,index=1,media=disk,format=raw \
+      -drive file=xv6.img,index=0,media=disk,format=raw
 #+END_SRC
 
 ** initrd 启动
-initrd 全称是 initial RAM disk ，它提供一种让核心可以简单使用 Ramdisk 的能力，简单
-的说，这些能力包括
+initrd 全称是 initial RAM disk ，它提供一种让核心可以简单使用 Ramdisk 的能力，简
+单的说，这些能力包括
 - 格式化一个 Ramdisk
 - 加载文件系统内容到 Ramdisk
 - 将 Ramdisk 作为根文件系统
 
+minix 3 的 ram 启动
 #+BEGIN_SRC sh
   qemu-system-i386 \
       --enable-kvm \
