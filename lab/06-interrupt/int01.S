@@ -9,7 +9,6 @@ _start:
 	mov	$4, %eax	# Linux 系统调用号 (sys_write) arch/x86/entry/syscalls/syscall_32.tbl
 	int	$0x80		# syscall 中断
 
-
 	# sys_exit(int code)
 	mov	$0, %ebx	# 程序退出码 code
 	mov	$1, %eax	# Linux 系统调用号 (sys_exit)
@@ -18,5 +17,5 @@ _start:
 
 .data
 msg:
-	.ascii    "Hello, world!\n"   # 字符串缓存
-	len = . - msg                 # 当前位置减去 msg 地址 = 字符串 msg 的长度
+	.ascii	"Hello, world!\n"	# 字符串缓存
+	len = . - msg			# 当前位置减去 msg 地址 = 字符串 msg 的长度

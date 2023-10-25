@@ -6,7 +6,7 @@ _start:
 	mov	vector+1, %ebx
 	mov	vector+2, %ecx
 	mov	vector+3, %edx
-	;; add	$4, %eax
+	add	$4, %eax
 	;; mov	(%eax), %ecx
 
 loop:
