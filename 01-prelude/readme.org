@@ -17,7 +17,7 @@
 | 变地址寄存器 | Source Index        | si    | esi   | rsi   |
 | 变地址寄存器 | Destination Index   | di    | edi   | rdi   |
 | 控制寄存器   | Instruction Pointer | ip    | eip   | rip   |
-| 控制寄存器   | Flag                | flag  | flag  | flag  |
+| 控制寄存器   | Flag                | flag  | eflag | eflag |
 | 段寄存器     | Code Segment        | cs    | cs    | cs    |
 | 段寄存器     | Data Segment        | ds    | ds    | ds    |
 | 段寄存器     | Stack Segment       | ss    | ss    | ss    |
