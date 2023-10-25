@@ -335,7 +335,12 @@ qemu 通过 gdb server 来支持 gdb 调试，启动时需要添加下面选项�
    ~int 0x80~
 
 系统调用(System Call) 指操作系统提供给应用的一组 API 函数， Linux 系统调用见
-arch/x86/entry/syscalls/syscall_32.tbl
+
+查看 32 位操作系统系统调用号 NR_syscal 文件见
+#+BEGIN_SRC sh
+  /usr/src/linux-headers-5.15.0-87-generic/arch/x86/include/generated/uapi/asm/unistd_32.h
+#+END_SRC
+
 #+BEGIN_EXAMPLE
   #
   # 32-bit system call numbers and entry vectors
