@@ -370,20 +370,13 @@ qemu 通过 gdb server 来支持 gdb 调试，启动时需要添加下面选项�
   .section .data  # 数据段, 可以简写 .data
 #+END_SRC
 
-8086 寄存器是 16 位的,
-#+BEGIN_SRC asm
-  ;;; 设置 ds 段寄存器
-  mov bx, 0x7c0
-  mov ds, bx
-  ;;; 默认使用 ds 段寄存器作为基地址
-  mov al, [msg]
-  int 0x10
+AT&T 寻址方式
+#+BEGIN_QUOTE
+  section:disp(base, index, scale)
+#+END_QUOTE
 
-  ;;; 使用 es 段寄存器进行寻址
-  mov bx, 0x7c0
-  mov es, bx
-  mov al, [es:the_secret]
-  int 0x10
+#+BEGIN_SRC asm
+  %es:msg # 寻址 es 段的 msg
 #+END_SRC
 
 ** GDT
