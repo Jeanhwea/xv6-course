@@ -6,7 +6,7 @@ _start:
 	mov	$len, %edx	# count 字符串长度
 	mov	$msg, %ecx	# buf 字符串缓冲区
 	mov	$1, %ebx	# fd 输出文件描述符
-	mov	$4, %eax	# Linux 系统调用号 (sys_write) arch/x86/entry/syscalls/syscall_32.tbl
+	mov	$4, %eax	# Linux 系统调用号 (sys_write)
 	int	$0x80		# syscall 中断
 
 	# sys_exit(int code)
