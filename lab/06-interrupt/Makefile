@@ -21,4 +21,4 @@ all: int01.out
 
 .PHONY: clean
 clean:
-	rm *.o *.out
+	-rm *.o *.out
