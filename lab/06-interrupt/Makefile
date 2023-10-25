@@ -5,8 +5,9 @@ CCFLAG = -m32
 ASFLAG = -32
 LDFLAG = -m elf_i386
 GDB    = gdb
+OBJS   = $(patsubst %.S,%.out,$(wildcard *.S))
 
-all: int01.out
+all: $(OBJS)
 
 
 %.o: %.S

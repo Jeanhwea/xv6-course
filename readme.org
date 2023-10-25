@@ -28,3 +28,4 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
 1. MIT 课程官网 [[https://pdos.csail.mit.edu/6.828/][6.828]]
 2. x86 版本 [[https://github.com/mit-pdos/xv6-public][xv6-public]]
 3. riscv 版本 [[https://github.com/mit-pdos/xv6-riscv][xv6-riscv]]
+4. gas 汇编教程 [[https://web.mit.edu/gnu/doc/html/as_3.html][as]]

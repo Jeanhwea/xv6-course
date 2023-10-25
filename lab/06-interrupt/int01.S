@@ -1,6 +1,6 @@
-.text
-
 .global _start
+
+.text
 _start:
 	# sys_write(unsigned int fd, const char *buf, size_t count)
 	mov	$len, %edx	# count 字符串长度
