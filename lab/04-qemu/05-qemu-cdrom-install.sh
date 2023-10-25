@@ -8,6 +8,7 @@ Please download images first
    bzip2 -d minix_R3.3.0-588a35b.iso.bz2
 
 EOF
+   exit 1
 fi
 
 
