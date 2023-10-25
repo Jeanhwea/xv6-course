@@ -23,7 +23,7 @@
 | 段寄存器     | Stack Segment       | ss    | ss    | ss    |
 | 段寄存器     | Extra Segment       | es    | es    | es    |
 
-[[file:../lab/01-register/main.S]]
+[[file:lab/01-register/main.S]]
 
 操作示例
 #+BEGIN_EXAMPLE
@@ -72,7 +72,7 @@ ubuntu 分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持�
      8 | 0x0 |
 #+END_EXAMPLE
 
-[[file:../lab/02-stack/main.S]]
+[[file:lab/02-stack/main.S]]
 
 .gdbinit 定义 hook, 设置 watch point
 #+BEGIN_EXAMPLE
@@ -95,14 +95,14 @@ ubuntu 分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持�
   jmp label
 #+END_SRC
 
-[[file:../lab/03-control-flow/jump.S]]
+[[file:lab/03-control-flow/jump.S]]
 
 ** 函数调用 call/ret
 函数调用也属于简单的跳转指令, 例如
 - call 调用函数
 - ret 函数返回
 
-[[file:../lab/03-control-flow/fcall.S]]
+[[file:lab/03-control-flow/fcall.S]]
 
 使用 gcc 编译的真实函数调用
 #+BEGIN_SRC sh
@@ -110,7 +110,7 @@ ubuntu 分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持�
   objdump -d adder.out > adder.asm
 #+END_SRC
 
-[[file:../lab/03-control-flow/adder.c]]
+[[file:lab/03-control-flow/adder.c]]
 
 #+BEGIN_SRC asm
   0000118d <add>:

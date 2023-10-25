@@ -11,7 +11,7 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
 3. 目前 MIT XV6 操作系统支持 x86 和 riscv 两种体系结构
 
 * 相关话题
-1. [[file:01-prelude/readme.org][序章]]
+1. [[file:01-prelude.org][序章]]
    - x86 汇编
    - BIOS 原理
    - qemu 模拟器

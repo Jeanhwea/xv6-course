@@ -1,8 +1,0 @@
-#+TITLE: 内存管理
-#+AUTHOR: Jinghui Hu
-#+EMAIL: hujinghui@buaa.edu.cn
-#+DATE: <2023-10-23 Mon 13:41:23>
-#+STARTUP: overview num indent
-
-
-* starting here
