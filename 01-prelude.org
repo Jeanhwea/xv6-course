@@ -322,42 +322,7 @@ qemu 通过 gdb server 来支持 gdb 调试，启动时需要添加下面选项�
    - 模拟器性能会有一些损耗
 
 * 编写最小操作系统
-** 中断，陷阱和系统调用
-中断(Interrupt) 是指 CPU 停下当前的工作任务，去处理其他事情，处理完后回来继续执
-行刚才的任务 [[https://stanislavs.org/helppc/idx_interrupt.html][Interrupt Services]] , 中断是硬件实现的基础功能
-#+BEGIN_SRC asm
-  int 0x80 # 中断号
-#+END_SRC
-
-BIOS 提供一下中断，
-- 输出字符
-- 读写磁盘数据 ~int 0x13~, 详见 [[https://stanislavs.org/helppc/int_13-2.html][link]]
-- 读取用户键盘输入 ~int 0x16~, 详见 [[https://stanislavs.org/helppc/int_16.html][link]]
-
-陷阱(Trap)：是一种有意的，预先安排的异常事件
-1. 一般是在编写程序时故意设下的陷阱指令，而后执行到陷阱指令后，CPU 将会调用特定
-   程序进行相应的处理，处理结束后返回到陷阱指令的下一条指令
-2. 如系统调用，程序调试功能等, 最常见的就是 Linux 系统调用的实现，使用中断指令
-
-系统调用(System Call) 指操作系统提供给应用的一组 API 函数， Linux 系统调用见
-
-查看 32 位操作系统系统调用号 NR_syscal 文件见
-#+BEGIN_EXAMPLE
-  /usr/src/linux-headers-5.15.0-87-generic » rg NR_write
-  arch/x86/include/generated/uapi/asm/unistd_64.h
-  5:#define __NR_write 1
-  24:#define __NR_writev 20
-
-  arch/x86/include/generated/uapi/asm/unistd_32.h
-  8:#define __NR_write 4
-  150:#define __NR_writev 146
-
-  arch/x86/include/generated/uapi/asm/unistd_x32.h
-  5:#define __NR_write (__X32_SYSCALL_BIT + 1)
-  321:#define __NR_writev (__X32_SYSCALL_BIT + 516)
-#+END_EXAMPLE
-
-** 分段
+** 系统引导及分段
 操作系统在对地址空间访问是通过分段实现 (segment)
 1. 段使用物理上连续的一块空间
 2. 分段的历史
@@ -387,6 +352,44 @@ AT&T 寻址方式
 #+BEGIN_SRC asm
   %es:msg # 寻址 es 段的 msg
 #+END_SRC
+
+** 中断，陷阱和系统调用
+中断(Interrupt) 是指 CPU 停下当前的工作任务，去处理其他事情，处理完后回来继续执
+行刚才的任务 [[https://stanislavs.org/helppc/idx_interrupt.html][Interrupt Services]] , 中断是硬件实现的基础功能
+#+BEGIN_SRC asm
+  int 0x80 # 中断号
+#+END_SRC
+
+BIOS 提供一下中断，[[https://stanislavs.org/helppc/idx_interrupt.html][link]]
+| 功能码 | 说明                   |
+|--------+------------------------|
+|   0x13 | 读取磁盘数据           |
+|   0x14 | 异步通信: 串口输出字符 |
+|   0x16 | 读取键盘输入           |
+|   0x1a | 时钟中断               |
+
+陷阱(Trap)：是一种有意的，预先安排的异常事件
+1. 一般是在编写程序时故意设下的陷阱指令，而后执行到陷阱指令后，CPU 将会调用特定
+   程序进行相应的处理，处理结束后返回到陷阱指令的下一条指令
+2. 如系统调用，程序调试功能等, 最常见的就是 Linux 系统调用的实现，使用中断指令
+
+系统调用(System Call) 指操作系统提供给应用的一组 API 函数， Linux 系统调用见
+
+查看 32 位操作系统系统调用号 NR_syscal 文件见
+#+BEGIN_EXAMPLE
+  /usr/src/linux-headers-5.15.0-87-generic » rg NR_write
+  arch/x86/include/generated/uapi/asm/unistd_64.h
+  5:#define __NR_write 1
+  24:#define __NR_writev 20
+
+  arch/x86/include/generated/uapi/asm/unistd_32.h
+  8:#define __NR_write 4
+  150:#define __NR_writev 146
+
+  arch/x86/include/generated/uapi/asm/unistd_x32.h
+  5:#define __NR_write (__X32_SYSCALL_BIT + 1)
+  321:#define __NR_writev (__X32_SYSCALL_BIT + 516)
+#+END_EXAMPLE
 
 ** GDT
 1. GDT 主要保护以下信息, 总共 64 位, [[https://files.osdev.org/mirrors/geezer/os/pm.htm][link]]

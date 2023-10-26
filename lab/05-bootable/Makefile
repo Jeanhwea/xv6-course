@@ -1,16 +1,19 @@
 CC     = gcc
+AS     = as
 LD     = ld
 CCFLAG = -m32
+ASFLAG = -32
 LDFLAG = -m elf_i386
 GDB    = gdb
+OBJS   = $(patsubst %.S,%.out,$(wildcard *.S))
 
-all: seg01.out seg02.out
+all: $(OBJS)
 
-
-%.o: %.c
-	$(CC) $(CCFLAG) -c $< -o $@
 
 %.o: %.S
+	$(AS) $(ASFLAG) -c $< -o $@
+
+%.o: %.c
 	$(CC) $(CCFLAG) -c $< -o $@
 
 %.out: %.o
@@ -19,4 +22,4 @@ all: seg01.out seg02.out
 
 .PHONY: clean
 clean:
-	rm *.o *.out
+	-rm *.o *.out
