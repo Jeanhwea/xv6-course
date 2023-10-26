@@ -326,7 +326,7 @@ qemu 通过 gdb server 来支持 gdb 调试，启动时需要添加下面选项�
 中断(Interrupt) 是指 CPU 停下当前的工作任务，去处理其他事情，处理完后回来继续执
 行刚才的任务 [[https://stanislavs.org/helppc/idx_interrupt.html][Interrupt Services]] , 中断是硬件实现的基础功能
 #+BEGIN_SRC asm
-  int 0x80 # 中断号
+  int $0x80 # 中断号
 #+END_SRC
 
 BIOS 提供一下中断，[[https://stanislavs.org/helppc/idx_interrupt.html][link]]
@@ -416,3 +416,10 @@ AT&T 寻址方式编写格式
               |             |
         存储在段寄存器中   偏移
 #+END_EXAMPLE
+
+** 裸金属启动
+回顾 BIOS 启动流程
+- 启动地址 0x7c00
+- 校验码   0x55aa => 0b01010101 0b10101010
+
+[[file:lab/06-barebone/boot.S]]
