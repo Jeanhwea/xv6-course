@@ -1,6 +1,6 @@
 #include <unistd.h>
 
-char *msg = "Hello from C\n";
+char msg[] = "Hello from C\n";
 
 int main()
 {
