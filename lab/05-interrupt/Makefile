@@ -6,7 +6,7 @@ ASFLAG = -32
 LDFLAG = -m elf_i386
 GDB    = gdb
 OUTS   = $(patsubst %.S,%.out,$(wildcard *.S))
-OUTS   += $(patsubst %.c,%.out,$(wildcard *.S))
+OUTS   += $(patsubst %.c,%.out,$(wildcard *.c))
 
 all: $(OUTS)
 
@@ -25,4 +25,4 @@ all: $(OUTS)
 
 .PHONY: clean
 clean:
-	-rm *.o *.out $(OUTS)
+	-rm *.o *.out
