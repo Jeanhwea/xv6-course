@@ -3,12 +3,15 @@ AS     = as
 LD     = ld
 CCFLAG = -m32
 ASFLAG = -32
-LDFLAG = -m elf_i386
+LDFLAG = -m elf_i386 -e start -Ttext 0x7c00
 GDB    = gdb
 QEMU   = qemu-system-i386
+QMFLAG = -nographic -fda fda.img
 OBJS   = $(patsubst %.S,%.out,$(wildcard *.S))
 
-all: $(OBJS)
+# all: $(OBJS)
+
+all: fda.img
 
 
 %.o: %.S
@@ -20,12 +23,18 @@ all: $(OBJS)
 %.out: %.o
 	$(LD) $(LDFLAG) $< -o $@
 
-img:
-	dd if=/dev/zero of=hd.img bs=512 count=1
+fda.img: seg01.out
+	dd if=/dev/zero of=fda.img bs=512 count=1
+	dd if=seg01.out of=fda.img conv=notrunc
 
-qemu:
-	[ -f fda.img ] && \
-	$(QEMU) -nographic -fda fda.img -s -S
+mbr:
+	hexdump -n 512 fda.img
+
+run: fda.img
+	$(QEMU) $(QMFLAG)
+
+dbg: fda.img
+	$(QEMU) $(QMFLAG) -s -S
 
 
 .PHONY: clean qemu
