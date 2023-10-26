@@ -45,10 +45,6 @@ qemu: fda.img
 qemu-debug: fda.img
 	$(QEMU) $(QMFLAG) -s -S
 
-# Prevent deletion of intermediate files, e.g. cat.o, after first build, so
-# that disk image changes after first build are persistent until clean.  More
-# details:
-# http://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
 .PRECIOUS: %.o
 
 .PHONY: clean qemu
