@@ -322,37 +322,6 @@ qemu 通过 gdb server 来支持 gdb 调试，启动时需要添加下面选项�
    - 模拟器性能会有一些损耗
 
 * 编写最小操作系统
-** 系统引导及分段
-操作系统在对地址空间访问是通过分段实现 (segment)
-1. 段使用物理上连续的一块空间
-2. 分段的历史
-   - 8086 是 16 位地址线
-   - 当 cpu 升级到 20 位地址线是会出现问题,
-   - 为了兼容, 280 芯片启用来段寄存器 cs, ds, ss, es 寄存器
-   - 380 芯片又添加了段寄存器 fs, gs
-   - 最终导致了实模式下段寻址模式
-   #+BEGIN_EXAMPLE
-     真实地址 = 段地址 << 4 + address
-                 ^             ^
-                 |             |
-           存储在段寄存器中   偏移
-   #+END_EXAMPLE
-
-在 gas 汇编中对段的描述是 section, 例如
-#+BEGIN_SRC asm
-  .section .text  # 代码段, 可以简写 .text
-  .section .data  # 数据段, 可以简写 .data
-#+END_SRC
-
-AT&T 寻址方式
-#+BEGIN_QUOTE
-  section:disp(base, index, scale)
-#+END_QUOTE
-
-#+BEGIN_SRC asm
-  %es:msg # 寻址 es 段的 msg
-#+END_SRC
-
 ** 中断，陷阱和系统调用
 中断(Interrupt) 是指 CPU 停下当前的工作任务，去处理其他事情，处理完后回来继续执
 行刚才的任务 [[https://stanislavs.org/helppc/idx_interrupt.html][Interrupt Services]] , 中断是硬件实现的基础功能
@@ -390,6 +359,37 @@ BIOS 提供一下中断，[[https://stanislavs.org/helppc/idx_interrupt.html][li
   5:#define __NR_write (__X32_SYSCALL_BIT + 1)
   321:#define __NR_writev (__X32_SYSCALL_BIT + 516)
 #+END_EXAMPLE
+
+** 系统引导及分段
+操作系统在对地址空间访问是通过分段实现 (segment)
+1. 段使用物理上连续的一块空间
+2. 分段的历史
+   - 8086 是 16 位地址线
+   - 当 cpu 升级到 20 位地址线是会出现问题,
+   - 为了兼容, 280 芯片启用来段寄存器 cs, ds, ss, es 寄存器
+   - 380 芯片又添加了段寄存器 fs, gs
+   - 最终导致了实模式下段寻址模式
+   #+BEGIN_EXAMPLE
+     真实地址 = 段地址 << 4 + address
+                 ^             ^
+                 |             |
+           存储在段寄存器中   偏移
+   #+END_EXAMPLE
+
+在 gas 汇编中对段的描述是 section, 例如
+#+BEGIN_SRC asm
+  .section .text  # 代码段, 可以简写 .text
+  .section .data  # 数据段, 可以简写 .data
+#+END_SRC
+
+AT&T 寻址方式
+#+BEGIN_QUOTE
+  section:disp(base, index, scale)
+#+END_QUOTE
+
+#+BEGIN_SRC asm
+  %es:msg # 寻址 es 段的 msg
+#+END_SRC
 
 ** GDT
 1. GDT 主要保护以下信息, 总共 64 位, [[https://files.osdev.org/mirrors/geezer/os/pm.htm][link]]
