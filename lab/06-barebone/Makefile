@@ -32,6 +32,7 @@ boot.bin: boot.out
 	$(OC) $(OCFLAG) $< boot.bin
 
 fda.img: boot.bin
+	./sign.pl boot.bin
 	dd if=/dev/zero of=fda.img bs=512 count=1
 	dd if=boot.bin  of=fda.img conv=notrunc
 
