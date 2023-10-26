@@ -1,5 +1,4 @@
 #include <unistd.h>
-#include <stdio.h>
 
 char *msg = "Hello from C\n";
 
