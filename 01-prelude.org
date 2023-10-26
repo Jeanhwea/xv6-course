@@ -363,7 +363,7 @@ BIOS 提供一下中断，[[https://stanislavs.org/helppc/idx_interrupt.html][li
 [[file:lab/05-interrupt/greet.S]]
 
 通过 strace 查看系统调用过程
-#+BEGIN_SRC sh :results output
+#+BEGIN_SRC sh :results output :exports both
   strace ./lab/05-interrupt/greet.out 2>&1 1>/dev/null
 #+END_SRC
 
@@ -375,7 +375,7 @@ BIOS 提供一下中断，[[https://stanislavs.org/helppc/idx_interrupt.html][li
 : +++ exited with 0 +++
 
 ** 系统引导及分段
-#+BEGIN_SRC sh :results output
+#+BEGIN_SRC sh :results output :exports both
   objdump -d ./lab/05-interrupt/greet2.run
 #+END_SRC
 
