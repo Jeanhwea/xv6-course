@@ -17,5 +17,5 @@ _start:
 
 .data
 msg:
-	.ascii	"Hello, world!\n"	# 字符串缓存
+	.ascii	"Hello from ASM!\n"	# 字符串缓存
 	len = . - msg			# 当前位置减去 msg 地址 = 字符串 msg 的长度

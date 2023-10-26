@@ -1,8 +1,10 @@
 #include <unistd.h>
+#include <stdio.h>
 
-int main (int argc, char *argv[])
+char *msg = "Hello from C\n";
+
+int main()
 {
-	char *msg = "Hello from C\n";
-	write(1, msg, sizeof(msg));
+	write(1, msg, 13);
 	return 0;
 }
