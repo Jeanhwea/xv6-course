@@ -422,4 +422,15 @@ AT&T 寻址方式编写格式
 - 启动地址 0x7c00
 - 校验码   0x55aa => 0b01010101 0b10101010
 
+#+BEGIN_SRC sh :results output :exports both
+  hexdump -n 512 ./lab/06-barebone/fda.img
+#+END_SRC
+
+#+RESULTS:
+: 0000000 01b8 bb00 0002 03b9 ba00 0004 feeb 0000
+: 0000010 0000 0000 0000 0000 0000 0000 0000 0000
+: *
+: 00001f0 0000 0000 0000 0000 0000 0000 0000 aa55
+: 0000200
+
 [[file:lab/06-barebone/boot.S]]
