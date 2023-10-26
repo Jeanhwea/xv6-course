@@ -392,7 +392,7 @@ BIOS 提供一下中断，[[https://stanislavs.org/helppc/idx_interrupt.html][li
   .section .data  # 数据段, 可以简写 .data
 #+END_SRC
 
-AT&T 寻址方式
+AT&T 寻址方式编写格式
 #+BEGIN_QUOTE
   section:disp(base, index, scale)
 #+END_QUOTE
@@ -405,16 +405,17 @@ AT&T 寻址方式
 1. 段使用物理上连续的一块空间
 2. x86 系列分段的历史原因
    - 8086 是 16 位地址线
-   - 当 cpu 升级到 20 位地址线是会出现问题,
+   - 当 CPU 升级到 20 位地址线是会出现问题
    - 为了兼容, 280 芯片启用来段寄存器 cs, ds, ss, es 寄存器
    - 380 芯片又添加了段寄存器 fs, gs
    - 最终导致了实模式下段寻址模式
-   #+BEGIN_EXAMPLE
-     真实地址 = 段地址 << 4 + address
-                 ^             ^
-                 |             |
-           存储在段寄存器中   偏移
-   #+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+  真实地址 = 段地址 << 4 + address
+              ^             ^
+              |             |
+        存储在段寄存器中   偏移
+#+END_EXAMPLE
 
 
 ** GDT
