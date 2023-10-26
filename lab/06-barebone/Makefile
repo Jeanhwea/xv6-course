@@ -39,10 +39,10 @@ fda.img: boot.bin
 mbr:
 	hexdump -n 512 fda.img
 
-run: fda.img
+qemu: fda.img
 	$(QEMU) $(QMFLAG)
 
-dbg: fda.img
+qemu-debug: fda.img
 	$(QEMU) $(QMFLAG) -s -S
 
 # Prevent deletion of intermediate files, e.g. cat.o, after first build, so
