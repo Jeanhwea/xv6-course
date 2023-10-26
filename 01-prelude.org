@@ -386,6 +386,20 @@ BIOS 提供一下中断，[[https://stanislavs.org/helppc/idx_interrupt.html][li
 : Disassembly of section .text:
 : Disassembly of section .fini:
 
+在 gas 汇编中对段的描述是 section, 例如
+#+BEGIN_SRC asm
+  .section .text  # 代码段, 可以简写 .text
+  .section .data  # 数据段, 可以简写 .data
+#+END_SRC
+
+AT&T 寻址方式
+#+BEGIN_QUOTE
+  section:disp(base, index, scale)
+#+END_QUOTE
+
+#+BEGIN_SRC asm
+  %es:msg # 寻址 es 段的 msg
+#+END_SRC
 
 操作系统在对地址空间访问是通过分段实现 (segment)
 1. 段使用物理上连续的一块空间
@@ -402,20 +416,6 @@ BIOS 提供一下中断，[[https://stanislavs.org/helppc/idx_interrupt.html][li
            存储在段寄存器中   偏移
    #+END_EXAMPLE
 
-在 gas 汇编中对段的描述是 section, 例如
-#+BEGIN_SRC asm
-  .section .text  # 代码段, 可以简写 .text
-  .section .data  # 数据段, 可以简写 .data
-#+END_SRC
-
-AT&T 寻址方式
-#+BEGIN_QUOTE
-  section:disp(base, index, scale)
-#+END_QUOTE
-
-#+BEGIN_SRC asm
-  %es:msg # 寻址 es 段的 msg
-#+END_SRC
 
 ** GDT
 1. GDT 主要保护以下信息, 总共 64 位, [[https://files.osdev.org/mirrors/geezer/os/pm.htm][link]]
