@@ -360,6 +360,8 @@ BIOS 提供一下中断，[[https://stanislavs.org/helppc/idx_interrupt.html][li
   321:#define __NR_writev (__X32_SYSCALL_BIT + 516)
 #+END_EXAMPLE
 
+[[file:lab/05-interrupt/greet.S]]
+
 ** 系统引导及分段
 操作系统在对地址空间访问是通过分段实现 (segment)
 1. 段使用物理上连续的一块空间
