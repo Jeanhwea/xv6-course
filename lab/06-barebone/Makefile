@@ -1,9 +1,13 @@
 CC     = gcc
 AS     = as
 LD     = ld
+OD     = objdump
+OC     = objcopy
 CCFLAG = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer
 ASFLAG = -32
 LDFLAG = -m elf_i386 -N -e start -Ttext 0x7c00
+ODFLAG = -S
+OCFLAG = -S -O binary -j .text
 GDB    = gdb
 QEMU   = qemu-system-i386
 QMFLAG = -nographic -fda fda.img
@@ -20,15 +24,16 @@ all: fda.img
 %.o: %.c
 	$(CC) $(CCFLAG) -c -o $@ $<
 
-%.asm: %.o
-	$(OD) -S
-
 %.out: %.o
 	$(LD) $(LDFLAG) $< -o $@
 
-fda.img: boot.out
+boot.bin: boot.out
+	$(OD) $(ODFLAG) $< > boot.asm
+	$(OC) $(OCFLAG) $< boot.bin
+
+fda.img: boot.bin
 	dd if=/dev/zero of=fda.img bs=512 count=1
-	dd if=boot.out  of=fda.img conv=notrunc
+	dd if=boot.bin  of=fda.img conv=notrunc
 
 mbr:
 	hexdump -n 512 fda.img
