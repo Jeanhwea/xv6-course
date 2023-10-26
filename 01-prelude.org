@@ -389,7 +389,7 @@ BIOS 提供一下中断，[[https://stanislavs.org/helppc/idx_interrupt.html][li
 
 操作系统在对地址空间访问是通过分段实现 (segment)
 1. 段使用物理上连续的一块空间
-2. 分段的历史
+2. x86 系列分段的历史原因
    - 8086 是 16 位地址线
    - 当 cpu 升级到 20 位地址线是会出现问题,
    - 为了兼容, 280 芯片启用来段寄存器 cs, ds, ss, es 寄存器
