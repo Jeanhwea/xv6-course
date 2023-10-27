@@ -422,6 +422,14 @@ AT&T 寻址方式编写格式
 - 启动地址 0x7c00
 - 校验码   0x55aa => 0b01010101 0b10101010
 
+#+BEGIN_SRC sh :results output
+  gdb -q -ex 'p/t 0x55aa'
+#+END_SRC
+
+#+RESULTS:
+: $1 = 101010110101010
+: (gdb) quit
+
 #+BEGIN_SRC sh :results output :exports both
   hexdump -n 512 ./lab/06-barebone/fda.img
 #+END_SRC
