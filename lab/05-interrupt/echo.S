@@ -5,7 +5,7 @@ _start:
 	# sys_read(unsigned int fd, const char *buf, size_t count)
 	mov	$len, %edx	# count 字符串长度
 	mov	$msg, %ecx	# buf 字符串缓冲区
-	mov	$1, %ebx	# fd 输出文件描述符
+	mov	$0, %ebx	# fd 输出文件描述符
 	mov	$3, %eax	# Linux 系统调用号 (sys_read)
 	int	$0x80		# syscall 中断
 
