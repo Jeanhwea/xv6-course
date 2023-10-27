@@ -442,3 +442,12 @@ AT&T 寻址方式编写格式
 : 0000200
 
 [[file:lab/06-barebone/boot.S]]
+
+
+扩展: nasm 汇编器
+[[file:lab/07-nasm-boot/boot.s]]
+#+BEGIN_EXAMPLE
+  (gdb) show disassembly-flavor intel
+  att
+  (gdb) set disassembly-flavor intel
+#+END_EXAMPLE
