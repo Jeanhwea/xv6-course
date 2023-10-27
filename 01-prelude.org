@@ -348,15 +348,15 @@ BIOS 提供一下中断，[[https://stanislavs.org/helppc/idx_interrupt.html][li
 系统调用(System Call) 指操作系统提供给应用的一组 API 函数， Linux 系统调用见
 
 查看 32 位操作系统系统调用号 NR_syscall 文件见
-#+BEGIN_SRC sh :results output
-  rg --line-number NR_write /usr/src/linux-headers-5.15.0-87-generic
+#+BEGIN_SRC sh :results output :exports both
+  rg -n NR_write /usr/src/linux-headers-5.15.0-87-generic
 #+END_SRC
 
 #+RESULTS:
-: /usr/src/linux-headers-5.15.0-87-generic/arch/x86/include/generated/uapi/asm/unistd_64.h:5:#define __NR_write 1
-: /usr/src/linux-headers-5.15.0-87-generic/arch/x86/include/generated/uapi/asm/unistd_64.h:24:#define __NR_writev 20
 : /usr/src/linux-headers-5.15.0-87-generic/arch/x86/include/generated/uapi/asm/unistd_32.h:8:#define __NR_write 4
 : /usr/src/linux-headers-5.15.0-87-generic/arch/x86/include/generated/uapi/asm/unistd_32.h:150:#define __NR_writev 146
+: /usr/src/linux-headers-5.15.0-87-generic/arch/x86/include/generated/uapi/asm/unistd_64.h:5:#define __NR_write 1
+: /usr/src/linux-headers-5.15.0-87-generic/arch/x86/include/generated/uapi/asm/unistd_64.h:24:#define __NR_writev 20
 : /usr/src/linux-headers-5.15.0-87-generic/arch/x86/include/generated/uapi/asm/unistd_x32.h:5:#define __NR_write (__X32_SYSCALL_BIT + 1)
 : /usr/src/linux-headers-5.15.0-87-generic/arch/x86/include/generated/uapi/asm/unistd_x32.h:321:#define __NR_writev (__X32_SYSCALL_BIT + 516)
 
