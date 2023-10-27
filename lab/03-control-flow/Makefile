@@ -15,4 +15,4 @@ fcall.out: fcall.S
 	ld -m elf_i386 fcall.o -o fcall.out
 
 clean:
-	-rm *.out *.asm *.o
+	-rm -f *.out *.asm *.o

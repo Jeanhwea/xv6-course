@@ -4,10 +4,10 @@ CCFLAG = -m32
 LDFLAG = -m elf_i386
 GDB    = gdb
 
-all: start
+all: a.out
 
 start: a.out
-	-rm gdb.log
+	-rm -f gdb.log
 	$(GDB) ./a.out
 
 main.o: main.S
@@ -17,4 +17,4 @@ a.out: main.o
 	$(LD) $(LDFLAG) main.o
 
 clean:
-	rm *.o *.out
+	-rm -f *.o *.out
