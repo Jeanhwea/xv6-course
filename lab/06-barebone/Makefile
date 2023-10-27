@@ -6,7 +6,7 @@ OC     = objcopy
 CCFLAG = -m32
 ASFLAG = -32
 LDFLAG = -m elf_i386 -N -e start -Ttext 0x7c00
-ODFLAG = -S
+ODFLAG = -S -m i8086
 OCFLAG = -S -O binary -j .text
 GDB    = gdb
 QEMU   = qemu-system-i386
@@ -36,9 +36,6 @@ fda.img: boot.bin
 	dd if=/dev/zero of=fda.img bs=512 count=1
 	dd if=boot.bin  of=fda.img conv=notrunc
 
-mbr:
-	hexdump -n 512 fda.img
-
 qemu: fda.img
 	$(QEMU) $(QMFLAG)
 
@@ -49,4 +46,4 @@ qemu-debug: fda.img
 
 .PHONY: clean qemu
 clean:
-	-rm *.o *.d *.out *.img
+	-rm -f *.o *.d *.out *.img
