@@ -328,8 +328,11 @@ qemu 通过 gdb server 来支持 gdb 调试，启动时需要添加下面选项�
 - 中断是硬件实现的基础功能
 - HelpPC Reference Library [[https://stanislavs.org/helppc/idx_interrupt.html][Interrupt Services]]
 - Interrupts [[https://wiki.osdev.org/Interrupts][osdev]]
+
 #+BEGIN_SRC asm
   int $0x80 # 中断号
+  cli
+  sti
 #+END_SRC
 
 BIOS 提供一下中断，[[https://stanislavs.org/helppc/idx_interrupt.html][link]]
