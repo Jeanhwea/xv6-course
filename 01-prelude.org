@@ -324,7 +324,10 @@ qemu 通过 gdb server 来支持 gdb 调试，启动时需要添加下面选项�
 * 编写最小操作系统
 ** 中断，陷阱和系统调用
 中断(Interrupt) 是指 CPU 停下当前的工作任务，去处理其他事情，处理完后回来继续执
-行刚才的任务 [[https://stanislavs.org/helppc/idx_interrupt.html][Interrupt Services]] , 中断是硬件实现的基础功能
+行刚才的任务
+- 中断是硬件实现的基础功能
+- HelpPC Reference Library [[https://stanislavs.org/helppc/idx_interrupt.html][Interrupt Services]]
+- Interrupts [[https://wiki.osdev.org/Interrupts][osdev]]
 #+BEGIN_SRC asm
   int $0x80 # 中断号
 #+END_SRC
