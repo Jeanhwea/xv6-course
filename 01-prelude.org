@@ -390,6 +390,7 @@ BIOS 提供一下中断，[[https://stanislavs.org/helppc/idx_interrupt.html][li
 : Disassembly of section .text:
 : Disassembly of section .fini:
 
+
 在 gas 汇编中对段的描述是 section, 例如
 #+BEGIN_SRC asm
   .section .text  # 代码段, 可以简写 .text
@@ -408,7 +409,7 @@ AT&T 寻址方式编写格式
 操作系统在对地址空间访问是通过分段实现 (segment)
 1. 段使用物理上连续的一块空间
 2. x86 系列分段的历史原因
-   - 8086 是 16 位地址线
+   - 8086 是 16 位地址线 / ax
    - 当 CPU 升级到 20 位地址线是会出现问题
    - 为了兼容, 280 芯片启用来段寄存器 cs, ds, ss, es 寄存器
    - 380 芯片又添加了段寄存器 fs, gs
@@ -425,6 +426,7 @@ AT&T 寻址方式编写格式
 回顾 BIOS 启动流程
 - 校验码   0x55aa => 0b01010101 0b10101010
 - 启动地址 0x7c00
+  - fda.img => 0x7c00
 
 #+BEGIN_SRC sh :results output
   gdb -q -ex 'p/t 0x55aa'

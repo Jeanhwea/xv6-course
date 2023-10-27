@@ -1,4 +1,5 @@
 .code16
+
 .global start
 start:
 	mov	$1, %ax

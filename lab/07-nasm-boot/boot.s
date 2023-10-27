@@ -21,7 +21,7 @@ msg:
 	db 0x0d, 0x0a,
 	db 'Hello from Kernel!', 0x0d, 0x0a
 	db 0x0d, 0x0a,
-	db 0			; \0
+	db 0			; '\0'
 
 times 510-($-$$) db 0		; 填充多余的 510 个字节为零值
 	dw 0xaa55		; BIOS 结束校验码
