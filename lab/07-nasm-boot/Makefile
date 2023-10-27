@@ -13,4 +13,4 @@ boot.bin: boot.s
 
 .PHONY: clean qemu
 clean:
-	-rm -f *.o *.d *.out *.img
+	-rm -f *.o *.d *.out *.img *.bin

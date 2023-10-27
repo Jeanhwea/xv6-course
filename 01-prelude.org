@@ -423,8 +423,8 @@ AT&T 寻址方式编写格式
 
 ** 裸金属启动
 回顾 BIOS 启动流程
-- 启动地址 0x7c00
 - 校验码   0x55aa => 0b01010101 0b10101010
+- 启动地址 0x7c00
 
 #+BEGIN_SRC sh :results output
   gdb -q -ex 'p/t 0x55aa'
@@ -451,7 +451,7 @@ AT&T 寻址方式编写格式
 扩展: nasm 汇编器
 [[file:lab/07-nasm-boot/boot.s]]
 #+BEGIN_EXAMPLE
-  (gdb) show disassembly-flavor intel
+  (gdb) show disassembly-flavor
   att
   (gdb) set disassembly-flavor intel
 #+END_EXAMPLE
