@@ -4,9 +4,11 @@
 #+DATE: <2023-10-24 Tue>
 #+STARTUP: overview num indent
 
-如果觉得讲解得好，可以请 UP 主喝一杯咖啡也是极好的
+**如果觉得讲解得好，可以请 UP 主喝一杯咖啡也是极好的**
 
 [[file:img/pay.jpg]]
+
+* 简介
 
 XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且在 MIT 的操作系统课程
 6.828 中使用
@@ -14,7 +16,7 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
 2. 通过阅读并理解 XV6 的代码，可以清楚地了解操作系统中众多核心的概念 (1w)
 3. 目前 MIT XV6 操作系统支持 x86 和 riscv 两种体系结构
 
-* 相关话题
+* 主题
 1. [[file:01-prelude.org][序章]]
    - [[https://www.bilibili.com/video/BV1cw411z7Ro][XV6 - x86 汇编 - 寄存器 - 栈 - 跳转指令]]
    - [[https://www.bilibili.com/video/BV1me411R7MN][XV6 - qemu - bochs - gdb - 模拟器使用]]
@@ -28,7 +30,7 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
 4. 文件系统
    - TODO
 
-* 外部资源
+* 资源
 1. MIT 课程官网 [[https://pdos.csail.mit.edu/6.828/][6.828]]
 2. x86 版本 [[https://github.com/mit-pdos/xv6-public][xv6-public]]
 3. riscv 版本 [[https://github.com/mit-pdos/xv6-riscv][xv6-riscv]]
