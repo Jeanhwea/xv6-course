@@ -4,6 +4,10 @@
 #+DATE: <2023-10-24 Tue>
 #+STARTUP: overview num indent
 
+如果觉得讲解得好，可以请 UP 主喝一杯咖啡也是极好的
+
+[[file:img/pay.jpg]]
+
 XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且在 MIT 的操作系统课程
 6.828 中使用
 1. 它源自 Dennis Ritchie 和 Ken Thompson 的 Unix Version 6 (v6)
