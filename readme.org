@@ -12,10 +12,9 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
 
 * 相关话题
 1. [[file:01-prelude.org][序章]]
-   - x86 汇编
-   - BIOS 原理
-   - qemu 模拟器
-   - 最小操作系统
+   - [[https://www.bilibili.com/video/BV1cw411z7Ro][XV6 - x86 汇编 - 寄存器 - 栈 - 跳转指令]]
+   - [[https://www.bilibili.com/video/BV1me411R7MN][XV6 - qemu - bochs - gdb - 模拟器使用]]
+   - [[https://www.bilibili.com/video/BV1Fe411975E][XV6 - 中断 - 系统调用 - 分段 - 最小操作系统]]
 2. 内存管理
    - 页表
    - 内存分配流程
