@@ -1,0 +1,59 @@
+#+TITLE: 走进操作系统
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-10-30 Mon>
+#+STARTUP: overview num indent
+
+
+* 系统概览
+** 用户态/内核态
+#+BEGIN_SRC text
+  ------------+==================================================
+              |
+              |    vi       cat          echo
+  User Mode   |     |   sh   |      ls    |
+              |     |   |    |      |     |
+              |     +---------+-----+-----+
+              |               |
+              |               v
+  ------------|=========== SYSCALL ==============================
+              |             |    ^
+              |             |    +------------+
+              |             v                 |
+  Kernel Mode |       [sys_fork/sys_exec] -> [exec/io_wait]
+              |
+              |               [scheduler]
+  ------------+==================================================
+#+END_SRC
+
+1. RING 3 被叫做用户态，在应用程序中运行
+2. RING 0 被叫做内核态，完全在操作系统内核中运行
+3. 内核态有一些特权的命令
+   - cli 关中断
+   - sti 开中断
+
+** 系统调用
+xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户进程编写代码的 API
+
+| NO. | SYSCALL                   | Description                                |
+|-----+---------------------------+--------------------------------------------|
+|   1 | fork()                    | Create a process                           |
+|   2 | exit()                    | Terminate the current process              |
+|   3 | wait()                    | Wait for a child process to exit           |
+|   4 | kill(pid)                 | Terminate process pid                      |
+|   5 | getpid()                  | Return the current process’s pid           |
+|   6 | sleep(n)                  | Sleep for n clock ticks                    |
+|   7 | exec(filename, *argv)     | Load a file and execute it                 |
+|   8 | sbrk(n)                   | Grow process’s memory by n bytes           |
+|   9 | open(filename, flags)     | Open a file; the flags indicate read/write |
+|  10 | read(fd, buf, n)          | Read n bytes from an open file into buf    |
+|  11 | write(fd, buf, n)         | Write n bytes to an open file              |
+|  12 | close(fd)                 | Release open file fd                       |
+|  13 | dup(fd)                   | Duplicate fd                               |
+|  14 | pipe(p)                   | Create a pipe and return fd’s in p         |
+|  15 | chdir(dirname)            | Change the current directory               |
+|  16 | mkdir(dirname)            | Create a new directory                     |
+|  17 | mknod(name, major, minor) | Create a device file                       |
+|  18 | fstat(fd)                 | Return info about an open file             |
+|  19 | link(f1, f2)              | Create another name (f2) for the file f1   |
+|  20 | unlink(filename)          | Remove a file                              |

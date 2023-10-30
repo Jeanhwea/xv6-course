@@ -12,7 +12,6 @@ GDB    = gdb
 QEMU   = qemu-system-i386
 QMFLAG = -nographic -fda fda.img
 OBJS   = $(patsubst %.S,%.out,$(wildcard *.S))
-SIGN   = ../../bin/sign.pl
 
 # all: $(OBJS)
 
@@ -28,14 +27,14 @@ all: fda.img
 %.out: %.o
 	$(LD) $(LDFLAG) $< -o $@
 
-boot.bin: boot.out
-	$(OD) $(ODFLAG) $< > boot.asm
-	$(OC) $(OCFLAG) $< boot.bin
+kernel.bin: kernel.out
+	$(OD) $(ODFLAG) $< > kernel.asm
+	$(OC) $(OCFLAG) $< kernel.bin
 
-fda.img: boot.bin
-	$(SIGN) boot.bin
+fda.img: kernel.bin
+	./sign.pl kernel.bin
 	dd if=/dev/zero of=fda.img bs=512 count=1
-	dd if=boot.bin  of=fda.img conv=notrunc
+	dd if=kernel.bin  of=fda.img conv=notrunc
 
 qemu: fda.img
 	$(QEMU) $(QMFLAG)
@@ -47,4 +46,4 @@ qemu-debug: fda.img
 
 .PHONY: clean qemu
 clean:
-	-rm -f *.o *.d *.out *.img *.bin *.asm
+	-rm -f *.o *.d *.out *.img
