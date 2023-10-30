@@ -27,6 +27,7 @@ all: fda.img user.run
 
 user.run: user.S
 	$(CC) -c user.S
+	$(OD) -d user.o > user.asm
 	$(LD) -o user.run user.o
 
 kernel.bin: kernel.out
