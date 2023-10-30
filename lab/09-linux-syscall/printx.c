@@ -4,8 +4,8 @@
 
 int main(int argc, char *argv[])
 {
-	int num = rand();
-	if (num) {
+	int num = rand() - 10;
+	if (num > 0) {
 		printf("aaa\n");
 	} else {
 		printf("bbb\n");
