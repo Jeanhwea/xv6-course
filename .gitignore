@@ -1,3 +1,5 @@
+compile_commands.json
+
 *.d
 *.o
 *.out
