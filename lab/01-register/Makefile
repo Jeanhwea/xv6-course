@@ -7,4 +7,4 @@ a.out: main.o
 	ld -m elf_i386 main.o
 
 clean:
-	-rm -f *.o *.out
+	-rm -f *.o *.out *.log
