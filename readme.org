@@ -24,18 +24,13 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
    - [[https://www.bilibili.com/video/BV1cw411z7Ro][XV6 - x86 汇编 - 寄存器 - 栈 - 跳转指令]]
    - [[https://www.bilibili.com/video/BV1me411R7MN][XV6 - qemu - bochs - gdb - 模拟器使用]]
    - [[https://www.bilibili.com/video/BV1Fe411975E][XV6 - 中断 - 系统调用 - 分段 - 最小操作系统实现]]
-2. 走进操作系统
+2. [[file:02-system-startup.org][走进操作系统]]
    - xv6 概览
    - 从汇编到 C 语言
    - 系统初始准备工作
-3. 内存管理
-   - 页表
-   - 内存分配流程
-4. 进程管理
-   - 中断
-   - 进程调度
-5. 文件系统
-   - TODO
+3. 内存管理 TODO
+4. 进程管理 TODO
+5. 文件系统 TODO
 
 * 资源
 1. MIT 课程官网 [[https://pdos.csail.mit.edu/6.828/][6.828]]

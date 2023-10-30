@@ -1,0 +1,242 @@
+#+TITLE: 走进操作系统
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-10-30 Mon>
+#+STARTUP: overview num indent
+
+
+* 系统概览
+** 为什么选 xv6 代码阅读?
+第一点: 代码量适中，统计大约 6000 行左右
+#+BEGIN_SRC sh :results output :dir /data/gitana/study/os/xv6-public
+  make clean > /dev/null
+  cloc --quiet .
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+  github.com/AlDanial/cloc v 1.90  T=0.06 s (1311.7 files/s, 159249.8 lines/s)
+  -------------------------------------------------------------------------------
+  Language                     files          blank        comment           code
+  -------------------------------------------------------------------------------
+  C                               46           1023            755           6455
+  C/C++ Header                    22            145            131            842
+  make                             1             36             33            210
+  Assembly                         7             51            117            201
+  Perl                             4             22             23            105
+  Pascal                           1             24             60             50
+  Bourne Shell                     3              7              3             23
+  Lisp                             1              0              0              4
+  -------------------------------------------------------------------------------
+  SUM:                            85           1308           1122           7890
+  -------------------------------------------------------------------------------
+#+end_example
+
+#+BEGIN_SRC sh :results output :dir /data/gitana/study/os/linux-0.11
+  cloc --quiet .
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+  github.com/AlDanial/cloc v 1.90  T=0.09 s (1163.5 files/s, 161025.8 lines/s)
+  -------------------------------------------------------------------------------
+  Language                     files          blank        comment           code
+  -------------------------------------------------------------------------------
+  C                               51            782           1049           6747
+  C/C++ Header                    33            327            260           2154
+  Assembly                         8            165            312           1458
+  make                             8             74             52            460
+  -------------------------------------------------------------------------------
+  SUM:                           100           1348           1673          10819
+  -------------------------------------------------------------------------------
+#+end_example
+
+#+BEGIN_SRC sh :results output :dir /data/gitana/study/os/minix1/kernel
+  cloc --quiet .
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+  github.com/AlDanial/cloc v 1.90  T=0.05 s (451.0 files/s, 133013.8 lines/s)
+  -------------------------------------------------------------------------------
+  Language                     files          blank        comment           code
+  -------------------------------------------------------------------------------
+  C                               12            706           1245           3083
+  Assembly                         4            224            386            970
+  make                             2             30              6            149
+  DOS Batch                        2              1              0            139
+  C/C++ Header                     4             25             27             88
+  -------------------------------------------------------------------------------
+  SUM:                            24            986           1664           4429
+  -------------------------------------------------------------------------------
+#+end_example
+
+第二点：代码比较干净 clean code
+- 用于教学
+- xv6 的原始代码设计的结构相对于 Linux 0.11 和 minix1 要好一些
+- 可以学到一些好的编程实践
+
+第三点：代码比较现代 morden
+1. 可以很轻松地在 macos 和 linux 发行版中编译调试
+2. 作者值得信赖
+   - 源自 Dennis Ritchie 和 Ken Thompson 的 Unix Version 6
+   - Robert Morris 是 Cornell University 的学生，年仅 23 岁。蠕虫病毒发明者，通过互
+     联网传播直接侵犯到美国陆军弹道研究实验室
+   - Frans Kaashoek 时 MIT 操作系统/分布式系统课程教授，系统研究领域 TOP 团队
+
+
+** 用户态/内核态
+#+BEGIN_SRC text
+  ------------+==================================================
+              |
+              |    vi       cat          echo
+  User Mode   |     |   sh   |      ls    |
+              |     |   |    |      |     |
+              |     +---------+-----+-----+
+              |               |
+              |               v
+  ------------|=========== SYSCALL ==============================
+              |             |    ^
+              |             |    +------------+
+              |             v                 |
+  Kernel Mode |       [sys_fork/sys_exec] -> [exec/io_wait]
+              |
+              |               [scheduler]
+  ------------+==================================================
+#+END_SRC
+
+1. RING 3 被叫做用户态，在应用程序中运行
+2. RING 0 被叫做内核态，完全在操作系统内核中运行
+3. 内核态有一些特权的命令
+   - cli 关中断 [[file:lab/08-kernel-user-mode/kernel.S]]
+   - sti 开中断
+   - 但是用户态程序不行 [[file:lab/08-kernel-user-mode/user.S]]
+
+** 系统调用
+xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户进程编写代码的 API
+
+| NO. | SYSCALL                   | Description                                |
+|-----+---------------------------+--------------------------------------------|
+|   1 | fork()                    | Create a process                           |
+|   2 | exit()                    | Terminate the current process              |
+|   3 | wait()                    | Wait for a child process to exit           |
+|   4 | kill(pid)                 | Terminate process pid                      |
+|   5 | getpid()                  | Return the current process’s pid           |
+|   6 | sleep(n)                  | Sleep for n clock ticks                    |
+|   7 | exec(filename, *argv)     | Load a file and execute it                 |
+|   8 | sbrk(n)                   | Grow process’s memory by n bytes           |
+|   9 | open(filename, flags)     | Open a file; the flags indicate read/write |
+|  10 | read(fd, buf, n)          | Read n bytes from an open file into buf    |
+|  11 | write(fd, buf, n)         | Write n bytes to an open file              |
+|  12 | close(fd)                 | Release open file fd                       |
+|  13 | dup(fd)                   | Duplicate fd                               |
+|  14 | pipe(p)                   | Create a pipe and return fd’s in p         |
+|  15 | chdir(dirname)            | Change the current directory               |
+|  16 | mkdir(dirname)            | Create a new directory                     |
+|  17 | mknod(name, major, minor) | Create a device file                       |
+|  18 | fstat(fd)                 | Return info about an open file             |
+|  19 | link(f1, f2)              | Create another name (f2) for the file f1   |
+|  20 | unlink(filename)          | Remove a file                              |
+
+
+[[file:lab/09-linux-syscall/forkme.c]]
+
+** 地址空间
+1. 操作系统的每个进程都有自己的地址空间
+   1) 这个空间只用进程内部是可见的，也称虚拟地址空间，不同进程的地址空间是隔离的
+      - 如果不隔离会出现什么情况?
+   2) xv6 虚拟地址空间如下
+     #+BEGIN_EXAMPLE
+       0xFFFFFFFF -> |-------------|  -
+                     |             |  ^
+                     |             |  |
+                     |             |  |
+                     | Free Memory |
+                     |             |
+                     |             | Kernel Space
+                     |-------------|
+                     | Text & Data |
+                     |             |  |
+       0x80100000 -> |-------------|  |
+                     |     BIOS    |  v
+       0x80000000 -> |-------------|  -
+       (KERNBASE)    |     Heap    |  ^
+                     |      |      |  |
+                     |      v      |  |
+                     |     ...     |  |
+                     |             |
+                     |             |
+                     |             |
+                     |             |
+                     |             | User Space
+                     |-------------|
+                     |     ...     |
+                     |             |
+                     |      ^      |
+                     |      |      |  |
+                     |  User stack |  |
+                     |-------------|  |
+                     |             |  |
+                     |    User     |  |
+                     | Text & Data |  v
+       0x0        -> |-------------|  -
+     #+END_EXAMPLE
+   3) xv6 虚拟地址空间 -> 物理地址空间
+     #+BEGIN_EXAMPLE
+       0xFFFFFFFF -> |-------------|
+                     |             |
+                     |             |
+                     |             |
+                     | Free Memory |
+                     |             |
+                     |             |
+                     |-------------|
+                     | Text & Data |
+                     |             |
+       0x80100000 -> |-------------| -------+
+                     |     BIOS    |        |
+       0x80000000 -> |-------------| ----+  |
+       (KERNBASE)    |     Heap    |     |  |
+                     |      |      |     |  |
+                     |      v      |     |  |
+                     |     ...     |     |  |
+                     |             |     |  |
+                     |             |     |  |
+                     |             |     |  |
+                     |             |     |  |
+                     |             |     |  |       |-------------| <- Top Physical memory
+                     |-------------|     |  |       |             |
+                     |     ...     |     |  |       |             |
+                     |             |     |  |       |             |
+                     |      ^      |     |  |       |             |
+                     |      |      |     |  |       |-------------|  <- 4M
+                     |  User stack |     |  |       |    Kernel   |
+                     |-------------|     |  |       | Text & Data |
+                     |             |     |  |       |             |
+                     |    User     |     |  +-----> |-------------|
+                     | Text & Data |     |          |     BIOS    |
+       0x0        -> |-------------|     +--------> |-------------|  <- 0x0
+
+       VIRTUAL                                                       PHYSICAL
+     #+END_EXAMPLE
+
+2. xv6 的地址管理: 保护分页/页表
+   1) xv6 为每个进程维护一个页表
+   2) 用以描述每个进程的用户地址空间，外加一个单独描述内核地址空间的页表
+   3) 虚拟地址访问物理内存和各种硬件资源
+      - 虚拟地址 va (virtual address)
+      - 物理地址 pa (physical address)
+      - va -> pa 通过分页机制实现
+   4) 为什么需要搞虚拟地址或物理地址?
+
+** 进程管理
+1. 并发 (Concurrency) 实现
+   - 分时运行
+   - 时间中断抢夺运行权利
+2. 并行 (Parallelism) 实现
+   - 程序真实同时运行
+
+#+BEGIN_EXAMPLE
+#+END_EXAMPLE

@@ -26,4 +26,4 @@ all: $(OUTS) $(RUNS)
 
 .PHONY: clean
 clean:
-	-rm *.o *.out *.run
+	-rm *.o *.out *.run *.bin *.asm
