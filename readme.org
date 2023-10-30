@@ -4,7 +4,9 @@
 #+DATE: <2023-10-24 Tue>
 #+STARTUP: overview num indent
 
-**如果觉得讲解得好，请喝一杯咖啡也是极好的**
+#+BEGIN_QUOTE
+如果觉得讲解得好，请喝一杯咖啡也是极好的
+#+END_QUOTE
 
 [[file:img/pay.jpg]]
 
@@ -28,14 +30,9 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
    - xv6 概览
    - 从汇编到 C 语言
    - 系统初始准备工作
-3. 内存管理
-   - 页表
-   - 内存分配流程
-4. 进程管理
-   - 中断
-   - 进程调度
-5. 文件系统
-   - TODO
+3. 内存管理 TODO
+4. 进程管理 TODO
+5. 文件系统 TODO
 
 * 资源
 1. MIT 课程官网 [[https://pdos.csail.mit.edu/6.828/][6.828]]
