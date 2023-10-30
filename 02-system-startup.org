@@ -156,3 +156,6 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
    - 时间中断抢夺运行权利
 2. 并行 (Parallelism) 实现
    - 程序真实同时运行
+
+#+BEGIN_EXAMPLE
+#+END_EXAMPLE
