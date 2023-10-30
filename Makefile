@@ -2,7 +2,7 @@ all: init
 
 
 clean:
-	make -c lab clean
+	make -C lab clean
 
 init:
 	bear -- make -C lab
