@@ -238,10 +238,35 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
 1. 并发 (Concurrency) 实现
    - 分时运行
    - 时间中断抢夺运行权利
-2. 并行 (Parallelism) 实现
-   - 程序真实同时运行
 
 #+BEGIN_EXAMPLE
+  core 1: 2GH/ 10ms
+         t:     a     b
+         t:  1  2  3  4
+  =======================
+   sh        x  s  x  s
+   vi        s  x  s  s
+   cat       s  s  s  x
+#+END_EXAMPLE
+
+2. 并行 (Parallelism) 实现
+   - 程序真实同时运行
+   - kernel 时间中断抢夺运行权利
+
+#+BEGIN_EXAMPLE
+  core 1:
+             1  2  3
+  =======================
+   sh        x  s  x
+   vi        s  x  s
+   cat       s  s  s
+
+  core 2:
+             1  2  3
+  =======================
+   sh        s  s  s
+   vi        x  s  s
+   cat       s  x  x
 #+END_EXAMPLE
 
 * x86 实模式和保护模式
@@ -324,32 +349,3 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
 
       call BEGIN_PM               ; 7. Call a well-known label with useful code
 #+END_SRC
-   - kernel 时间中断抢夺运行权利
-
-#+BEGIN_EXAMPLE
-  core 1: 2GH/ 10ms
-         t:     a     b
-         t:  1  2  3  4
-  =======================
-   sh        x  s  x  s
-   vi        s  x  s  s
-   cat       s  s  s  x
-#+END_EXAMPLE
-
-2. 并行 (Parallelism) 实现
-   - 程序真实同时运行
-#+BEGIN_EXAMPLE
-  core 1:
-             1  2  3
-  =======================
-   sh        x  s  x
-   vi        s  x  s
-   cat       s  s  s
-
-  core 2:
-             1  2  3
-  =======================
-   sh        s  s  s
-   vi        x  s  s
-   cat       s  x  x
-#+END_EXAMPLE
