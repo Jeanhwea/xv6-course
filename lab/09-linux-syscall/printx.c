@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[])
 {
-	int num = rand() - 10;
+	int num = fork();
 	if (num > 0) {
 		printf("aaa\n");
 	} else {

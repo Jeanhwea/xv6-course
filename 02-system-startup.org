@@ -94,10 +94,9 @@
 #+BEGIN_SRC text
   ------------+==================================================
               |
-              |    vi        bbb          echo   pgsql -> process: read/log/memory
-
-  User Mode   |     |   aaa   |      ls    |
-              |     |   |    |      |     |
+              |    vi         vi          echo
+  User Mode   |     |   echo   |      ls    |
+              |     |   |      |      |     |
               |     +---------+-----+-----+
               |               |
               |               v
@@ -107,7 +106,7 @@
               |             v                 |
   Kernel Mode |       [sys_fork/sys_exec] -> [exec/io_wait]
               |
-              |               [scheduler]
+              |               [scheduler] mm fs
   ------------+==================================================
 #+END_SRC
 
@@ -201,7 +200,7 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
                      |     ...     |     |  |
                      |             |     |  |
                      |             |     |  |
-                     |             |     |  |       |-------------| <- Top Physical memory / 1G / 512M
+                     |             |     |  |       |-------------| <- Top Physical memory / 2G / 128M
                      |-------------|     |  |       |             |
                      |     ...     |     |  |       |             |
                      |             |     |  |       |             |
@@ -229,10 +228,20 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
 ** 进程管理
 1. 并发 (Concurrency) 实现
    - 分时运行
-   - 时间中断抢夺运行权利
+   - kernel 时间中断抢夺运行权利
+
+#+BEGIN_EXAMPLE
+  core 1: 2GH/ 10ms
+         t:     a     b
+         t:  1  2  3  4
+  =======================
+   sh        x  s  x  s
+   vi        s  x  s  s
+   cat       s  s  s  x
+#+END_EXAMPLE
+
 2. 并行 (Parallelism) 实现
    - 程序真实同时运行
-
 #+BEGIN_EXAMPLE
   core 1:
              1  2  3
