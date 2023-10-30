@@ -4,7 +4,7 @@
 #+DATE: <2023-10-24 Tue>
 #+STARTUP: overview num indent
 
-**如果觉得讲解得好，请喝一杯咖啡也是极好的**
+*如果觉得讲解得好，请喝一杯咖啡也是极好的*
 
 [[file:img/pay.jpg]]
 
