@@ -12,11 +12,9 @@ GDB    = gdb
 QEMU   = qemu-system-i386
 QMFLAG = -nographic -fda fda.img
 OBJS   = $(patsubst %.S,%.out,$(wildcard *.S))
+SIGN   = ../../bin/sign.pl
 
-# all: $(OBJS)
-
-all: fda.img
-
+all: fda.img user.run
 
 %.o: %.S
 	$(CC) $(CCFLAG) -c -o $@ $<
@@ -27,12 +25,16 @@ all: fda.img
 %.out: %.o
 	$(LD) $(LDFLAG) $< -o $@
 
+user.run: user.S
+	$(CC) -c user.S
+	$(LD) -o user.run user.o
+
 kernel.bin: kernel.out
 	$(OD) $(ODFLAG) $< > kernel.asm
 	$(OC) $(OCFLAG) $< kernel.bin
 
 fda.img: kernel.bin
-	./sign.pl kernel.bin
+	$(SIGN) kernel.bin
 	dd if=/dev/zero of=fda.img bs=512 count=1
 	dd if=kernel.bin  of=fda.img conv=notrunc
 
