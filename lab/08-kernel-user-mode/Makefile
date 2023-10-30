@@ -14,10 +14,7 @@ QMFLAG = -nographic -fda fda.img
 OBJS   = $(patsubst %.S,%.out,$(wildcard *.S))
 SIGN   = ../../bin/sign.pl
 
-# all: $(OBJS)
-
-all: fda.img
-
+all: fda.img user.run
 
 %.o: %.S
 	$(CC) $(CCFLAG) -c -o $@ $<
@@ -28,14 +25,19 @@ all: fda.img
 %.out: %.o
 	$(LD) $(LDFLAG) $< -o $@
 
-boot.bin: boot.out
-	$(OD) $(ODFLAG) $< > boot.asm
-	$(OC) $(OCFLAG) $< boot.bin
+user.run: user.S
+	$(CC) -c user.S
+	$(OD) -d user.o > user.asm
+	$(LD) -o user.run user.o
 
-fda.img: boot.bin
-	$(SIGN) boot.bin
+kernel.bin: kernel.out
+	$(OD) $(ODFLAG) $< > kernel.asm
+	$(OC) $(OCFLAG) $< kernel.bin
+
+fda.img: kernel.bin
+	$(SIGN) kernel.bin
 	dd if=/dev/zero of=fda.img bs=512 count=1
-	dd if=boot.bin  of=fda.img conv=notrunc
+	dd if=kernel.bin  of=fda.img conv=notrunc
 
 qemu: fda.img
 	$(QEMU) $(QMFLAG)
@@ -47,4 +49,4 @@ qemu-debug: fda.img
 
 .PHONY: clean qemu
 clean:
-	-rm -f *.o *.d *.out *.img *.bin *.asm
+	-rm *.o *.out *.run *.bin *.asm
