@@ -25,7 +25,7 @@ start32:
 
 
 ;; 空段，用于校验
-gdt_start:
+gdt_begin:
     dd 0x0			; 4 byte
     dd 0x0			; 4 byte
 
@@ -50,9 +50,9 @@ gdt_data:
 gdt_end:
 
 desc:
-    dw gdt_end - gdt_start - 1 ; size (16 bit), always one less of its true size
-    dd gdt_start               ; address (32 bit)
+    dw gdt_end - gdt_begin - 1 ; size (16 bit), always one less of its true size
+    dd gdt_begin               ; address (32 bit)
 
 ; define some constants for later use
-CODE_SEG equ gdt_code - gdt_start
-DATA_SEG equ gdt_data - gdt_start
+CODE_SEG equ gdt_code - gdt_begin
+DATA_SEG equ gdt_data - gdt_begin
