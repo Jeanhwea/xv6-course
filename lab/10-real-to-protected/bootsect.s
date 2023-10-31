@@ -1,4 +1,5 @@
 [org 0x7c00]                    ; 设置起始地址, BIOS 默认跳转地址为 0x7c00
+KERNEL_BASE equ 0x1000		; 内核加载到内存的起始地址
 
 ;; 实模式
 [bits 16]
@@ -14,20 +15,23 @@ start:
 
 
 ;; 参考手册 https://stanislavs.org/helppc/int_13-2.html
+;; ES:BX = pointer to buffer
 load_disk:
 	pusha
-	mov	ah, 0x02	; function code: read disk
+	mov	ah, 0x02	; function code: 2 = read disk
 	mov	al, 0x16	; nsector
 	mov	ch, 0		; cylinder
 	mov	cl, 2		; sector
 	mov	dh, 0		; header
 	mov	dl, 0		; 0 = flappy, 1 = flappy1, 0x80 = hdd
+	mov	bx, KERNEL_BASE	;
 	int	0x13		; BIOS 中断
 	popa
 	ret
 
 ;; 保护模式
 [bits 32]
+[extern bootmain]
 start2:
 	mov	ax, DATA_SEG	; 5. 更新所有段寄存器
 	mov	ds, ax
@@ -37,7 +41,7 @@ start2:
 	mov	gs, ax
 	mov	ebp, 0x90000	; 6. 更新系统栈
 	mov	esp, ebp
-	call	bootmain	; 7. 跳转到 C 语言入口代码
+	call	KERNEL_BASE	; 7. 跳转到 C 语言入口代码
 
 	hlt
 
