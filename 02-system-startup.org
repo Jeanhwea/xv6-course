@@ -8,7 +8,9 @@
 * 系统概览
 ** 为什么选 xv6 代码阅读?
 第一点: 代码量适中，统计大约 6000 行左右
-#+BEGIN_SRC sh :results output :dir /data/gitana/study/os/xv6-public
+
+xv6 代码统计
+#+BEGIN_SRC sh :results output :exports results :dir /data/gitana/study/os/xv6-public
   make clean > /dev/null
   cloc --quiet .
 #+END_SRC
@@ -32,7 +34,8 @@
   -------------------------------------------------------------------------------
 #+end_example
 
-#+BEGIN_SRC sh :results output :dir /data/gitana/study/os/linux-0.11
+linux 0.11 代码统计
+#+BEGIN_SRC sh :results output :exports results :dir /data/gitana/study/os/linux-0.11
   cloc --quiet .
 #+END_SRC
 
@@ -51,7 +54,8 @@
   -------------------------------------------------------------------------------
 #+end_example
 
-#+BEGIN_SRC sh :results output :dir /data/gitana/study/os/minix1/kernel
+minix1 代码统计
+#+BEGIN_SRC sh :results output :exports results :dir /data/gitana/study/os/minix1/kernel
   cloc --quiet .
 #+END_SRC
 
