@@ -1,27 +1,27 @@
 ;; 实模式
 [bits 16]
-switch_to_pm:
-	cli			 ; 1. 关中断
-	lgdt	[gdt_descriptor] ; 2. 加载 GDT
+start:
+	cli			; 1. 关中断
+	lgdt	[desc]		; 2. 加载 GDT
 	mov	eax, cr0
-	or	eax, 0x1	 ; 3. 设置 cr0
+	or	eax, 0x1	; 3. 设置 cr0
 	mov	cr0, eax
-	jmp	CODE_SEG:init_pm ; 4. 长跳转到 32 汇编入口
+	jmp	CODE_SEG:start2 ; 4. 长跳转到 32 汇编入口
 
 ;; 保护模式
 [bits 32]
-init_pm:
-	mov	ax, DATA_SEG	 ; 5. 更新所有段寄存器
+start32:
+	mov	ax, DATA_SEG	; 5. 更新所有段寄存器
 	mov	ds, ax
 	mov	ss, ax
 	mov	es, ax
 	mov	fs, ax
 	mov	gs, ax
-
 	mov	ebp, 0x90000	; 6. 更新系统栈
 	mov	esp, ebp
+	call	main		; 7. 跳转到 C 语言入口代码
 
-    call _PM               ; 7. 跳转到 C 语言入口代码
+	hlt
 
 
 ;; 空段，用于校验
@@ -49,7 +49,7 @@ gdt_data:
 
 gdt_end:
 
-gdt_descriptor:
+desc:
     dw gdt_end - gdt_start - 1 ; size (16 bit), always one less of its true size
     dd gdt_start               ; address (32 bit)
 
