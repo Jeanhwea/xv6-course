@@ -26,7 +26,8 @@ end
 
 target remote :1234
 
-lay asm
-lay reg
-b *0x7c00
-c
+break *0x7c00
+watch $cs
+# layout asm
+# layout reg
+continue
