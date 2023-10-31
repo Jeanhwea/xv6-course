@@ -27,7 +27,6 @@ end
 target remote :1234
 
 break *0x7c00
-watch $cs
 # layout asm
 # layout reg
 continue
