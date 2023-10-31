@@ -49,4 +49,4 @@ qemu-debug: fda.img
 
 .PHONY: clean qemu
 clean:
-	-rm *.o *.out *.run *.bin *.asm
+	-rm *.o *.out *.run *.bin *.asm *.img
