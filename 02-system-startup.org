@@ -258,7 +258,7 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
 #+END_EXAMPLE
 
 * 实模式到保护模式
-** GDT 表说明
+** GDT 全局描述符表
 1. GDT 主要保护以下信息, 总共 64 位, [[https://files.osdev.org/mirrors/geezer/os/pm.htm][link]]
    - base  = low(16) + middle(8) + high(8)
    - limit = low(16) + high(4)
@@ -292,6 +292,18 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
 #+END_EXAMPLE
 
 ** 实模式到保护模式切换
+1. =实模式= Real Mode
+   - x86 处理器加点后都是先进入实模式
+   - 实模式时直接访问所有地址空间
+   - 实模式只有 1 MB 的寻址空间，并且没有内存保护
+2. =保护模式= Protected Mode
+   - 保护模式提供了一些高级特性
+     + memory protection
+     + multitasking
+     + enhanced memory addressing
+   - 它支持更大的地址空间，并且多任务有不同的运行级别 (rings)
+
+实模式到保护模式切换流程
 1. 关闭中断
 2. 加载 gdt
 3. 设置控制寄存器 ~cr0~
