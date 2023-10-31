@@ -1,3 +1,5 @@
+[org 0x7c00]                    ; 设置起始地址, BIOS 默认跳转地址为 0x7c00
+
 ;; 实模式
 [bits 16]
 start:
@@ -24,10 +26,10 @@ start32:
 	hlt
 
 
-;; 空段，用于校验
+;; 用于校验，前 8 字节要求置零
 gdt_begin:
-    dd 0x0			; 4 byte
-    dd 0x0			; 4 byte
+    dd 0x0
+    dd 0x0
 
 ;; 代码段 base = 0x00000000, length = 0xfffff
 gdt_code:
@@ -56,3 +58,7 @@ desc:
 ; define some constants for later use
 CODE_SEG equ gdt_code - gdt_begin
 DATA_SEG equ gdt_data - gdt_begin
+
+;; BIOS 结束校验码
+times 510-($-$$) db 0
+	dw 0xaa55
