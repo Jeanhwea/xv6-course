@@ -10,7 +10,8 @@ qemu-debug: bootsect.bin
 
 bootsect.bin: bootsect.s
 	nasm -f bin -o bootsect.bin -l bootsect.lst bootsect.s
+	ndisasm -b 16 bootsect.bin > bootsect.dis
 
 .PHONY: clean qemu
 clean:
-	-rm -f *.o *.d *.out *.img *.bin *.asm
+	-rm -f *.o *.d *.out *.img *.bin *.asm *.dis

@@ -12,3 +12,4 @@ compile_commands.json
 *.bin
 *.run
 *.lst
+*.dis
