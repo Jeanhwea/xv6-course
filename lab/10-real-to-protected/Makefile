@@ -9,7 +9,7 @@ qemu-debug: bootsect.bin
 	$(QEMU) -s -S -nographic -fda bootsect.bin
 
 bootsect.bin: bootsect.s
-	nasm -f bin -o bootsect.bin bootsect.s
+	nasm -f bin -o bootsect.bin -l bootsect.lst bootsect.s
 
 .PHONY: clean qemu
 clean:

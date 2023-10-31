@@ -12,7 +12,7 @@ start:
 
 ;; 保护模式
 [bits 32]
-start32:
+start2:
 	mov	ax, DATA_SEG	; 5. 更新所有段寄存器
 	mov	ds, ax
 	mov	ss, ax
@@ -21,7 +21,7 @@ start32:
 	mov	gs, ax
 	mov	ebp, 0x90000	; 6. 更新系统栈
 	mov	esp, ebp
-	call	main		; 7. 跳转到 C 语言入口代码
+	; call	main		; 7. 跳转到 C 语言入口代码
 
 	hlt
 

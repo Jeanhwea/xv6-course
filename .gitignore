@@ -11,3 +11,4 @@ compile_commands.json
 *.img
 *.bin
 *.run
+*.lst
