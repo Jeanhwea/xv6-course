@@ -1,4 +1,4 @@
 [bits 32]
-[extern bootmain]
-call bootmain
+[extern start_kernel]
+call start_kernel
 jmp $

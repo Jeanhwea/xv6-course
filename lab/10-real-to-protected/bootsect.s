@@ -4,6 +4,13 @@ KERNEL_BASE equ 0x1000		; 内核加载到内存的起始地址
 ;; 实模式
 [bits 16]
 start:
+	xor	ax, ax
+	mov	ds, ax
+	mov	ss, ax
+	mov	es, ax
+	mov	fs, ax
+	mov	gs, ax
+
 	call	load_disk
 
 	cli			; 1. 关中断
@@ -19,7 +26,7 @@ start:
 load_disk:
 	pusha
 	mov	ah, 0x02	; function code: 2 = read disk
-	mov	al, 0x16	; nsector
+	mov	al, 2		; nsector
 	mov	ch, 0		; cylinder
 	mov	cl, 2		; sector
 	mov	dh, 0		; header
