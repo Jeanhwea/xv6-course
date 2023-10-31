@@ -3,12 +3,28 @@
 ;; 实模式
 [bits 16]
 start:
+	call	load_disk
+
 	cli			; 1. 关中断
 	lgdt	[desc]		; 2. 加载 GDT
 	mov	eax, cr0
 	or	eax, 0x1	; 3. 设置 cr0
 	mov	cr0, eax
 	jmp	CODE_SEG:start2 ; 4. 长跳转到 32 汇编入口
+
+
+;; 参考手册 https://stanislavs.org/helppc/int_13-2.html
+load_disk:
+	pusha
+	mov	ah, 0x02	; function code: read disk
+	mov	al, 0x16	; nsector
+	mov	ch, 0		; cylinder
+	mov	cl, 2		; sector
+	mov	dh, 0		; header
+	mov	dl, 0		; 0 = flappy, 1 = flappy1, 0x80 = hdd
+	int	0x13		; BIOS 中断
+	popa
+	ret
 
 ;; 保护模式
 [bits 32]
@@ -21,7 +37,7 @@ start2:
 	mov	gs, ax
 	mov	ebp, 0x90000	; 6. 更新系统栈
 	mov	esp, ebp
-	; call	main		; 7. 跳转到 C 语言入口代码
+	call	bootmain	; 7. 跳转到 C 语言入口代码
 
 	hlt
 
