@@ -2,9 +2,9 @@ CC     = gcc
 AS     = nasm
 LD     = ld
 OD     = objdump
-OC     = objcopy
 CCFLAG = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer -fno-stack-protector -fno-pie -no-pie -O -nostdinc -I.
 LDFLAG = -m elf_i386 -N -e start_kernel -Ttext 0x1000
+ODFLAG = -D -m i386 -b binary
 QEMU   = qemu-system-i386
 
 all: fda.img
@@ -30,6 +30,7 @@ bootmain.o: bootmain.c
 
 bootmain.bin: bootmain.o entry.o
 	$(LD) $(LDFLAG) -o bootmain.bin --oformat binary $^
+	$(OD) $(ODFLAG) bootmain.bin > bootmain.asm
 
 fda.img: bootsect.bin bootmain.bin
 	cat bootsect.bin bootmain.bin > fda.img
