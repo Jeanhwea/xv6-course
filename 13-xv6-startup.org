@@ -66,8 +66,16 @@ dd if=bootblock of=xv6.img conv=notrunc
 dd if=kernel of=xv6.img seek=1 conv=notrunc
 #+end_example
 
-启动编译流程
-1. bootasm.S, bootmain.c
+启动编译阶段:
+1. bootasm.S, bootmain.c 构建 bootblock
+   - 产出汇编文件 bootblock.asm
+   - 产出 MBR 文件 bootblock
+2. 编译内核文件, bio.c, console.c ... swtch.S, trap.c
+   - c 文件和汇编单个编译，混合链接
+   - 产出 kernel.asm
+   - 产出 kernel 内核镜像文件
+3. 合成启动镜像 bootblock, kernel
+   - 产出 xv6.img
 
 * 启动逻辑
 系统启动文件
