@@ -13,56 +13,56 @@
 
 #+RESULTS:
 #+begin_example
-gcc -c bootmain.c
-gcc -c bootasm.S
-ld -m    elf_i386 -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
-objdump -S bootblock.o > bootblock.asm
-objcopy -S -O binary -j .text bootblock.o bootblock
-./sign.pl bootblock
-gcc -c -o bio.o bio.c
-gcc -c -o console.o console.c
-gcc -c -o exec.o exec.c
-gcc -c -o file.o file.c
-gcc -c -o fs.o fs.c
-gcc -c -o ide.o ide.c
-gcc -c -o ioapic.o ioapic.c
-gcc -c -o kalloc.o kalloc.c
-gcc -c -o kbd.o kbd.c
-gcc -c -o lapic.o lapic.c
-gcc -c -o log.o log.c
-gcc -c -o main.o main.c
-gcc -c -o mp.o mp.c
-gcc -c -o picirq.o picirq.c
-gcc -c -o pipe.o pipe.c
-gcc -c -o proc.o proc.c
-gcc -c -o sleeplock.o sleeplock.c
-gcc -c -o spinlock.o spinlock.c
-gcc -c -o string.o string.c
-gcc -c -o swtch.o swtch.S
-gcc -c -o syscall.o syscall.c
-gcc -c -o sysfile.o sysfile.c
-gcc -c -o sysproc.o sysproc.c
-gcc -c -o trapasm.o trapasm.S
-gcc -c -o trap.o trap.c
-gcc -c -o uart.o uart.c
-./vectors.pl > vectors.S
-gcc -c -o vectors.o vectors.S
-gcc -c -o vm.o vm.c
-gcc -c -o entry.o entry.S
-gcc -c entryother.S
-ld -m    elf_i386 -N -e start -Ttext 0x7000 -o bootblockother.o entryother.o
-objcopy -S -O binary -j .text bootblockother.o entryother
-objdump -S bootblockother.o > entryother.asm
-gcc -c initcode.S
-ld -m    elf_i386 -N -e start -Ttext 0 -o initcode.out initcode.o
-objcopy -S -O binary initcode.out initcode
-objdump -S initcode.o > initcode.asm
-ld -m    elf_i386 -T kernel.ld -o kernel entry.o bio.o console.o exec.o file.o fs.o ide.o ioapic.o kalloc.o kbd.o lapic.o log.o main.o mp.o picirq.o pipe.o proc.o sleeplock.o spinlock.o string.o swtch.o syscall.o sysfile.o sysproc.o trapasm.o trap.o uart.o vectors.o vm.o  -b binary initcode entryother
-objdump -S kernel > kernel.asm
-objdump -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > kernel.sym
-dd if=/dev/zero of=xv6.img count=10000
-dd if=bootblock of=xv6.img conv=notrunc
-dd if=kernel of=xv6.img seek=1 conv=notrunc
+  gcc -c bootmain.c
+  gcc -c bootasm.S
+  ld -m    elf_i386 -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
+  objdump -S bootblock.o > bootblock.asm
+  objcopy -S -O binary -j .text bootblock.o bootblock
+  ./sign.pl bootblock
+  gcc -c -o bio.o bio.c
+  gcc -c -o console.o console.c
+  gcc -c -o exec.o exec.c
+  gcc -c -o file.o file.c
+  gcc -c -o fs.o fs.c
+  gcc -c -o ide.o ide.c
+  gcc -c -o ioapic.o ioapic.c
+  gcc -c -o kalloc.o kalloc.c
+  gcc -c -o kbd.o kbd.c
+  gcc -c -o lapic.o lapic.c
+  gcc -c -o log.o log.c
+  gcc -c -o main.o main.c
+  gcc -c -o mp.o mp.c
+  gcc -c -o picirq.o picirq.c
+  gcc -c -o pipe.o pipe.c
+  gcc -c -o proc.o proc.c
+  gcc -c -o sleeplock.o sleeplock.c
+  gcc -c -o spinlock.o spinlock.c
+  gcc -c -o string.o string.c
+  gcc -c -o swtch.o swtch.S
+  gcc -c -o syscall.o syscall.c
+  gcc -c -o sysfile.o sysfile.c
+  gcc -c -o sysproc.o sysproc.c
+  gcc -c -o trapasm.o trapasm.S
+  gcc -c -o trap.o trap.c
+  gcc -c -o uart.o uart.c
+  ./vectors.pl > vectors.S
+  gcc -c -o vectors.o vectors.S
+  gcc -c -o vm.o vm.c
+  gcc -c -o entry.o entry.S
+  gcc -c entryother.S
+  ld -m    elf_i386 -N -e start -Ttext 0x7000 -o bootblockother.o entryother.o
+  objcopy -S -O binary -j .text bootblockother.o entryother
+  objdump -S bootblockother.o > entryother.asm
+  gcc -c initcode.S
+  ld -m    elf_i386 -N -e start -Ttext 0 -o initcode.out initcode.o
+  objcopy -S -O binary initcode.out initcode
+  objdump -S initcode.o > initcode.asm
+  ld -m    elf_i386 -T kernel.ld -o kernel entry.o bio.o console.o exec.o file.o fs.o ide.o ioapic.o kalloc.o kbd.o lapic.o log.o main.o mp.o picirq.o pipe.o proc.o sleeplock.o spinlock.o string.o swtch.o syscall.o sysfile.o sysproc.o trapasm.o trap.o uart.o vectors.o vm.o  -b binary initcode entryother
+  objdump -S kernel > kernel.asm
+  objdump -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > kernel.sym
+  dd if=/dev/zero of=xv6.img count=10000
+  dd if=bootblock of=xv6.img conv=notrunc
+  dd if=kernel of=xv6.img seek=1 conv=notrunc
 #+end_example
 
 启动编译阶段:
