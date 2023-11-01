@@ -7,11 +7,11 @@
 #+PROPERTY: header-args:sh :results output
 
 
+
 * 读取磁盘，加载 kernel
 设置断点观察读取磁盘 | [[https://stanislavs.org/helppc/int_13-2.html][link]]
 
-代码文件
-[[file:lab/10-real-to-protected/bootsect.s]]
+代码文件 [[file:lab/10-real-to-protected/bootsect.s]]
 
 #+BEGIN_EXAMPLE
   (gdb)
@@ -106,3 +106,6 @@
 5. 更新所有的段寄存器
 6. 更新系统栈
 7. 跳转到 32 位指令出执行
+
+* 总结
+1.
