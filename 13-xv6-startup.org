@@ -70,11 +70,16 @@ dd if=kernel of=xv6.img seek=1 conv=notrunc
 1. bootasm.S, bootmain.c 构建 bootblock
    - 产出汇编文件 bootblock.asm
    - 产出 MBR 文件 bootblock
-2. 编译内核文件, bio.c, console.c ... swtch.S, trap.c
+2. 编译入口文件, entry.S, entryother.S, initcode.S
+   - entry.o     entry 函数, 启动入口函数 (paging off)
+   - entryother
+   - initcode    start 函数
+3. 编译内核文件, bio.c, console.c ... swtch.S, trap.c
    - c 文件和汇编单个编译，混合链接
    - 产出 kernel.asm
    - 产出 kernel 内核镜像文件
-3. 合成启动镜像 bootblock, kernel
+   - kernel 起始地址 0x80100000, 见 kernel.ld
+4. 合成启动镜像 bootblock, kernel
    - 产出 xv6.img
 
 * 启动逻辑
