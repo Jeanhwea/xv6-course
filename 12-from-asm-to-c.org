@@ -13,16 +13,11 @@
   (gdb)
   [   0:7c34] => 0x7c34:  int    $0x13
   0x00007c34 in ?? ()
-  (gdb) x/4i $ip
-  Value can't be converted to integer.
   (gdb) x/4i $eip
   => 0x7c34:      int    $0x13
      0x7c36:      popa
      0x7c37:      ret
      0x7c38:      mov    $0x10,%ax
-  (gdb) b 0x7c36
-  No symbol table is loaded.  Use the "file" command.
-  Make breakpoint pending on future shared library load? (y or [n]) n
   (gdb) b *0x7c36
   Breakpoint 2 at 0x7c36
   (gdb) c
