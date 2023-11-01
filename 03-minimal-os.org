@@ -1,0 +1,142 @@
+#+TITLE: 编写最小操作系统
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-01 Wed>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+
+* 中断，陷阱和系统调用
+中断(Interrupt) 是指 CPU 停下当前的工作任务，去处理其他事情，处理完后回来继续执
+行刚才的任务
+- 中断是硬件实现的基础功能
+- HelpPC Reference Library [[https://stanislavs.org/helppc/idx_interrupt.html][Interrupt Services]]
+- Interrupts [[https://wiki.osdev.org/Interrupts][osdev]]
+
+#+BEGIN_SRC asm
+  int $0x80 # 中断号
+  cli
+  sti
+#+END_SRC
+
+BIOS 提供一下中断，[[https://stanislavs.org/helppc/idx_interrupt.html][link]]
+| 功能码 | 说明                   |
+|--------+------------------------|
+|   0x13 | 读取磁盘数据           |
+|   0x14 | 异步通信: 串口输出字符 |
+|   0x16 | 读取键盘输入           |
+|   0x1a | 时钟中断               |
+
+陷阱(Trap)：是一种有意的，预先安排的异常事件
+1. 一般是在编写程序时故意设下的陷阱指令，而后执行到陷阱指令后，CPU 将会调用特定
+   程序进行相应的处理，处理结束后返回到陷阱指令的下一条指令
+2. 如系统调用，程序调试功能等, 最常见的就是 Linux 系统调用的实现，使用中断指令
+
+系统调用(System Call) 指操作系统提供给应用的一组 API 函数， Linux 系统调用见
+
+查看 32 位操作系统系统调用号 NR_syscall 文件见
+#+BEGIN_SRC sh :results output :exports both
+  rg -n NR_write /usr/src/linux-headers-5.15.0-87-generic
+#+END_SRC
+
+#+RESULTS:
+: /usr/src/linux-headers-5.15.0-87-generic/arch/x86/include/generated/uapi/asm/unistd_32.h:8:#define __NR_write 4
+: /usr/src/linux-headers-5.15.0-87-generic/arch/x86/include/generated/uapi/asm/unistd_32.h:150:#define __NR_writev 146
+: /usr/src/linux-headers-5.15.0-87-generic/arch/x86/include/generated/uapi/asm/unistd_64.h:5:#define __NR_write 1
+: /usr/src/linux-headers-5.15.0-87-generic/arch/x86/include/generated/uapi/asm/unistd_64.h:24:#define __NR_writev 20
+: /usr/src/linux-headers-5.15.0-87-generic/arch/x86/include/generated/uapi/asm/unistd_x32.h:5:#define __NR_write (__X32_SYSCALL_BIT + 1)
+: /usr/src/linux-headers-5.15.0-87-generic/arch/x86/include/generated/uapi/asm/unistd_x32.h:321:#define __NR_writev (__X32_SYSCALL_BIT + 516)
+
+
+[[file:lab/05-interrupt/greet.S]]
+
+通过 strace 查看系统调用过程
+#+BEGIN_SRC sh :results output :exports both
+  strace ./lab/05-interrupt/greet.out 2>&1 1>/dev/null
+#+END_SRC
+
+#+RESULTS:
+: execve("./lab/05-interrupt/greet.out", ["./lab/05-interrupt/greet.out"], 0x7ffcb604f8b0 /* 56 vars */) = 0
+: [ Process PID=82486 runs in 32 bit mode. ]
+: write(1, "Hello from ASM!\n", 16)       = 16
+: exit(0)                                 = ?
+: +++ exited with 0 +++
+
+* 系统引导及分段
+#+BEGIN_SRC sh :results output :exports both
+  objdump -d ./lab/05-interrupt/greet2.run | grep section
+#+END_SRC
+
+#+RESULTS:
+: Disassembly of section .init:
+: Disassembly of section .plt:
+: Disassembly of section .plt.got:
+: Disassembly of section .text:
+: Disassembly of section .fini:
+
+
+在 gas 汇编中对段的描述是 section, 例如
+#+BEGIN_SRC asm
+  .section .text  # 代码段, 可以简写 .text
+  .section .data  # 数据段, 可以简写 .data
+#+END_SRC
+
+AT&T 寻址方式编写格式
+#+BEGIN_QUOTE
+  section:disp(base, index, scale)
+#+END_QUOTE
+
+#+BEGIN_SRC asm
+  %es:msg # 寻址 es 段的 msg
+#+END_SRC
+
+操作系统在对地址空间访问是通过分段实现 (segment)
+1. 段使用物理上连续的一块空间
+2. x86 系列分段的历史原因
+   - 8086 是 16 位地址线
+   - 当 CPU 升级到 20 位地址线是会出现问题
+   - 为了兼容, 280 芯片启用来段寄存器 cs, ds, ss, es 寄存器
+   - 380 芯片又添加了段寄存器 fs, gs
+   - 最终导致了实模式下段寻址模式
+
+#+BEGIN_EXAMPLE
+  真实地址 = 段地址 << 4 + address
+              ^             ^
+              |             |
+        存储在段寄存器中   偏移
+#+END_EXAMPLE
+
+* 裸金属启动
+回顾 BIOS 启动流程
+- 校验码   0x55aa => 0b01010101 0b10101010
+- 启动地址 0x7c00
+  - fda.img => 0x7c00
+
+#+BEGIN_SRC sh :results output
+  gdb -q -ex 'p/t 0x55aa'
+#+END_SRC
+
+#+RESULTS:
+: $1 = 101010110101010
+: (gdb) quit
+
+#+BEGIN_SRC sh :results output :exports both
+  hexdump -n 512 ./lab/06-barebone/fda.img
+#+END_SRC
+
+#+RESULTS:
+: 0000000 01b8 bb00 0002 03b9 ba00 0004 feeb 0000
+: 0000010 0000 0000 0000 0000 0000 0000 0000 0000
+: *
+: 00001f0 0000 0000 0000 0000 0000 0000 0000 aa55
+: 0000200
+
+[[file:lab/06-barebone/boot.S]]
+
+
+扩展: nasm 汇编器
+[[file:lab/07-nasm-boot/boot.s]]
+#+BEGIN_EXAMPLE
+  (gdb) show disassembly-flavor
+  att
+  (gdb) set disassembly-flavor intel
+#+END_EXAMPLE

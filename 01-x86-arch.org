@@ -1,0 +1,150 @@
+#+TITLE: x86 体系结构
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-01 Wed>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+
+
+* 寄存器及编译流程
+| 分类         | 英文全称            | 16 位 | 32 位 | 64 位 |
+|--------------+---------------------+-------+-------+-------|
+| 通用寄存器   | Accumulator         | ax    | eax   | rax   |
+| 通用寄存器   | Base                | bx    | ebx   | rbx   |
+| 通用寄存器   | Counter             | cx    | ecx   | rcx   |
+| 通用寄存器   | Data                | dx    | edx   | rdx   |
+| 指针寄存器   | Stack Pointer       | sp    | esp   | rsp   |
+| 指针寄存器   | Base Pointer        | bp    | ebp   | rbp   |
+| 变地址寄存器 | Source Index        | si    | esi   | rsi   |
+| 变地址寄存器 | Destination Index   | di    | edi   | rdi   |
+| 控制寄存器   | Instruction Pointer | ip    | eip   | rip   |
+| 控制寄存器   | Flag                | flag  | eflag | eflag |
+| 段寄存器     | Code Segment        | cs    | cs    | cs    |
+| 段寄存器     | Data Segment        | ds    | ds    | ds    |
+| 段寄存器     | Stack Segment       | ss    | ss    | ss    |
+| 段寄存器     | Extra Segment       | es    | es    | es    |
+
+[[file:lab/01-register/main.S]]
+
+操作示例
+#+BEGIN_EXAMPLE
+  info reg
+  info reg eax
+  p $esp
+
+  layout asm
+  layout reg
+#+END_EXAMPLE
+
+ubuntu 分清 32 位和 64 位, 如果是 64 为系统需要安装 32 为支持库
+#+BEGIN_SRC sh
+  apt install gcc-multilib
+#+END_SRC
+
+* 栈操作 push/pop
+1. esp 指向栈的顶端
+2. ebp 指向栈的基地址
+3. push 操作时, esp = esp - 4, ebp 不变 (32b)
+4. pop 操作时,  esp = esp + 4, ebp 不变
+
+#+BEGIN_EXAMPLE
+  origin:
+     addr      data
+     0x0008 |   1 |
+     0x0007 |   0 | <- ebp  <-esp
+     0x0006 |   0 |
+     0x0005 |   2 |
+     0x0004 |   2 |
+     0x0003 |   2 |
+
+  push: 操作后
+     addr     data
+     0x0008 |   1 |
+     0x0007 |   0 | <- ebp
+     0x0006 |   0 |
+     0x0005 |   2 |
+     0x0004 |   2 |
+     0x0003 |   2 |        <-esp
+
+  pop: 操作后
+     addr     data
+     0x0008 |   1 |
+     0x0007 |   0 | <- ebp <-esp
+     0x0006 |   0 |
+     0x0005 |   2 |
+     0x0004 |   2 |
+     0x0003 |   2 |
+#+END_EXAMPLE
+
+[[file:lab/02-stack/main.S]]
+
+.gdbinit 定义 hook, 设置 watch point
+#+BEGIN_EXAMPLE
+  define hook-stepi
+    if $ebp > 0
+      # printf "ebp=%p, esp=%p\n", $ebp, $esp
+      x/4x $ebp-16
+      x/i $eip
+    end
+  end
+
+  starti
+  watch $ebp
+  watch $esp
+#+END_EXAMPLE
+
+* 分支跳转 jmp
+通常汇编的跳转通过 ~cmp~, ~je~, ~jmp~ 等指令配合实现，例如
+#+BEGIN_SRC asm
+  jmp label
+#+END_SRC
+
+[[file:lab/03-control-flow/jump.S]]
+
+* 函数调用 call/ret
+函数调用也属于简单的跳转指令, 例如
+- call 调用函数
+- ret 函数返回
+
+[[file:lab/03-control-flow/fcall.S]]
+
+使用 gcc 编译的真实函数调用
+#+BEGIN_SRC sh
+  gcc -m32 -O0 adder.c -o adder.out
+  objdump -d adder.out > adder.asm
+#+END_SRC
+
+[[file:lab/03-control-flow/adder.c]]
+
+#+BEGIN_SRC asm
+  0000118d <add>:
+      118d:	55                      push   %ebp
+      118e:	89 e5                   mov    %esp,%ebp
+      1190:	83 ec 10                sub    $0x10,%esp
+      1193:	e8 49 00 00 00          call   11e1 <__x86.get_pc_thunk.ax>
+      1198:	05 44 2e 00 00          add    $0x2e44,%eax
+      119d:	8b 55 08                mov    0x8(%ebp),%edx
+      11a0:	8b 45 0c                mov    0xc(%ebp),%eax
+      11a3:	01 d0                   add    %edx,%eax
+      11a5:	89 45 fc                mov    %eax,-0x4(%ebp)
+      11a8:	8b 45 fc                mov    -0x4(%ebp),%eax
+      11ab:	c9                      leave
+      11ac:	c3                      ret
+
+  000011ad <main>:
+      11ad:	55                      push   %ebp
+      11ae:	89 e5                   mov    %esp,%ebp
+      11b0:	83 ec 10                sub    $0x10,%esp
+      11b3:	e8 29 00 00 00          call   11e1 <__x86.get_pc_thunk.ax>
+      11b8:	05 24 2e 00 00          add    $0x2e24,%eax
+      11bd:	c7 45 f4 03 00 00 00    movl   $0x3,-0xc(%ebp)
+      11c4:	c7 45 f8 04 00 00 00    movl   $0x4,-0x8(%ebp)
+      11cb:	ff 75 f8                push   -0x8(%ebp)
+      11ce:	ff 75 f4                push   -0xc(%ebp)
+      11d1:	e8 b7 ff ff ff          call   118d <add>
+      11d6:	83 c4 08                add    $0x8,%esp
+      11d9:	89 45 fc                mov    %eax,-0x4(%ebp)
+      11dc:	8b 45 fc                mov    -0x4(%ebp),%eax
+      11df:	c9                      leave
+      11e0:	c3                      ret
+#+END_SRC

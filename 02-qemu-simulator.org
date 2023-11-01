@@ -1,0 +1,178 @@
+#+TITLE: QEMU 模拟器
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-01 Wed>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+
+* 什么是模拟器
+1. [[https://www.qemu.org/][qemu]]
+2. [[https://bochs.sourceforge.io/][bochs]]
+
+操作系统：直接通过指令对硬件进行控制
+#+BEGIN_EXAMPLE
+  +============================================+
+  ||  Operation System (操作系统): Linux, xv6 ||
+  +============================================+
+              |                    |
+              |  Instruction(x86)  |
+              v                    v
+  +============================================+
+  ||  Hardware(硬件): 硬盘，鼠标，显示器      ||
+  +============================================+
+#+END_EXAMPLE
+
+
+模拟器：直接通过指令对硬件进行控制
+#+BEGIN_EXAMPLE
+  +============================================+
+  || Host OS: Ubuntu                          ||
+  ||                                          ||
+  ||      +--------------------------------+  ||
+  ||      | 调试操作系统: xv6-riscv        |  ||
+  ||      +--------------------------------+  ||
+  ||          |                     |         ||
+  ||          |  Instruction(riscv) |         ||
+  ||          V                     v         ||
+  ||      +--------------------------------+  ||
+  ||      | Simulator(模拟器): QEMU, Bochs |  ||
+  ||      |    作为软件运行在宿主机器      |  ||
+  ||      +--------------------------------+  ||
+  ||              |                           ||
+  ||              | 宿主操作系统指令(x86)     ||
+  ||              |                           ||
+  ||              V                           ||
+  +============================================+
+              |                    |
+              |  Instruction(x86)  |
+              v                    v
+  +============================================+
+  ||  Hardware(硬件): 硬盘，鼠标，显示器      ||
+  +============================================+
+#+END_EXAMPLE
+
+* 操作系统启动过程
+1. ~启动 BIOS~ Basic Input/Output System，基本输入输出系统。
+   1) =供电初始化= 按下电源开关后，电源就开始给主板和其他设备供电，CPU 会把所有寄
+      存器的值都设为默认值，即恢复初始状态。随后 CPU 会执行初始位置的指令，跳转到
+      BIOS 启动代码位置，开始启动 BIOS。
+   2) =POST 硬件自检= BIOS 首先进行 POST（Power On Self Test，硬件自检），检查计算
+      机硬件是否满足运行的基本条件，并完成相应的初始化工作。如果发现了问题，主板会
+      发出不同的蜂鸣声表示不同的问题。
+   3) =搜索可引导的存储设备= BIOS 按照启动顺序开始搜索可引导的存储设备，找到后，会
+      将存储设备中的引导扇区读入物理内存，并执行引导扇区中的程序，开始系统引导。
+   4) BIOS 是按照顺序依次搜索可引导的存储设备的，这个顺序就叫启动顺序（Boot
+      Sequence），可以在 BIOS 中进行查看和修改。
+2. ~系统引导~
+   1) =读取 MBR= 读取并执行硬盘的第一个扇区，即 MBR（Master Boot Record，主引导记
+      录，大小为 512 字节）。其作用为告诉计算机到硬盘的哪一个位置去找操作系统。MBR
+      的结构如下：
+      + 第 1-446 字节：调用操作系统的机器码，可以被 CPU 直接执行
+      + 第 447-510 字节：分区表（Partition Table），将硬盘分为了若干个分区
+      + 第 511-512 字节：记录签名（0x55 和 0xAA），表示设备可以用于启动
+   2) =查找活动分区= 搜索 MBR 中的分区表，找到唯一的活动分区（Active Partition），
+      并将活动分区的第一个扇区中的引导扇区（称为 卷引导记录，Volume Boot Record，
+      VBR）读入内存，就能找到操作系统在这个分区中的位置。然后，计算机就会开始加载
+      操作系统了。
+3. ~启动系统~ 由于一台计算机中可以安装多个操作系统，所以启动系统时也会有不同的情
+   况。当有多个操作系统时，会运行启动管理器（Boot Loader），让用户选择启动操作系
+   统； 当只有一个操作系统时，就会直接从激活分区中启动操作系统（当然也可以选择将
+   控制权交 给启动管理器，boot loader 可以存在 MBR 中，也可以存在主分区的引导扇
+   区中）。
+4. ~初始化系统~ 操作系统启动后，控制权就从 boot loader 转交给了操作系统，之后，
+   操作系统的内核首先被载入缓存，随后会运行初始化进程进行操作系统的初始化。
+
+至此，整个计算机的启动过程就完成了。
+
+* 普通启动
+存储设备
+1. 软盘 -fda
+2. 硬盘 -hda
+3. 光盘介质 -cdrom
+#+BEGIN_SRC sh
+  man qemu
+#+END_SRC
+
+启动 linux 0.11 系统
+1. 指定软盘 Image
+2. 指定硬盘 hdc-0.11.img
+3. -boot a 表示从软盘启动,  man qemu ... /-boot
+#+BEGIN_SRC sh
+  qemu-system-i386 -boot a -fda Image -hda hdc-0.11.img
+#+END_SRC
+
+启动 xv6, 控制系统硬件参数
+1. -smp CPU 数据
+2. -m   内存大小
+3. -nographic 表示不启动图形界面, 无图形界面的常用快捷键如下：
+   + =ctrl-a x= 退出 qemu
+   + =ctrl-a c= 切换串口
+   + =ctrl-a h= 帮助
+#+BEGIN_SRC sh
+  qemu-system-i386 -smp 2 -m 512 -nographic -hda xv6.img -hdb fs.img
+#+END_SRC
+
+另外存储驱动也可以使用下面方法指定
+#+BEGIN_SRC sh
+  qemu-system-i386 -smp 2 -m 512 -nographic \
+      -drive file=fs.img,index=1,media=disk,format=raw \
+      -drive file=xv6.img,index=0,media=disk,format=raw
+#+END_SRC
+
+* initrd 启动
+initrd 全称是 initial RAM disk ，它提供一种让核心可以简单使用 Ramdisk 的能力
+1. 格式化一个 Ramdisk
+2. 加载文件系统内容到 Ramdisk
+3. 将 Ramdisk 作为根文件系统
+
+MINIX 3 的 initrd 启动
+#+BEGIN_SRC sh
+  cd /data/os/minix/obj.i386/work
+  qemu-system-i386 \
+      --enable-kvm \
+      -m 1G \
+      -kernel kernel \
+      -append "bootramdisk=1" \
+      -initrd "mod01_ds,mod02_rs,mod03_pm,mod04_sched,mod05_vfs,mod06_memory,mod07_tty,mod08_mib,mod09_vm,mod10_pfs,mod11_mfs,mod12_init"
+#+END_SRC
+
+Linux 内核启动方式
+#+BEGIN_SRC sh
+  cd /data/os/x86_64/buildroot-2023.02.5/output/images
+
+  qemu-system-x86_64 \
+      -M pc \
+      -nographic \
+      -kernel bzImage \
+      -drive file=rootfs.ext2,if=virtio,format=raw \
+      -append "rootwait root=/dev/vda console=tty1 console=ttyS0" \
+      -net nic,model=virtio -net user
+#+END_SRC
+
+* GDB 调试 XV6
+qemu 通过 gdb server 来支持 gdb 调试，启动时需要添加下面选项来开启调试
+1. -S 启动时不要立即执行 CPU 指令，等待 c 命令
+2. -s 开启 gdb 监听端口 1234, 这样 gdb 可以使用下面命令来链接到 qemu
+   #+BEGIN_EXAMPLE
+     (gdb) target remote :1234
+   #+END_EXAMPLE
+3. -s 也可以是 ~-gdb tcp::1234~ 的简写，也可以制定其他端口
+
+以 xv6-public 为例，通过 make qemu-nox-gdb 可以开启调试
+#+BEGIN_SRC sh
+  sed "s/localhost:1234/localhost:26000/" < .gdbinit.tmpl > .gdbinit
+  qemu-system-i386 \
+      -nographic -drive file=fs.img,index=1,media=disk,format=raw \
+      -drive file=xv6.img,index=0,media=disk,format=raw -smp 2 -m 512 \
+      -S -gdb tcp::26000
+#+END_SRC
+
+* 模拟器的优缺点
+1. 优点
+   - 方便快捷，无需重启电脑
+   - 可以作为 gdb server 来调试
+   - 提供了丰富的调试命令, info regs, info tlb
+   - 支持多架构 x86, riscv, arm, mips 等
+   - 开源免费
+2. 缺点
+   - 模拟器性能会有一些损耗

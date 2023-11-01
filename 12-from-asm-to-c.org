@@ -1,0 +1,108 @@
+#+TITLE: 从汇编到 C 语言
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-01 Wed>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+
+
+* 读取磁盘，加载 kernel
+设置断点观察读取磁盘, [[file:lab/10-real-to-protected/bootsect.s]]
+#+BEGIN_EXAMPLE
+  (gdb)
+  [   0:7c34] => 0x7c34:  int    $0x13
+  0x00007c34 in ?? ()
+  (gdb) x/4i $ip
+  Value can't be converted to integer.
+  (gdb) x/4i $eip
+  => 0x7c34:      int    $0x13
+     0x7c36:      popa
+     0x7c37:      ret
+     0x7c38:      mov    $0x10,%ax
+  (gdb) b 0x7c36
+  No symbol table is loaded.  Use the "file" command.
+  Make breakpoint pending on future shared library load? (y or [n]) n
+  (gdb) b *0x7c36
+  Breakpoint 2 at 0x7c36
+  (gdb) c
+  Continuing.
+  [   0:7c36] => 0x7c36:  popa
+
+  Breakpoint 2, 0x00007c36 in ?? ()
+  (gdb) x/40h 0x1000
+  0x1000: 0x37b9  0x0010  0xb800  0x8000  0x000b  0x48ba  0x0000  0x8800
+  0x1010: 0xc610  0x0140  0x830a  0x02c0  0xc183  0x0f01  0x11b6  0xfa80
+  0x1020: 0x750a  0xebec  0x66fe  0x6690  0x6690  0x6690  0x6690  0x9090
+  0x1030: 0xcbe8  0xffff  0xebff  0x48fe  0x6c65  0x6f6c  0x5720  0x726f
+  0x1040: 0x646c  0x000a  0x0014  0x0000  0x0000  0x0000  0x7a01  0x0052
+  (gdb)
+#+END_EXAMPLE
+
+查看磁盘镜像的数据
+#+BEGIN_SRC sh :results output :exports both
+  hexdump -s 512 ./lab/10-real-to-protected/fda.img
+#+END_SRC
+
+#+RESULTS:
+: 0000200 37b9 0010 b800 8000 000b 48ba 0000 8800
+: 0000210 c610 0140 830a 02c0 c183 0f01 11b6 fa80
+: 0000220 750a ebec 66fe 6690 6690 6690 6690 9090
+: 0000230 cbe8 ffff ebff 48fe 6c65 6f6c 5720 726f
+: 0000240 646c 000a 0014 0000 0000 0000 7a01 0052
+: 0000250 7c01 0108 0c1b 0404 0188 0000 0010 0000
+: 0000260 001c 0000 ff9c ffff 0025 0000 0000 0000
+: 0000270
+
+* GDT 全局描述符表
+1. GDT 主要保护以下信息, 总共 64 位, [[https://files.osdev.org/mirrors/geezer/os/pm.htm][link]]
+   - base  = low(16) + middle(8) + high(8)
+   - limit = low(16) + high(4)
+   - flags = (12)
+2. GDT 的第一项必须全是 ~0x00~
+3. GDT 加载通过 ~lgdt~ 指令
+
+下面是一个调试 gdt 内存的示例，使用 qemu 模拟器调试
+#+BEGIN_EXAMPLE
+  (qemu) info registers
+  ...
+  GS =0000 00000000 0000ffff 00009300
+  LDT=0000 00000000 0000ffff 00008200
+  TR =0000 00000000 0000ffff 00008b00
+  GDT=     00007c2b 00000017
+  IDT=     00000000 000003ff
+  CR0=00000010 CR2=00000000 CR3=00000000 CR4=00000000
+  ...
+  XMM06=0000000000000000 0000000000000000 XMM07=0000000000000000 0000000000000000
+  (qemu) x/8x 0x7c2b
+  00007c2b: 0x00000000 0x00000000 0x0000ffff 0x00cf9a00
+  00007c3b: 0x0000ffff 0x00cf9200 0x7c2b0017 0x00000000
+  (qemu)
+#+END_EXAMPLE
+
+查询到 gdtr 后也可以使用 gdb 打印内存地址
+#+BEGIN_EXAMPLE
+  (gdb) x/8x 0x7c2b
+  0x7c2b: 0x00000000      0x00000000      0x0000ffff      0x00cf9a00
+  0x7c3b: 0x0000ffff      0x00cf9200      0x7c2b0017      0x00000000
+#+END_EXAMPLE
+
+* 实模式到保护模式切换
+1. =实模式= Real Mode
+   - x86 处理器加点后都是先进入实模式
+   - 实模式时直接访问所有地址空间
+   - 实模式只有 1 MB 的寻址空间，并且没有内存保护
+2. =保护模式= Protected Mode
+   - 保护模式提供了一些高级特性
+     + memory protection
+     + multitasking
+     + enhanced memory addressing
+   - 它支持更大的地址空间，并且多任务有不同的运行级别 (rings)
+
+实模式到保护模式切换流程
+1. 关闭中断
+2. 加载 gdt
+3. 设置控制寄存器 ~cr0~
+4. 通过远程跳转来 flush 流水线
+5. 更新所有的段寄存器
+6. 更新系统栈
+7. 跳转到 32 位指令出执行

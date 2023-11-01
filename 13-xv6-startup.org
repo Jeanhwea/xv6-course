@@ -1,0 +1,111 @@
+#+TITLE: xv6 启动分析
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-10-30 Mon>
+#+STARTUP: overview num indent
+#+PROPERTY: header-args:sh :results output :exports both :dir ../../study/os/xv6-public
+
+* 启动磁盘镜像构建过程
+首先 xv6-public 是通过 make 编译系统构建，构建流程如下
+#+BEGIN_SRC sh
+  make -nB \
+      | sed 's/-fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer -fno-stack-protector -fno-pie -no-pie/CCFLAG/'
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+gcc CCFLAG -fno-pic -O -nostdinc -I. -c bootmain.c
+gcc CCFLAG -fno-pic -nostdinc -I. -c bootasm.S
+ld -m    elf_i386 -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
+objdump -S bootblock.o > bootblock.asm
+objcopy -S -O binary -j .text bootblock.o bootblock
+./sign.pl bootblock
+gcc CCFLAG   -c -o bio.o bio.c
+gcc CCFLAG   -c -o console.o console.c
+gcc CCFLAG   -c -o exec.o exec.c
+gcc CCFLAG   -c -o file.o file.c
+gcc CCFLAG   -c -o fs.o fs.c
+gcc CCFLAG   -c -o ide.o ide.c
+gcc CCFLAG   -c -o ioapic.o ioapic.c
+gcc CCFLAG   -c -o kalloc.o kalloc.c
+gcc CCFLAG   -c -o kbd.o kbd.c
+gcc CCFLAG   -c -o lapic.o lapic.c
+gcc CCFLAG   -c -o log.o log.c
+gcc CCFLAG   -c -o main.o main.c
+gcc CCFLAG   -c -o mp.o mp.c
+gcc CCFLAG   -c -o picirq.o picirq.c
+gcc CCFLAG   -c -o pipe.o pipe.c
+gcc CCFLAG   -c -o proc.o proc.c
+gcc CCFLAG   -c -o sleeplock.o sleeplock.c
+gcc CCFLAG   -c -o spinlock.o spinlock.c
+gcc CCFLAG   -c -o string.o string.c
+gcc -m32 -gdwarf-2 -Wa,-divide   -c -o swtch.o swtch.S
+gcc CCFLAG   -c -o syscall.o syscall.c
+gcc CCFLAG   -c -o sysfile.o sysfile.c
+gcc CCFLAG   -c -o sysproc.o sysproc.c
+gcc -m32 -gdwarf-2 -Wa,-divide   -c -o trapasm.o trapasm.S
+gcc CCFLAG   -c -o trap.o trap.c
+gcc CCFLAG   -c -o uart.o uart.c
+./vectors.pl > vectors.S
+gcc -m32 -gdwarf-2 -Wa,-divide   -c -o vectors.o vectors.S
+gcc CCFLAG   -c -o vm.o vm.c
+gcc -m32 -gdwarf-2 -Wa,-divide   -c -o entry.o entry.S
+gcc CCFLAG -fno-pic -nostdinc -I. -c entryother.S
+ld -m    elf_i386 -N -e start -Ttext 0x7000 -o bootblockother.o entryother.o
+objcopy -S -O binary -j .text bootblockother.o entryother
+objdump -S bootblockother.o > entryother.asm
+gcc CCFLAG -nostdinc -I. -c initcode.S
+ld -m    elf_i386 -N -e start -Ttext 0 -o initcode.out initcode.o
+objcopy -S -O binary initcode.out initcode
+objdump -S initcode.o > initcode.asm
+ld -m    elf_i386 -T kernel.ld -o kernel entry.o bio.o console.o exec.o file.o fs.o ide.o ioapic.o kalloc.o kbd.o lapic.o log.o main.o mp.o picirq.o pipe.o proc.o sleeplock.o spinlock.o string.o swtch.o syscall.o sysfile.o sysproc.o trapasm.o trap.o uart.o vectors.o vm.o  -b binary initcode entryother
+objdump -S kernel > kernel.asm
+objdump -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > kernel.sym
+dd if=/dev/zero of=xv6.img count=10000
+dd if=bootblock of=xv6.img conv=notrunc
+dd if=kernel of=xv6.img seek=1 conv=notrunc
+#+end_example
+
+启动编译流程
+1. bootasm.S, bootmain.c
+
+* 启动逻辑
+系统启动文件
+[[file:../../study/os/xv6-public/bootasm.S]]
+
+读取磁盘函数 readsect
+[[file:../../study/os/xv6-public/bootmain.c]]
+
+磁盘读取发展 IO 操作读取硬盘的三种方式：
+1. CHS 方式 ：小于 8G (8064MB)
+2. LBA28 方式：小于 137GB
+3. LBA48 方式：小于 144,000,000 GB
+
+LBA 方式访问使用了 data 寄存器，LBA 寄存器（总共 3 个），device 寄存器，command
+寄存器来完成的。
+
+LBA28 和 LBA48 方式：LBA28 方式使用 28 位来描述一个扇区地址，最大支持 128GB 的硬
+磁盘容量。
+
+xv6 使用 LBA28 方式读取硬盘中的数据
+1. ~0x1F0~ data 寄存器
+   - 已经读取或写入的数据，大小为两个字节（16 位数据) 每次读取 1 个 word
+   - 反复循环，直到读完所有数据
+2. ~0x1F1~ features 寄存器
+   - 读取时的错误信息 写入时的额外参数
+3. ~0x1F2~ sector count 寄存器
+   - 指定读取或写入的扇区数
+4. ~0x1F3~ LBA low 寄存器
+   - lba 地址的低 8 位
+5. ~0x1F4~ LBA mid 寄存器
+   - lba 地址的中 8 位
+6. ~0x1F5~ LBA high 寄存器
+   - lba 地址的高 8 位
+7. ~0x1F6~ device 寄存器
+   - lba 地址的前 4 位（占用 device 寄存器的低 4 位）
+   - 主盘值为 0（占用 device 寄存器的第 5 位）
+   - 第 6 位值为 1 LBA 模式为 1，
+   - CHS 模式为 0（占用 device 寄存器的第 7 位） 第 8 位值为 1
+8. ~0x1F7~ command 寄存器
+   - 读取，写入的命令，返回磁盘状态 1
+   - 读取扇区:0x20 写入扇区:0x30 磁盘识别:0xEC
