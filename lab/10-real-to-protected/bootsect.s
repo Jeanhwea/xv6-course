@@ -38,7 +38,6 @@ load_disk:
 
 ;; 保护模式
 [bits 32]
-[extern bootmain]
 start2:
 	mov	ax, DATA_SEG	; 5. 更新所有段寄存器
 	mov	ds, ax
