@@ -121,3 +121,27 @@ xv6 使用 LBA28 方式读取硬盘中的数据
 8. ~0x1F7~ command 寄存器
    - 读取，写入的命令，返回磁盘状态 1
    - 读取扇区:0x20 写入扇区:0x30 磁盘识别:0xEC
+
+
+内联汇编形式
+#+BEGIN_QUOTE
+asm [volatile] ("Instruction list":Output:Input:Clobber/Modify)
+#+END_QUOTE
+
+读取端口的字节到给定地址
+#+BEGIN_SRC c
+  static inline void
+  insl(int port, void *addr, int cnt)  // 从端口 port 读 4*cnt 个字节到地址 addr
+  {
+    asm volatile("cld; rep insl" :                    // 清零 DF 位，重复指令 insl
+                 "=D" (addr), "=c" (cnt) :            // addr 目的地址绑定寄存器 edi，cnt 循环次数绑定 ecx
+                 "d" (port), "0" (addr), "1" (cnt) :  // port 端口绑定 dx，addr,cnt 同上
+                 "memory", "cc");                     // 改变了内存，改变了eflags寄存器
+  }
+#+END_SRC
+
+重复执行 insl 指令来读取多个字节的数据到目的地址，
+- 具体操作顺序是先读目的地址和循环次数，insl 每次执行后再更新 addr，cnt 的值，所
+  以 addr 和 cnt 是又读又写的
+- Output 和 Input 部分都存在 addr 和 cnt。期间改变了内存和 eflags 寄存器，所以
+  内联汇编的最后一部分申明 "cc" 和 "memory"
