@@ -1,22 +1,12 @@
 #include <stdio.h>
-
-int add_numbers(int a, int b)
+int add(int a, int b)
 {
-	int result;
-
-	asm volatile("add %1, %0" // Instruction
-		     : "=r"(result) // Outputs
-		     : "r"(a), "0"(b) // Inputs
-	);
-
-	return result;
+	int res;
+	asm("add %1, %2;" : "=r"(res) : "r"(a), "0"(b));
+	return res;
 }
 
 int main()
 {
-	int x = 3;
-	int y = 4;
-	int sum = add_numbers(x, y);
-	printf("sum = %d\n", sum);
-	return 0;
+	printf("8+4 == %d\n", add(8, 4)); // prints 8+4 == 12
 }

@@ -128,6 +128,21 @@ xv6 使用 LBA28 方式读取硬盘中的数据
 asm [volatile] ("Instruction list":Output:Input:Clobber/Modify)
 #+END_QUOTE
 
+从 port 端口读取一个 byte，返回这个读取的值。
+使用内联汇编，指定把 data 放在%al 存储，port 放在%dx 存储，然后调用
+inb %dx, %al
+#+BEGIN_SRC c
+  static inline uchar
+  inb(ushort port)
+  {
+    uchar data;
+
+    asm volatile("in %1,%0" : "=a" (data) : "d" (port)); // =a, al 寄存器, d 表示 dx 寄存器
+    return data;
+  }
+#+END_SRC
+
+
 读取端口的字节到给定地址
 #+BEGIN_SRC c
   static inline void
