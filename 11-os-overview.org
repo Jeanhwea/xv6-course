@@ -1,14 +1,16 @@
-#+TITLE: 走进操作系统
+#+TITLE: 操作系统概览
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
-#+DATE: <2023-10-30 Mon>
+#+DATE: <2023-11-01 Wed>
 #+STARTUP: overview num indent
+#+OPTIONS: ^:nil
 
 
-* 系统概览
-** 为什么选 xv6 代码阅读?
+* 为什么选 xv6 代码阅读?
 第一点: 代码量适中，统计大约 6000 行左右
-#+BEGIN_SRC sh :results output :dir /data/gitana/study/os/xv6-public
+
+xv6 代码统计
+#+BEGIN_SRC sh :results output :exports results :dir /data/gitana/study/os/xv6-public
   make clean > /dev/null
   cloc --quiet .
 #+END_SRC
@@ -32,7 +34,8 @@
   -------------------------------------------------------------------------------
 #+end_example
 
-#+BEGIN_SRC sh :results output :dir /data/gitana/study/os/linux-0.11
+linux 0.11 代码统计
+#+BEGIN_SRC sh :results output :exports results :dir /data/gitana/study/os/linux-0.11
   cloc --quiet .
 #+END_SRC
 
@@ -51,7 +54,8 @@
   -------------------------------------------------------------------------------
 #+end_example
 
-#+BEGIN_SRC sh :results output :dir /data/gitana/study/os/minix1/kernel
+minix1 代码统计
+#+BEGIN_SRC sh :results output :exports results :dir /data/gitana/study/os/minix1/kernel
   cloc --quiet .
 #+END_SRC
 
@@ -90,7 +94,7 @@
    - [[file:../../study/os/xv6-public/param.h]]
    - round robin
 
-** 用户态/内核态
+* 用户态/内核态
 #+BEGIN_SRC text
   ------------+==================================================
               |
@@ -117,7 +121,7 @@
    - sti 开中断
    - 但是用户态程序不行 [[file:lab/08-kernel-user-mode/user.S]]
 
-** 系统调用
+* 系统调用
 xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户进程编写代码的 API
 
 | NO. | SYSCALL                   | Description                                |
@@ -146,7 +150,7 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
 
 [[file:lab/09-linux-syscall/forkme.c]]
 
-** 地址空间
+* 地址空间
 1. 操作系统的每个进程都有自己的地址空间
    1) 这个空间只用进程内部是可见的，也称虚拟地址空间，不同进程的地址空间是隔离的
       - 如果不隔离会出现什么情况?
@@ -155,9 +159,7 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
        0xFFFFFFFF -> |-------------|  -
                      |             |  ^
                      |             |  |
-                     |             |  |
                      | Free Memory |
-                     |             |
                      |             | Kernel Space
                      |-------------|
                      | Text & Data |
@@ -170,13 +172,8 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
                      |      v      |  |
                      |     ...     |  |
                      |             |
-                     |             |
-                     |             |
-                     |             |
-                     |             | User Space
-                     |-------------|
+                     |-------------| User Space
                      |     ...     |
-                     |             |
                      |      ^      |
                      |      |      |  |
                      |  User stack |  |
@@ -189,15 +186,10 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
    3) xv6 虚拟地址空间 -> 物理地址空间
      #+BEGIN_EXAMPLE
        0xFFFFFFFF -> |-------------|
-                     |             |
-                     |             |
-                     |             |
                      | Free Memory |
-                     |             |
                      |             |
                      |-------------|
                      | Text & Data |
-                     |             |
        0x80100000 -> |-------------| -------+
                      |     BIOS    |        |
        0x80000000 -> |-------------| ----+  |
@@ -205,10 +197,6 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
                      |      |      |     |  |
                      |      v      |     |  |
                      |     ...     |     |  |
-                     |             |     |  |
-                     |             |     |  |
-                     |             |     |  |
-                     |             |     |  |
                      |             |     |  |       |-------------| <- Top Physical memory
                      |-------------|     |  |       |             |
                      |     ...     |     |  |       |             |
@@ -234,7 +222,7 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
       - va -> pa 通过分页机制实现
    4) 为什么需要搞虚拟地址或物理地址?
 
-** 进程管理
+* 进程管理
 1. 并发 (Concurrency) 实现
    - 分时运行
    - 时间中断抢夺运行权利
@@ -268,84 +256,3 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
    vi        x  s  s
    cat       s  x  x
 #+END_EXAMPLE
-
-* x86 实模式和保护模式
-** GDT
-1. GDT 主要保护以下信息, 总共 64 位, [[https://files.osdev.org/mirrors/geezer/os/pm.htm][link]]
-   - base  = low(16) + middle(8) + high(8)
-   - limit = low(16) + high(4)
-   - flags = (12)
-2. GDT 的第一项必须全是 ~0x00~
-3. GDT 加载通过 ~lgdt~ 指令
-
-下面是一个初始化的 gdt 内存定义，这里先将代码段和数据段合并在一起
-#+BEGIN_SRC nasm
-  gdt_start: ; don't remove the labels, they're needed to compute sizes and jumps
-      ; the GDT starts with a null 8-byte
-      dd 0x0 ; 4 byte
-      dd 0x0 ; 4 byte
-
-  ; GDT for code segment. base = 0x00000000, length = 0xfffff
-  gdt_code:
-      dw 0xffff    ; segment length, bits 0-15                    | limit_low(16)
-      dw 0x0       ; segment base, bits 0-15                      | base_low(16)
-      db 0x0       ; segment base, bits 16-23                     | base_middle(8)
-      db 10011010b ; flags (8 bits)                               | flags1(8)
-      db 11001111b ; flags (4 bits) + segment length, bits 16-19  | limit_high(4), flags2(4)
-      db 0x0       ; segment base, bits 24-31                     | base_high(8)
-
-  gdt_data:
-      dw 0xffff
-      dw 0x0
-      db 0x0
-      db 10010010b
-      db 11001111b
-      db 0x0
-
-  gdt_end:
-
-  ; GDT descriptor, via lgdt [gdt_descriptor]
-  gdt_descriptor:
-      dw gdt_end - gdt_start - 1 ; size (16 bit), always one less of its true size
-      dd gdt_start               ; address (32 bit)
-
-  ; define some constants for later use
-  CODE_SEG equ gdt_code - gdt_start
-  DATA_SEG equ gdt_data - gdt_start
-#+END_SRC
-
-** 实模式到保护模式切换
-1. 关闭中断
-2. 加载 gdt
-3. 设置控制寄存器 ~cr0~
-4. 通过远程调整来 flush 流水线
-5. 更新所以的段寄存器
-6. 更新系统栈
-7. 跳转到 32 位指令出执行
-
-#+BEGIN_SRC nasm
-  ;;; real mode
-  [bits 16]
-  switch_to_pm:
-      cli                         ; 1. disable interrupts
-      lgdt [gdt_descriptor]       ; 2. load the GDT descriptor
-      mov eax, cr0
-      or eax, 0x1                 ; 3. set 32-bit mode bit in cr0
-      mov cr0, eax
-      jmp CODE_SEG:init_pm        ; 4. far jump by using a different segment
-
-  ;;; protected mode is enabled
-  [bits 32]
-  init_pm:
-      mov ax, DATA_SEG            ; 5. update the segment registers
-      mov ds, ax
-      mov ss, ax
-      mov es, ax
-      mov fs, ax
-      mov gs, ax
-
-      mov ebp, 0x90000            ; 6. update the stack right at the top of the free space
-      mov esp, ebp
-
-      call BEGIN_PM               ; 7. Call a well-known label with useful code
-#+END_SRC

@@ -22,17 +22,17 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
 3. 目前 MIT XV6 操作系统支持 x86 和 riscv 两种体系结构
 
 * 主题
-1. [[file:01-prelude.org][序章]]
-   - [[https://www.bilibili.com/video/BV1cw411z7Ro][XV6 - x86 汇编 - 寄存器 - 栈 - 跳转指令]]
-   - [[https://www.bilibili.com/video/BV1me411R7MN][XV6 - qemu - bochs - gdb - 模拟器使用]]
-   - [[https://www.bilibili.com/video/BV1Fe411975E][XV6 - 中断 - 系统调用 - 分段 - 最小操作系统实现]]
-2. [[file:02-system-startup.org][走进操作系统]]
-   - [[https://www.bilibili.com/video/BV1vu4y1h7mR/][内核态 - 用户态 - 系统调用 - 地址空间 - 进程管理]]
+1. 序言
+   - [[file:01-x86-arch.org][x86 体系结构]] | [[https://www.bilibili.com/video/BV1cw411z7Ro][视频]]
+   - [[file:02-qemu-simulator.org][QEMU 模拟器]] | [[https://www.bilibili.com/video/BV1me411R7MN][视频]]
+   - [[file:03-minimal-os.org][编写最小操作系统]] | [[https://www.bilibili.com/video/BV1Fe411975E][视频]]
+2. 走进操作系统
+   - [[file:11-os-overview.org][操作系统概览]] | [[https://www.bilibili.com/video/BV1vu4y1h7mR/][视频]]
    - 从汇编到 C 语言
    - 系统初始准备工作
-3. 内存管理 TODO
-4. 进程管理 TODO
-5. 文件系统 TODO
+3. TODO 内存管理
+4. TODO 进程管理
+5. TODO 文件系统
 
 * 资源
 1. MIT 课程官网 [[https://pdos.csail.mit.edu/6.828/][6.828]]
