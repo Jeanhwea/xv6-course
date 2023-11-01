@@ -5,22 +5,6 @@
 #define MAX_COLS 80
 #define GREEN 0x0a;
 
-void start_kernel()
-{
-	char *video = VGA_ADDR;
-
-	char *msg = "Hello World\n";
-	for (char *p = msg; *p != '\n'; ++p) {
-		*video = *p;
-		video++;
-		*video = GREEN;
-		video++;
-	}
-
-	while (1) {
-	}
-}
-
 unsigned char port_in(unsigned short port)
 {
 	unsigned char result;
@@ -52,4 +36,20 @@ void set_cursor(int offset)
 	port_out(VGA_DATA_REG, high);
 	port_out(VGA_CTRL_REG, 15);
 	port_out(VGA_DATA_REG, low);
+}
+
+void start_kernel()
+{
+	char *video = VGA_ADDR;
+
+	char *msg = "Hello World\n";
+	for (char *p = msg; *p != '\n'; ++p) {
+		*video = *p;
+		video++;
+		*video = GREEN;
+		video++;
+	}
+
+	while (1) {
+	}
 }

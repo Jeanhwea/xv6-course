@@ -28,7 +28,7 @@ entry.o: entry.s
 bootmain.o: bootmain.c
 	$(CC) $(CCFLAG) -c -g -o bootmain.o bootmain.c
 
-bootmain.bin: bootmain.o entry.o
+bootmain.bin: entry.o bootmain.o
 	$(LD) $(LDFLAG) -g -o vmKernel $^
 	$(LD) $(LDFLAG) -o bootmain.bin --oformat binary $^
 	$(OD) $(ODFLAG) bootmain.bin > bootmain.asm
