@@ -82,6 +82,22 @@
   0x7c3b: 0x0000ffff      0x00cf9200      0x7c2b0017      0x00000000
 #+END_EXAMPLE
 
+
+使用全局描述符表的建议
+- Don't worry about returning to real mode. Use the reset button :)
+- Leave interrupts disabled.
+- Don't use an LDT.
+- Put only four descriptors in the GDT: null, code, stack/data, and linear data
+  (base address = 0).
+- Set the segment bases to real-mode values i.e. 16 * real-mode segment register
+  value. This lets you address variables in the same way in both real and
+  protected modes.
+- Set all segment limits to their maximum.
+- Leave all privilege values set to 0 (Ring 0, highest privilege).
+- Before each step of switching to pmode, poke a character into video memory, to
+  see (literally!) how far the code gets. Text-mode VGA memory starts at address
+  0B8000h.
+
 * 实模式到保护模式切换
 1. =实模式= Real Mode
    - x86 处理器加点后都是先进入实模式
