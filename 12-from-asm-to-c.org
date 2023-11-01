@@ -6,6 +6,11 @@
 #+OPTIONS: ^:nil
 #+PROPERTY: header-args:sh :results output
 
+* 编译流程分析
+1. 构建 MBR, bootsect.s
+2. 构建内核 c 语言入口
+   - entry.s
+   - bootmain.c
 
 * 读取磁盘，加载 kernel 文件
 设置断点观察读取磁盘 | [[https://stanislavs.org/helppc/int_13-2.html][link]]
