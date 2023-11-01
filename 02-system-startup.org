@@ -363,6 +363,9 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
 
 * xv6 启动过程
 ** 启动磁盘构建
+启动编译流程
+1. bootasm.S, bootmain.c
+
 #+BEGIN_SRC sh :results output :exports both :dir ../../study/os/xv6-public
   make -nB \
       | sed 's/-fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer -fno-stack-protector -fno-pie -no-pie/CCFLAG/'
@@ -421,7 +424,6 @@ dd if=/dev/zero of=xv6.img count=10000
 dd if=bootblock of=xv6.img conv=notrunc
 dd if=kernel of=xv6.img seek=1 conv=notrunc
 #+end_example
-
 
 ** 启动逻辑
 系统启动文件
