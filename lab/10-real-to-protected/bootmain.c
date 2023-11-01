@@ -1,8 +1,11 @@
+// 屏幕显示
 #define VGA_ADDR ((char *)0xb8000)
 #define CTRL_REG 0x3d4
 #define DATA_REG 0x3d5
 #define MAX_ROWS 25
 #define MAX_COLS 80
+
+// 颜色
 #define RED_ON_BLACK 0x0c
 #define GREEN_ON_BLACK 0x0a
 
