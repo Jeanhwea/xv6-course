@@ -24,4 +24,4 @@ all: $(OBJS)
 
 .PHONY: clean
 clean:
-	-rm *.o *.out *.run *.bin *.asm
+	-rm -f *.o *.out *.run *.bin *.asm
