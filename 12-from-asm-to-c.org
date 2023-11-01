@@ -12,6 +12,13 @@
    - entry.s
    - bootmain.c
 
+ - 磁盘 fda.img
+   - MBR bootsect.bin
+   - entry.s
+   - bootmain.c
+     -> bootmain.bin
+
+
 * 读取磁盘，加载 kernel 文件
 设置断点观察读取磁盘 | [[https://stanislavs.org/helppc/int_13-2.html][link]]
 
@@ -90,7 +97,7 @@
   0x7c3b: 0x0000ffff      0x00cf9200      0x7c2b0017      0x00000000
 #+END_EXAMPLE
 
-* 实模式到保护模式切换
+* 实模式(16)到保护模式(32)切换
 1. =实模式= Real Mode
    - x86 处理器加点后都是先进入实模式
    - 实模式时直接访问所有地址空间
@@ -114,4 +121,9 @@
 7. 跳转到 32 位指令出执行
 
 * 总结
-1.
+1. 通过磁盘中断 int 13 加载 bootmain.bin
+2. GDT 加载
+3. 16 => 32 汇编
+4. 32 => start_kernel C 语言函数
+5. 0xb8000 显存
+6. in/out 指令获取光标位置

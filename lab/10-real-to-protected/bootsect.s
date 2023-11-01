@@ -14,7 +14,7 @@ start:
 	call	load_disk
 
 	cli			; 1. 关中断
-	lgdt	[desc]		; 2. 加载 GDT
+	lgdt	[desc]		; 2. 加载 GDT / GDTr
 	mov	eax, cr0
 	or	eax, 0x1	; 3. 设置 cr0
 	mov	cr0, eax

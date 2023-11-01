@@ -68,7 +68,8 @@ void start_kernel()
 {
 	char *video = VGA_ADDR;
 
-	// print_char('X');
+	clear_screen();
+	set_cursor(get_offset(11, 0));
 
 	char *msg = "Hello World\n";
 	for (char *p = msg; *p != '\n'; ++p) {
