@@ -1,13 +1,17 @@
 #include <stdio.h>
 
-static inline int add(int x, int y)
+int add_numbers(int a, int b)
 {
-	return x + y;
+	int result;
+	__asm__ volatile("add %1, %0" : "=r"(result) : "r"(a), "0"(b));
+	return result;
 }
 
-int main(int argc, char *argv[])
+int main()
 {
-	int ans = add(1, 3);
-	printf("ans = %d\n", ans);
+	int x = 3;
+	int y = 4;
+	int sum = add_numbers(x, y);
+	printf("sum = %d\n", sum);
 	return 0;
 }
