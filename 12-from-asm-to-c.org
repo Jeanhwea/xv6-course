@@ -8,7 +8,7 @@
 
 * 编译流程分析
 1. 构建 MBR, bootsect.s
-2. 构建内核 c 语言入口
+2. 构建内核 c 语言入口 kernel
    - entry.s
    - bootmain.c
 
@@ -94,6 +94,8 @@
 1. =实模式= Real Mode
    - x86 处理器加点后都是先进入实模式
    - 实模式时直接访问所有地址空间
+     - pc = cs:eip
+     - pc = eip
    - 实模式只有 1 MB 的寻址空间，并且没有内存保护
 2. =保护模式= Protected Mode
    - 保护模式提供了一些高级特性
