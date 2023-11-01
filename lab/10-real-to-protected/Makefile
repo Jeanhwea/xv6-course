@@ -2,7 +2,7 @@ CC     = gcc
 AS     = nasm
 LD     = ld
 OD     = objdump
-CCFLAG = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer -fno-stack-protector -fno-pie -no-pie -O -nostdinc -I.
+CCFLAG = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -fno-omit-frame-pointer -fno-stack-protector -fno-pie -no-pie -O -nostdinc -I.
 LDFLAG = -m elf_i386 -N -e start_kernel -Ttext 0x1000
 ODFLAG = -D -m i386 -b binary
 QEMU   = qemu-system-i386
@@ -16,7 +16,7 @@ qemu-nox: fda.img
 	$(QEMU) -nographic -boot a -fda fda.img
 
 qemu-debug: fda.img
-	$(QEMU) -s -S -boot a -fda fda.img
+	$(QEMU) -s -S -boot a -fda fda.img >/dev/null 2>&1 &
 
 bootsect.bin: bootsect.s
 	$(AS) -f bin -o bootsect.bin -l bootsect.lst bootsect.s

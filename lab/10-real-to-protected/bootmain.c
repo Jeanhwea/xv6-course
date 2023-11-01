@@ -1,9 +1,9 @@
+#define VGA_ADDR ((char *)0xb8000)
 #define VGA_CTRL_REG 0x3d4
 #define VGA_DATA_REG 0x3d5
-#define VGA_ADDR ((char *)0xb8000)
 #define MAX_ROWS 25
 #define MAX_COLS 80
-#define GREEN 0x0a;
+#define GREEN_ON_BLACK 0x0a;
 
 unsigned char port_in(unsigned short port)
 {
@@ -38,17 +38,48 @@ void set_cursor(int offset)
 	port_out(VGA_DATA_REG, low);
 }
 
+int get_row(int offset)
+{
+	return offset / (2 * MAX_COLS);
+}
+
+int get_col(int offset)
+{
+	return (offset - (get_row(offset) * 2 * MAX_COLS)) / 2;
+}
+
+int get_offet(int col, int row)
+{
+	return 2 * (row * MAX_COLS + col);
+}
+
 void start_kernel()
 {
 	char *video = VGA_ADDR;
 
-	char *msg = "Hello World\n";
-	for (char *p = msg; *p != '\n'; ++p) {
-		*video = *p;
-		video++;
-		*video = GREEN;
-		video++;
+	for (int col = 0; col < 80; ++col) {
+		for (int row = 0; row < 10; ++row) {
+			video[get_offet(col, row)] = ' ';
+		}
 	}
+
+	int curr = get_cursor();
+	set_cursor(curr);
+
+	curr = get_cursor();
+	volatile int col;
+	volatile int row;
+	col = get_col(curr);
+	row = get_row(curr);
+	video[get_offet(col, row)] = 'X';
+
+	// char *msg = "Hello World\n";
+	// for (char *p = msg; *p != '\n'; ++p) {
+	//	*video = *p;
+	//	video++;
+	//	*video = GREEN_ON_BLACK;
+	//	video++;
+	// }
 
 	while (1) {
 	}
