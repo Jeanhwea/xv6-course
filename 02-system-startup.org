@@ -365,53 +365,52 @@ xv6 实现了如下的系统调用, 系统调用是操作系统提供给用户�
 ** 启动磁盘构建
 #+BEGIN_SRC sh :results output :exports both :dir ../../study/os/xv6-public
   make -nB \
-      | sed 's/-fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer -fno-stack-protector -fno-pie -no-pie -fno-pic -O -nostdinc -I./CCFLAG1/' \
-      | sed 's/-fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer -fno-stack-protector -fno-pie -no-pie/CCFLAG2/'
+      | sed 's/-fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer -fno-stack-protector -fno-pie -no-pie/CCFLAG/'
 #+END_SRC
 
 #+RESULTS:
 #+begin_example
-gcc CCFLAG1 -c bootmain.c
-gcc CCFLAG2 -fno-pic -nostdinc -I. -c bootasm.S
+gcc CCFLAG -fno-pic -O -nostdinc -I. -c bootmain.c
+gcc CCFLAG -fno-pic -nostdinc -I. -c bootasm.S
 ld -m    elf_i386 -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
 objdump -S bootblock.o > bootblock.asm
 objcopy -S -O binary -j .text bootblock.o bootblock
 ./sign.pl bootblock
-gcc CCFLAG2   -c -o bio.o bio.c
-gcc CCFLAG2   -c -o console.o console.c
-gcc CCFLAG2   -c -o exec.o exec.c
-gcc CCFLAG2   -c -o file.o file.c
-gcc CCFLAG2   -c -o fs.o fs.c
-gcc CCFLAG2   -c -o ide.o ide.c
-gcc CCFLAG2   -c -o ioapic.o ioapic.c
-gcc CCFLAG2   -c -o kalloc.o kalloc.c
-gcc CCFLAG2   -c -o kbd.o kbd.c
-gcc CCFLAG2   -c -o lapic.o lapic.c
-gcc CCFLAG2   -c -o log.o log.c
-gcc CCFLAG2   -c -o main.o main.c
-gcc CCFLAG2   -c -o mp.o mp.c
-gcc CCFLAG2   -c -o picirq.o picirq.c
-gcc CCFLAG2   -c -o pipe.o pipe.c
-gcc CCFLAG2   -c -o proc.o proc.c
-gcc CCFLAG2   -c -o sleeplock.o sleeplock.c
-gcc CCFLAG2   -c -o spinlock.o spinlock.c
-gcc CCFLAG2   -c -o string.o string.c
+gcc CCFLAG   -c -o bio.o bio.c
+gcc CCFLAG   -c -o console.o console.c
+gcc CCFLAG   -c -o exec.o exec.c
+gcc CCFLAG   -c -o file.o file.c
+gcc CCFLAG   -c -o fs.o fs.c
+gcc CCFLAG   -c -o ide.o ide.c
+gcc CCFLAG   -c -o ioapic.o ioapic.c
+gcc CCFLAG   -c -o kalloc.o kalloc.c
+gcc CCFLAG   -c -o kbd.o kbd.c
+gcc CCFLAG   -c -o lapic.o lapic.c
+gcc CCFLAG   -c -o log.o log.c
+gcc CCFLAG   -c -o main.o main.c
+gcc CCFLAG   -c -o mp.o mp.c
+gcc CCFLAG   -c -o picirq.o picirq.c
+gcc CCFLAG   -c -o pipe.o pipe.c
+gcc CCFLAG   -c -o proc.o proc.c
+gcc CCFLAG   -c -o sleeplock.o sleeplock.c
+gcc CCFLAG   -c -o spinlock.o spinlock.c
+gcc CCFLAG   -c -o string.o string.c
 gcc -m32 -gdwarf-2 -Wa,-divide   -c -o swtch.o swtch.S
-gcc CCFLAG2   -c -o syscall.o syscall.c
-gcc CCFLAG2   -c -o sysfile.o sysfile.c
-gcc CCFLAG2   -c -o sysproc.o sysproc.c
+gcc CCFLAG   -c -o syscall.o syscall.c
+gcc CCFLAG   -c -o sysfile.o sysfile.c
+gcc CCFLAG   -c -o sysproc.o sysproc.c
 gcc -m32 -gdwarf-2 -Wa,-divide   -c -o trapasm.o trapasm.S
-gcc CCFLAG2   -c -o trap.o trap.c
-gcc CCFLAG2   -c -o uart.o uart.c
+gcc CCFLAG   -c -o trap.o trap.c
+gcc CCFLAG   -c -o uart.o uart.c
 ./vectors.pl > vectors.S
 gcc -m32 -gdwarf-2 -Wa,-divide   -c -o vectors.o vectors.S
-gcc CCFLAG2   -c -o vm.o vm.c
+gcc CCFLAG   -c -o vm.o vm.c
 gcc -m32 -gdwarf-2 -Wa,-divide   -c -o entry.o entry.S
-gcc CCFLAG2 -fno-pic -nostdinc -I. -c entryother.S
+gcc CCFLAG -fno-pic -nostdinc -I. -c entryother.S
 ld -m    elf_i386 -N -e start -Ttext 0x7000 -o bootblockother.o entryother.o
 objcopy -S -O binary -j .text bootblockother.o entryother
 objdump -S bootblockother.o > entryother.asm
-gcc CCFLAG2 -nostdinc -I. -c initcode.S
+gcc CCFLAG -nostdinc -I. -c initcode.S
 ld -m    elf_i386 -N -e start -Ttext 0 -o initcode.out initcode.o
 objcopy -S -O binary initcode.out initcode
 objdump -S initcode.o > initcode.asm
