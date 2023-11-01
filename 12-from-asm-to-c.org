@@ -8,7 +8,11 @@
 
 
 * 读取磁盘，加载 kernel
-设置断点观察读取磁盘, [[file:lab/10-real-to-protected/bootsect.s]]
+设置断点观察读取磁盘 | [[https://stanislavs.org/helppc/int_13-2.html][link]]
+
+代码文件
+[[file:lab/10-real-to-protected/bootsect.s]]
+
 #+BEGIN_EXAMPLE
   (gdb)
   [   0:7c34] => 0x7c34:  int    $0x13
@@ -81,8 +85,6 @@
   0x7c2b: 0x00000000      0x00000000      0x0000ffff      0x00cf9a00
   0x7c3b: 0x0000ffff      0x00cf9200      0x7c2b0017      0x00000000
 #+END_EXAMPLE
-
-
 
 * 实模式到保护模式切换
 1. =实模式= Real Mode
