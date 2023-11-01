@@ -8,62 +8,61 @@
 * 启动磁盘镜像构建过程
 首先 xv6-public 是通过 make 编译系统构建，构建流程如下
 #+BEGIN_SRC sh :exports both
-  make -nB \
-      | sed 's/-fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer -fno-stack-protector -fno-pie -no-pie/CCFLAG/'
+  make -nB | sed 's/gcc.*-c/gcc -c/'
 #+END_SRC
 
 #+RESULTS:
 #+begin_example
-gcc CCFLAG -fno-pic -O -nostdinc -I. -c bootmain.c
-gcc CCFLAG -fno-pic -nostdinc -I. -c bootasm.S
-ld -m    elf_i386 -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
-objdump -S bootblock.o > bootblock.asm
-objcopy -S -O binary -j .text bootblock.o bootblock
-./sign.pl bootblock
-gcc CCFLAG   -c -o bio.o bio.c
-gcc CCFLAG   -c -o console.o console.c
-gcc CCFLAG   -c -o exec.o exec.c
-gcc CCFLAG   -c -o file.o file.c
-gcc CCFLAG   -c -o fs.o fs.c
-gcc CCFLAG   -c -o ide.o ide.c
-gcc CCFLAG   -c -o ioapic.o ioapic.c
-gcc CCFLAG   -c -o kalloc.o kalloc.c
-gcc CCFLAG   -c -o kbd.o kbd.c
-gcc CCFLAG   -c -o lapic.o lapic.c
-gcc CCFLAG   -c -o log.o log.c
-gcc CCFLAG   -c -o main.o main.c
-gcc CCFLAG   -c -o mp.o mp.c
-gcc CCFLAG   -c -o picirq.o picirq.c
-gcc CCFLAG   -c -o pipe.o pipe.c
-gcc CCFLAG   -c -o proc.o proc.c
-gcc CCFLAG   -c -o sleeplock.o sleeplock.c
-gcc CCFLAG   -c -o spinlock.o spinlock.c
-gcc CCFLAG   -c -o string.o string.c
-gcc -m32 -gdwarf-2 -Wa,-divide   -c -o swtch.o swtch.S
-gcc CCFLAG   -c -o syscall.o syscall.c
-gcc CCFLAG   -c -o sysfile.o sysfile.c
-gcc CCFLAG   -c -o sysproc.o sysproc.c
-gcc -m32 -gdwarf-2 -Wa,-divide   -c -o trapasm.o trapasm.S
-gcc CCFLAG   -c -o trap.o trap.c
-gcc CCFLAG   -c -o uart.o uart.c
-./vectors.pl > vectors.S
-gcc -m32 -gdwarf-2 -Wa,-divide   -c -o vectors.o vectors.S
-gcc CCFLAG   -c -o vm.o vm.c
-gcc -m32 -gdwarf-2 -Wa,-divide   -c -o entry.o entry.S
-gcc CCFLAG -fno-pic -nostdinc -I. -c entryother.S
-ld -m    elf_i386 -N -e start -Ttext 0x7000 -o bootblockother.o entryother.o
-objcopy -S -O binary -j .text bootblockother.o entryother
-objdump -S bootblockother.o > entryother.asm
-gcc CCFLAG -nostdinc -I. -c initcode.S
-ld -m    elf_i386 -N -e start -Ttext 0 -o initcode.out initcode.o
-objcopy -S -O binary initcode.out initcode
-objdump -S initcode.o > initcode.asm
-ld -m    elf_i386 -T kernel.ld -o kernel entry.o bio.o console.o exec.o file.o fs.o ide.o ioapic.o kalloc.o kbd.o lapic.o log.o main.o mp.o picirq.o pipe.o proc.o sleeplock.o spinlock.o string.o swtch.o syscall.o sysfile.o sysproc.o trapasm.o trap.o uart.o vectors.o vm.o  -b binary initcode entryother
-objdump -S kernel > kernel.asm
-objdump -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > kernel.sym
-dd if=/dev/zero of=xv6.img count=10000
-dd if=bootblock of=xv6.img conv=notrunc
-dd if=kernel of=xv6.img seek=1 conv=notrunc
+  gcc -c bootmain.c
+  gcc -c bootasm.S
+  ld -m    elf_i386 -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
+  objdump -S bootblock.o > bootblock.asm
+  objcopy -S -O binary -j .text bootblock.o bootblock
+  ./sign.pl bootblock
+  gcc -c -o bio.o bio.c
+  gcc -c -o console.o console.c
+  gcc -c -o exec.o exec.c
+  gcc -c -o file.o file.c
+  gcc -c -o fs.o fs.c
+  gcc -c -o ide.o ide.c
+  gcc -c -o ioapic.o ioapic.c
+  gcc -c -o kalloc.o kalloc.c
+  gcc -c -o kbd.o kbd.c
+  gcc -c -o lapic.o lapic.c
+  gcc -c -o log.o log.c
+  gcc -c -o main.o main.c
+  gcc -c -o mp.o mp.c
+  gcc -c -o picirq.o picirq.c
+  gcc -c -o pipe.o pipe.c
+  gcc -c -o proc.o proc.c
+  gcc -c -o sleeplock.o sleeplock.c
+  gcc -c -o spinlock.o spinlock.c
+  gcc -c -o string.o string.c
+  gcc -c -o swtch.o swtch.S
+  gcc -c -o syscall.o syscall.c
+  gcc -c -o sysfile.o sysfile.c
+  gcc -c -o sysproc.o sysproc.c
+  gcc -c -o trapasm.o trapasm.S
+  gcc -c -o trap.o trap.c
+  gcc -c -o uart.o uart.c
+  ./vectors.pl > vectors.S
+  gcc -c -o vectors.o vectors.S
+  gcc -c -o vm.o vm.c
+  gcc -c -o entry.o entry.S
+  gcc -c entryother.S
+  ld -m    elf_i386 -N -e start -Ttext 0x7000 -o bootblockother.o entryother.o
+  objcopy -S -O binary -j .text bootblockother.o entryother
+  objdump -S bootblockother.o > entryother.asm
+  gcc -c initcode.S
+  ld -m    elf_i386 -N -e start -Ttext 0 -o initcode.out initcode.o
+  objcopy -S -O binary initcode.out initcode
+  objdump -S initcode.o > initcode.asm
+  ld -m    elf_i386 -T kernel.ld -o kernel entry.o bio.o console.o exec.o file.o fs.o ide.o ioapic.o kalloc.o kbd.o lapic.o log.o main.o mp.o picirq.o pipe.o proc.o sleeplock.o spinlock.o string.o swtch.o syscall.o sysfile.o sysproc.o trapasm.o trap.o uart.o vectors.o vm.o  -b binary initcode entryother
+  objdump -S kernel > kernel.asm
+  objdump -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > kernel.sym
+  dd if=/dev/zero of=xv6.img count=10000
+  dd if=bootblock of=xv6.img conv=notrunc
+  dd if=kernel of=xv6.img seek=1 conv=notrunc
 #+end_example
 
 启动编译阶段:
@@ -122,3 +121,42 @@ xv6 使用 LBA28 方式读取硬盘中的数据
 8. ~0x1F7~ command 寄存器
    - 读取，写入的命令，返回磁盘状态 1
    - 读取扇区:0x20 写入扇区:0x30 磁盘识别:0xEC
+
+
+内联汇编形式
+#+BEGIN_QUOTE
+asm [volatile] ("Instruction list":Output:Input:Clobber/Modify)
+#+END_QUOTE
+
+从 port 端口读取一个 byte，返回这个读取的值。
+使用内联汇编，指定把 data 放在%al 存储，port 放在%dx 存储，然后调用
+inb %dx, %al
+#+BEGIN_SRC c
+  static inline uchar
+  inb(ushort port)
+  {
+    uchar data;
+
+    asm volatile("in %1,%0" : "=a" (data) : "d" (port)); // =a, al 寄存器, d 表示 dx 寄存器
+    return data;
+  }
+#+END_SRC
+
+
+读取端口的字节到给定地址
+#+BEGIN_SRC c
+  static inline void
+  insl(int port, void *addr, int cnt)  // 从端口 port 读 4*cnt 个字节到地址 addr
+  {
+    asm volatile("cld; rep insl" :                    // 清零 DF 位，重复指令 insl
+                 "=D" (addr), "=c" (cnt) :            // addr 目的地址绑定寄存器 edi，cnt 循环次数绑定 ecx
+                 "d" (port), "0" (addr), "1" (cnt) :  // port 端口绑定 dx，addr,cnt 同上
+                 "memory", "cc");                     // 改变了内存，改变了eflags寄存器
+  }
+#+END_SRC
+
+重复执行 insl 指令来读取多个字节的数据到目的地址，
+- 具体操作顺序是先读目的地址和循环次数，insl 每次执行后再更新 addr，cnt 的值，所
+  以 addr 和 cnt 是又读又写的
+- Output 和 Input 部分都存在 addr 和 cnt。期间改变了内存和 eflags 寄存器，所以
+  内联汇编的最后一部分申明 "cc" 和 "memory"
