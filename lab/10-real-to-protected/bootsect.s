@@ -26,7 +26,7 @@ start:
 load_disk:
 	pusha
 	mov	ah, 0x02	; function code: 2 = read disk
-	mov	al, 2		; nsector
+	mov	al, 8		; nsector
 	mov	ch, 0		; cylinder
 	mov	cl, 2		; sector
 	mov	dh, 0		; header

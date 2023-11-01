@@ -24,9 +24,13 @@ end
 #   kill
 # end
 
+file vmKernel
+
 target remote :1234
 
+
 break *0x7c00
+break start_kernel
 # layout asm
 # layout reg
 continue

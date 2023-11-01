@@ -4,6 +4,7 @@
 #+DATE: <2023-11-01 Wed>
 #+STARTUP: overview num indent
 #+OPTIONS: ^:nil
+#+PROPERTY: header-args:sh :results output
 
 
 * 读取磁盘，加载 kernel
