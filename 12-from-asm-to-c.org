@@ -7,8 +7,7 @@
 #+PROPERTY: header-args:sh :results output
 
 
-
-* 读取磁盘，加载 kernel
+* 读取磁盘，加载 kernel 文件
 设置断点观察读取磁盘 | [[https://stanislavs.org/helppc/int_13-2.html][link]]
 
 代码文件 [[file:lab/10-real-to-protected/bootsect.s]]
