@@ -129,6 +129,106 @@
 
 需要注意的是 --enable-debugger 和 --enable-gdb-stub 不能同时开启
 
+#+BEGIN_EXAMPLE
+  bochs -q -f bochsrc.bxrc
+  ========================================================================
+                          Bochs x86 Emulator 2.7
+                Built from SVN snapshot on August  1, 2021
+                  Timestamp: Sun Aug  1 10:07:00 CEST 2021
+  ========================================================================
+  00000000000i[      ] BXSHARE not set. using compile time default '/opt/bochs-2.7-native/share/bochs'
+  00000000000i[      ] reading configuration from bochsrc.bxrc
+  00000000000e[      ] bochsrc.bxrc:968: wrong value for parameter 'mode'
+  00000000000e[PCSPK ] bochsrc.bxrc:968: unknown parameter for speaker ignored.
+  00000000000e[      ] bochsrc.bxrc:968: unknown parameter 'volume'
+  00000000000e[PCSPK ] bochsrc.bxrc:968: unknown parameter for speaker ignored.
+  00000000000i[      ] installing x module as the Bochs GUI
+  00000000000i[      ] using log file bochsout.txt
+  Next at t=0
+  (0) [0x0000fffffff0] f000:fff0 (unk. ctxt): jmpf 0xf000:e05b          ; ea5be000f0
+  <bochs:1> b 0x7c00
+  <bochs:2> c
+  (0) Breakpoint 1, 0x0000000000007c00 in ?? ()
+  Next at t=4435772
+  (0) [0x000000007c00] 0000:7c00 (unk. ctxt): xor ax, ax                ; 31c0
+  <bochs:3> u/10
+  0000000000007c00: (                    ): xor ax, ax                ; 31c0
+  0000000000007c02: (                    ): mov ds, ax                ; 8ed8
+  0000000000007c04: (                    ): mov ss, ax                ; 8ed0
+  0000000000007c06: (                    ): mov es, ax                ; 8ec0
+  0000000000007c08: (                    ): mov fs, ax                ; 8ee0
+  0000000000007c0a: (                    ): mov gs, ax                ; 8ee8
+  0000000000007c0c: (                    ): call .+21  (0x00007c24)   ; e81500
+  0000000000007c0f: (                    ): cli                       ; fa
+  0000000000007c10: (                    ): lgdt ds:0x7c6b            ; 0f01166b7c
+  0000000000007c15: (                    ): mov eax, cr0              ; 0f20c0
+  <bochs:4> s
+  Next at t=4435773
+  (0) [0x000000007c02] 0000:7c02 (unk. ctxt): mov ds, ax                ; 8ed8
+  <bochs:5>
+  Next at t=4435774
+  (0) [0x000000007c04] 0000:7c04 (unk. ctxt): mov ss, ax                ; 8ed0
+  <bochs:6>
+  Next at t=4435775
+  (0) [0x000000007c06] 0000:7c06 (unk. ctxt): mov es, ax                ; 8ec0
+  <bochs:7>
+  Next at t=4435776
+  (0) [0x000000007c08] 0000:7c08 (unk. ctxt): mov fs, ax                ; 8ee0
+  <bochs:8>
+  Next at t=4435777
+  (0) [0x000000007c0a] 0000:7c0a (unk. ctxt): mov gs, ax                ; 8ee8
+  <bochs:9>
+  Next at t=4435778
+  (0) [0x000000007c0c] 0000:7c0c (unk. ctxt): call .+21  (0x00007c24)   ; e81500
+  <bochs:10>
+  Next at t=4435779
+  (0) [0x000000007c24] 0000:7c24 (unk. ctxt): pusha                     ; 60
+  <bochs:11>
+  Next at t=4435780
+  (0) [0x000000007c25] 0000:7c25 (unk. ctxt): mov ah, 0x02              ; b402
+  <bochs:12>
+  Next at t=4435781
+  (0) [0x000000007c27] 0000:7c27 (unk. ctxt): mov al, 0x08              ; b008
+  <bochs:13>
+  Next at t=4435782
+  (0) [0x000000007c29] 0000:7c29 (unk. ctxt): mov ch, 0x00              ; b500
+  <bochs:14> u/10
+  0000000000007c29: (                    ): mov ch, 0x00              ; b500
+  0000000000007c2b: (                    ): mov cl, 0x02              ; b102
+  0000000000007c2d: (                    ): mov dh, 0x00              ; b600
+  0000000000007c2f: (                    ): mov dl, 0x00              ; b200
+  0000000000007c31: (                    ): mov bx, 0x1000            ; bb0010
+  0000000000007c34: (                    ): int 0x13                  ; cd13
+  0000000000007c36: (                    ): popa                      ; 61
+  0000000000007c37: (                    ): ret                       ; c3
+  0000000000007c38: (                    ): mov eax, 0xd88e0010       ; 66b810008ed8
+  0000000000007c3e: (                    ): mov ss, ax                ; 8ed0
+  <bochs:15> b 0x7c36
+  <bochs:16> x/32h 0x1000
+  [bochs]:
+  0x0000000000001000 <bogus+       0>:    0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000
+  0x0000000000001010 <bogus+      16>:    0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000
+  0x0000000000001020 <bogus+      32>:    0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000
+  0x0000000000001030 <bogus+      48>:    0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000
+  <bochs:17> c
+  (0) Breakpoint 2, 0x0000000000007c36 in ?? ()
+  Next at t=8881120
+  (0) [0x000000007c36] 0000:7c36 (unk. ctxt): popa                      ; 61
+  <bochs:18> x/32h 0x1000
+  [bochs]:
+  0x0000000000001000 <bogus+       0>:    0xe0e8  0x0000  0xeb00  0x55fe  0xe589  0x558b  0xec08  0xc35d
+  0x0000000000001010 <bogus+      16>:    0x8955  0x0fe5  0x55b7  0x0f08  0x45b6  0xee0c  0xc35d  0x8955
+  0x0000000000001020 <bogus+      32>:    0x53e5  0xd4bb  0x0003  0xb800  0x000e  0x0000  0xda89  0xbaee
+  0x0000000000001030 <bogus+      48>:    0x03d5  0x0000  0x89ec  0xb8c1  0x000f  0x0000  0xda89  0x0fee
+  <bochs:19>
+#+END_EXAMPLE
+
+配置图形调试器
+#+BEGIN_SRC conf
+  # gui_debug 开启图形调试器, 需要编译时添加 --enable-debugger-gui 选项
+  display_library: x, options="gui_debug"
+#+END_SRC
+
 * 总结
 1. 通过磁盘中断 int 13 加载 bootmain.bin
 2. GDT 加载
