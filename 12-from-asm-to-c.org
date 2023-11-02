@@ -112,12 +112,22 @@
 
 实模式到保护模式切换流程
 1. 关闭中断
+   - cli
 2. 加载 gdt
+   - 段寄存器变成段选择子 (selector)
 3. 设置控制寄存器 ~cr0~
+   - 设置 PE 位
 4. 通过远程跳转来 flush 流水线
+   - 通过长跳转来设置 cs 寄存器
+   - 同时跳转到 .code32 位置
 5. 更新所有的段寄存器
+   - 更新数据段寄存器 ds, es, ss, fs, gs
+   - 通用设置成 0x10
 6. 更新系统栈
+   - 初始化系统栈 ebp, esp
 7. 跳转到 32 位指令出执行
+   - 跳转到正式的启动代码
+   - 启动代码也是 32 为 C 语言代码入口
 
 * Bochs 调试
 编译安装手册 [[https://bochs.sourceforge.io/doc/docbook/user/compiling.html][link]]
