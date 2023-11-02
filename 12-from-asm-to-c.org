@@ -122,6 +122,11 @@
 * Bochs 调试
 编译安装手册 [[https://bochs.sourceforge.io/doc/docbook/user/compiling.html][link]]
 
+注意需要开启下面的选项：
+1. --enable-gdb-stub 支持 gdb 调试
+2. --enable-debugger 开启调试器
+3. --enable-debugger-gui 开启图形调试界面
+
 * 总结
 1. 通过磁盘中断 int 13 加载 bootmain.bin
 2. GDT 加载
