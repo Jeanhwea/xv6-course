@@ -34,6 +34,55 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
 4. TODO 进程管理
 5. TODO 文件系统
 
+* 答疑
+** 视频(编号 11) 中的地址空间看起来有问题？
+有粉丝对 0x0 ~ 0x80000000 的地址空间存在疑问，认为 0x0 以上是外设程序？
+#+BEGIN_EXAMPLE
+  0x80000000 -> |-------------|  -
+  (KERNBASE)    |     Heap    |  ^
+                |      |      |  |
+                |      v      |  |
+                |     ...     |  |
+                |             |
+                |-------------| User Space
+                |     ...     |
+                |      ^      |
+                |      |      |  |
+                |  User stack |  |
+                |-------------|  |
+                |             |  |
+                |    User     |  |
+                | Text & Data |  v
+  0x0        -> |-------------|  -
+#+END_EXAMPLE
+
+我这边理解可能架构没有对齐问题
+- 因为 ta 参考的是 riscv 架构，和 i386 可能存在差异
+- 如果 BIOS 代码中断向量和一些 BIOS 处理流程我这边可以粗略地认为是用户代码
+- 实际的用户程序通过加载到内存精确地说肯定不是从 0x0 开始，应该可以使用下面命令
+  验证一下
+#+BEGIN_SRC sh :results output :exports both
+  readelf -l ./lab/09-linux-syscall/forkme.out | grep Entry
+#+END_SRC
+
+#+RESULTS:
+: Entry point 0x1120
+
+
+** 为什么视频编码看起来不是连续的？
+视频顺序采用三段式来编码，具体含义如下
+#+BEGIN_EXAMPLE
+  xyz-描述
+  ^``
+  | ` `- 番外号, z := null|a|b|c
+  | |
+  | +--- 节编号, y := 1|2|3|...
+  |
+  +----- 章编号, z := 0|1|2|...
+#+END_EXAMPLE
+
+最终结果是视频会根据字典序来排布
+
 * 资源
 1. MIT 课程官网 [[https://pdos.csail.mit.edu/6.828/][6.828]]
 2. x86 版本 [[https://github.com/mit-pdos/xv6-public][xv6-public]]
