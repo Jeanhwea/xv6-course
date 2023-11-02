@@ -46,24 +46,24 @@ mv bochs-2.7 bochs-2.7-native
 cd bochs-2.7-native
 
 ./configure --prefix=$PREFIX-native \
-            --enable-smp \
             --enable-cpu-level=6 \
-            --enable-fpu \
-            --enable-x86_64 \
-            --enable-vmx \
-            --enable-svm \
-            --enable-avx \
             --enable-all-optimizations \
+            --enable-x86-64 \
+            --enable-pci \
+            --enable-vmx \
             --enable-debugger \
+            --enable-disasm \
             --enable-debugger-gui \
+            --enable-logging \
+            --enable-fpu \
+            --enable-3dnow \
+            --enable-sb16=dummy \
+            --enable-cdrom \
             --enable-x86-debugger \
             --enable-iodebug \
-            --enable-logging \
-            --enable-ne2000 \
-            --enable-cdrom \
             --disable-plugins \
             --disable-docbook \
-            --with-x11
+            --with-x --with-x11 --with-term --with-sdl2
 
 make -j$(nproc)
 
