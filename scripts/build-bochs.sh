@@ -11,10 +11,42 @@ fi
 mkdir -p ~/build
 cd ~/build
 
-tar xzvf $FILEGZ
-cd bochs-2.7
+rm -rf bochs-2.7
 
-./configure --prefix=$PREFIX \
+tar xzvf $FILEGZ
+mv bochs-2.7 bochs-2.7-gdb
+cd bochs-2.7-gdb
+
+./configure --prefix=$PREFIX-gdb \
+            --enable-smp \
+            --enable-cpu-level=6 \
+            --enable-fpu \
+            --enable-x86_64 \
+            --enable-vmx \
+            --enable-svm \
+            --enable-avx \
+            --enable-all-optimizations \
+            --enable-gdb-stub \
+            --enable-debugger-gui \
+            --enable-x86-debugger \
+            --enable-iodebug \
+            --enable-logging \
+            --enable-ne2000 \
+            --enable-cdrom \
+            --disable-plugins \
+            --disable-docbook \
+            --with-x --with-x11 --with-term
+
+make
+
+sudo make install
+
+
+tar xzvf $FILEGZ
+mv bochs-2.7 bochs-2.7-native
+cd bochs-2.7-native
+
+./configure --prefix=$PREFIX-native \
             --enable-smp \
             --enable-cpu-level=6 \
             --enable-fpu \
