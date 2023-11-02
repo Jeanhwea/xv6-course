@@ -19,7 +19,7 @@ qemu-nox: fda.img
 qemu-debug: fda.img
 	$(QEMU) -s -S -boot a -fda fda.img >/dev/null 2>&1 &
 
-bochx: fda.img
+bochs: fda.img
 	$(BOCHS) -q -f bochsrc.bxrc
 
 bootsect.bin: bootsect.s
