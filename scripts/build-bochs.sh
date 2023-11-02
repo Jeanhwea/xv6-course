@@ -25,6 +25,7 @@ cd bochs-2.7-gdb
             --enable-svm \
             --enable-avx \
             --enable-all-optimizations \
+            --enable-readline \
             --enable-gdb-stub \
             --enable-debugger-gui \
             --enable-x86-debugger \
@@ -51,6 +52,7 @@ cd bochs-2.7-native
             --enable-x86-64 \
             --enable-pci \
             --enable-vmx \
+            --enable-readline \
             --enable-debugger \
             --enable-disasm \
             --enable-debugger-gui \
