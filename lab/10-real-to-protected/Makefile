@@ -42,4 +42,4 @@ fda.img: bootsect.bin bootmain.bin
 
 .PHONY: clean qemu
 clean:
-	-rm -f *.o *.d *.out *.img *.bin *.asm *.dis *.lst vm*
+	-rm -f *.o *.d *.out *.img *.bin *.asm *.dis *.lst vm* *.ini bochsout.txt

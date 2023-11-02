@@ -2,6 +2,7 @@
 compile_commands.json
 bochsout.txt
 
+*.ini
 *.d
 *.o
 *.out

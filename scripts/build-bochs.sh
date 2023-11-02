@@ -2,7 +2,7 @@
 PREFIX=/opt/bochs-2.7
 FILEGZ="$HOME/down/bochs-2.7.tar.gz"
 
-sudo apt-get install libsdl2-dev xorg-dev curl
+sudo apt-get install libsdl2-dev xorg-dev bochs bochs-x
 
 if [ ! -f $FILEGZ ]; then
     curl https://jaist.dl.sourceforge.net/project/bochs/bochs/2.7/bochs-2.7.tar.gz -o $FILEGZ
