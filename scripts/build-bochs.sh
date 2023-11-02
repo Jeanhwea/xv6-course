@@ -18,7 +18,6 @@ mv bochs-2.7 bochs-2.7-gdb
 cd bochs-2.7-gdb
 
 ./configure --prefix=$PREFIX-gdb \
-            --enable-smp \
             --enable-cpu-level=6 \
             --enable-fpu \
             --enable-x86_64 \
