@@ -5,7 +5,7 @@
 #+STARTUP: overview num indent
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
-* 启动磁盘镜像构建过程
+* 磁盘构建过程
 首先 xv6-public 是通过 make 编译系统构建，构建流程如下
 #+BEGIN_SRC sh :exports both
   make -nB | sed 's/gcc.*-c/gcc -c/'
@@ -81,7 +81,7 @@
 4. 合成启动镜像 bootblock, kernel
    - 产出 xv6.img
 
-* 启动逻辑
+* 启动流程分析
 系统启动文件
 [[file:../../study/os/xv6-public/bootasm.S]]
 
