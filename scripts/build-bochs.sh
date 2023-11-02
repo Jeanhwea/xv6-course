@@ -36,7 +36,7 @@ cd bochs-2.7-gdb
             --disable-docbook \
             --with-x --with-x11 --with-term
 
-make
+make -j$(nproc)
 
 sudo make install
 
@@ -65,6 +65,6 @@ cd bochs-2.7-native
             --disable-docbook \
             --with-x --with-x11 --with-term
 
-make
+make -j$(nproc)
 
 sudo make install
