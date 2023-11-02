@@ -6,6 +6,7 @@ CCFLAG = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb 
 LDFLAG = -m elf_i386 -N -e start_kernel -Ttext 0x1000
 ODFLAG = -D -m i386 -b binary
 QEMU   = qemu-system-i386
+BOCHS  = bochs
 
 all: fda.img
 
@@ -17,6 +18,9 @@ qemu-nox: fda.img
 
 qemu-debug: fda.img
 	$(QEMU) -s -S -boot a -fda fda.img >/dev/null 2>&1 &
+
+bochx: fda.img
+	$(BOCHS) -q -f bochsrc.bxrc
 
 bootsect.bin: bootsect.s
 	$(AS) -f bin -o bootsect.bin -l bootsect.lst bootsect.s
