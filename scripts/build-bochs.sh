@@ -54,7 +54,6 @@ cd bochs-2.7-native
             --enable-vmx \
             --enable-readline \
             --enable-debugger \
-            --enable-disasm \
             --enable-debugger-gui \
             --enable-logging \
             --enable-fpu \
