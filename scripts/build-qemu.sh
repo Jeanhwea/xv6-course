@@ -2,7 +2,7 @@
 PREFIX=/opt/qemu
 FILEGZ="$HOME/down/bochs-2.7.tar.gz"
 
-sudo apt-get install git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build \
+sudo apt-get install -y git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build \
      git-email \
      libaio-dev libbluetooth-dev libcapstone-dev libbrlapi-dev libbz2-dev \
      libcap-ng-dev libcurl4-gnutls-dev libgtk-3-dev \
