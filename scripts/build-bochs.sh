@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-PREFIX=/opt/bochs
+PREFIX=/opt/bochs-2.7
 FILEGZ="$HOME/down/bochs-2.7.tar.gz"
 
 sudo apt-get install libsdl2-dev curl
@@ -40,7 +40,7 @@ make
 
 sudo make install
 
-
+cd ~/build
 tar xzvf $FILEGZ
 mv bochs-2.7 bochs-2.7-native
 cd bochs-2.7-native
