@@ -11,7 +11,7 @@ fi
 mkdir -p ~/build
 cd ~/build
 
-rm -rf bochs-2.7
+rm -rf bochs-2.7-*
 
 tar xzvf $FILEGZ
 mv bochs-2.7 bochs-2.7-gdb
