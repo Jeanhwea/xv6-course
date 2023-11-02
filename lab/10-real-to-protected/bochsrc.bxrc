@@ -101,7 +101,7 @@
 #display_library: win32, options="traphotkeys, autoscale"
 #display_library: wx
 # display_library: x
-display_library: x, options="gui_debug"
+# display_library: x, options="gui_debug"
 
 #=======================================================================
 # CPU:
