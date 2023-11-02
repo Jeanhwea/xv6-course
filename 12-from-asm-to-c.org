@@ -127,6 +127,8 @@
 2. --enable-debugger 开启自带的调试器
 3. --enable-debugger-gui 开启图形调试界面
 
+需要注意的是 --enable-debugger 和 --enable-gdb-stub 不能同时开启
+
 * 总结
 1. 通过磁盘中断 int 13 加载 bootmain.bin
 2. GDT 加载
