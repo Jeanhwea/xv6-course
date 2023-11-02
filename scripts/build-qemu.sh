@@ -13,4 +13,4 @@ sudo apt-get install git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ni
      valgrind xfslibs-dev \
      libnfs-dev libiscsi-dev
 
-# TODO
+# https://wiki.qemu.org/Hosts/Linux
