@@ -35,7 +35,7 @@ cd bochs-2.7-gdb
             --enable-cdrom \
             --disable-plugins \
             --disable-docbook \
-            --with-x11
+            --with-x --with-x11 --with-term --with-sdl2
 
 make -j$(nproc)
 
