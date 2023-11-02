@@ -34,7 +34,7 @@ cd bochs-2.7-gdb
             --enable-cdrom \
             --disable-plugins \
             --disable-docbook \
-            --with-x --with-x11 --with-term
+            --with-x11
 
 make -j$(nproc)
 
@@ -63,7 +63,7 @@ cd bochs-2.7-native
             --enable-cdrom \
             --disable-plugins \
             --disable-docbook \
-            --with-x --with-x11 --with-term
+            --with-x11
 
 make -j$(nproc)
 
