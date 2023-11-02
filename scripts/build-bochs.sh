@@ -23,7 +23,6 @@ cd bochs-2.7
             --enable-svm \
             --enable-avx \
             --enable-all-optimizations \
-            --enable-gdb-stub \
             --enable-debugger \
             --enable-debugger-gui \
             --enable-x86-debugger \

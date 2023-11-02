@@ -124,7 +124,7 @@
 
 注意需要开启下面的选项：
 1. --enable-gdb-stub 支持 gdb 调试
-2. --enable-debugger 开启调试器
+2. --enable-debugger 开启自带的调试器
 3. --enable-debugger-gui 开启图形调试界面
 
 * 总结
