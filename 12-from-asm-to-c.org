@@ -223,11 +223,63 @@
   <bochs:19>
 #+END_EXAMPLE
 
+查看寄存器, reg, sreg, creg
+#+BEGIN_EXAMPLE
+  <bochs:19> sreg <= 段寄存器
+  es:0x0000, dh=0x00009300, dl=0x0000ffff, valid=1
+          Data segment, base=0x00000000, limit=0x0000ffff, Read/Write, Accessed
+  cs:0x0000, dh=0x00009300, dl=0x0000ffff, valid=1
+          Data segment, base=0x00000000, limit=0x0000ffff, Read/Write, Accessed
+  ss:0x0000, dh=0x00009300, dl=0x0000ffff, valid=7
+          Data segment, base=0x00000000, limit=0x0000ffff, Read/Write, Accessed
+  ds:0x0000, dh=0x00009300, dl=0x0000ffff, valid=1
+          Data segment, base=0x00000000, limit=0x0000ffff, Read/Write, Accessed
+  fs:0x0000, dh=0x00009300, dl=0x0000ffff, valid=1
+          Data segment, base=0x00000000, limit=0x0000ffff, Read/Write, Accessed
+  gs:0x0000, dh=0x00009300, dl=0x0000ffff, valid=1
+          Data segment, base=0x00000000, limit=0x0000ffff, Read/Write, Accessed
+  ldtr:0x0000, dh=0x00008200, dl=0x0000ffff, valid=1
+  tr:0x0000, dh=0x00008b00, dl=0x0000ffff, valid=1
+  gdtr:base=0x00000000000f9ad7, limit=0x30
+  idtr:base=0x0000000000000000, limit=0x3ff
+  <bochs:20> reg <= 通用寄存器
+  rax: 00000000_60000008
+  rbx: 00000000_00001000
+  rcx: 00000000_00090002
+  rdx: 00000000_00000000
+  rsp: 00000000_0000ffc4
+  rbp: 00000000_00000000
+  rsi: 00000000_000e0000
+  rdi: 00000000_0000070c
+  r8 : 00000000_00000000
+  r9 : 00000000_00000000
+  r10: 00000000_00000000
+  r11: 00000000_00000000
+  r12: 00000000_00000000
+  r13: 00000000_00000000
+  r14: 00000000_00000000
+  r15: 00000000_00000000
+  rip: 00000000_00007c36
+  eflags 0x00000046: id vip vif ac vm rf nt IOPL=0 of df if tf sf ZF af PF cf
+  <bochs:21> creg <= 控制寄存器
+  CR0=0x60000010: pg CD NW ac wp ne ET ts em mp pe
+  CR2=page fault laddr=0x0000000000000000
+  CR3=0x000000000000
+      PCD=page-level cache disable=0
+      PWT=page-level write-through=0
+  CR4=0x00000000: pks cet pke smap smep keylock osxsave pcid fsgsbase smx vmx la57 umip osxmmexcpt osfxsr pce pge mce pae pse de tsd pvi vme
+  CR8: 0x0
+  EFER=0x00000000: ffxsr nxe lma lme sce
+  XCR0=0x00000001: cet_s cet_u pkru hi_zmm zmm_hi256 opmask bndcfg bndregs ymm sse FPU
+  <bochs:22>
+#+END_EXAMPLE
+
 配置图形调试器
 #+BEGIN_SRC conf
   # gui_debug 开启图形调试器, 需要编译时添加 --enable-debugger-gui 选项
   display_library: x, options="gui_debug"
 #+END_SRC
+
 
 * 总结
 1. 通过磁盘中断 int 13 加载 bootmain.bin
