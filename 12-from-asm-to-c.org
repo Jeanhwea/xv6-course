@@ -280,7 +280,6 @@
   display_library: x, options="gui_debug"
 #+END_SRC
 
-
 * 总结
 1. 通过磁盘中断 int 13 加载 bootmain.bin
 2. GDT 加载
