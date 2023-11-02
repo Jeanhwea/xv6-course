@@ -129,6 +129,22 @@
    - 跳转到正式的启动代码
    - 启动代码也是 32 为 C 语言代码入口
 
+实模式和保护模式寻址方式的变化
+
+实模式
+#+BEGIN_EXAMPLE
+  addr=seg:offset
+#+END_EXAMPLE
+
+保护模式
+#+BEGIN_EXAMPLE
+  linear_addr = logic_addr + gdt[selector].base
+#+END_EXAMPLE
+1. 通过 gdtr 的地址找到 gdt 的地址
+2. 通过选择子(selector=ds/es/ss/fs/gs), 找到 gdt 的偏移
+3. 找到 gdt 项，选取 base 作为基地址
+4. base + logic_addr 则为线性地址
+
 * Bochs 调试
 编译安装手册 [[https://bochs.sourceforge.io/doc/docbook/user/compiling.html][link]]
 
