@@ -61,15 +61,20 @@ void print_char(char ch)
 {
 	char *video = VGA_ADDR;
 	int curr = get_cursor();
-	video[curr] = ch;
+	video += curr;
+	*video = ch;
+	video++;
+	*video = RED_ON_BLACK;
 }
 
 void start_kernel()
 {
 	char *video = VGA_ADDR;
 
-	clear_screen();
-	set_cursor(get_offset(11, 0));
+	// print_char('X');
+
+	// clear_screen();
+	// set_cursor(get_offset(11, 0));
 
 	char *msg = "Hello World\n";
 	for (char *p = msg; *p != '\n'; ++p) {
