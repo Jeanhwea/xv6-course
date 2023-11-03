@@ -145,6 +145,29 @@
 3. 找到 gdt 项，选取 base 作为基地址
 4. base + logic_addr 则为线性地址
 
+寻址流程
+#+BEGIN_EXAMPLE
+                          Logic Address (input)
+
+  selector(16)            [Offset(32) ]  {3}         [+]   --> Linear Address (output) {4}
+      |
+      |                                               ^
+      |                                               . {3}
+      |                                               .
+      |                              @................@
+      | {2}                          .
+      |                   |----------+--------------------------|
+      |                   | Base(32) .   | Limit(20) | Flag(12) |
+      |                   |----------+---|-----------|----------|
+      |                   |          .   |           |          |
+      |                   | ...      .   | ...       | ...      |
+      |                   |          .   |           |          |
+      |              0x10 | 0        .   | 0xffff    | Data     |
+      `------------>  0x8 | 0       @@@  | 0xffff    | Code     |
+                      0x0 | 0            | 0         | Null     |
+  gdtr {1} -------->      |-------------------------------------|
+#+END_EXAMPLE
+
 * Bochs 调试
 编译安装手册 [[https://bochs.sourceforge.io/doc/docbook/user/compiling.html][link]]
 
