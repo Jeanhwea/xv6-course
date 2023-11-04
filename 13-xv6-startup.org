@@ -160,3 +160,8 @@ inb %dx, %al
   以 addr 和 cnt 是又读又写的
 - Output 和 Input 部分都存在 addr 和 cnt。期间改变了内存和 eflags 寄存器，所以
   内联汇编的最后一部分申明 "cc" 和 "memory"
+
+* kernel 执行阶段
+1. entry.S 配置起始地址 0x10000
+2. 进行初始化操作(先忽略)
+3. 跳转到 main 方法
