@@ -1,4 +1,4 @@
-#+TITLE: xv6 启动分析
+#+TITLE: xv6 启动流程分析
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-10-30 Mon>
