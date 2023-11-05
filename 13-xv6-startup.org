@@ -172,7 +172,8 @@ inb %dx, %al
 2. 进行初始化操作(先忽略)
 3. 跳转到 main 方法
 
-#+BEGIN_SRC sh :results output
+查看 ELF 头
+#+BEGIN_SRC sh :exports both
   readelf -h kernel
 #+END_SRC
 
@@ -190,14 +191,39 @@ ELF Header:
   Version:                           0x1
   Entry point address:               0x10000c
   Start of program headers:          52 (bytes into file)
-  Start of section headers:          164696 (bytes into file)
+  Start of section headers:          134731012 (bytes into file)
   Flags:                             0x0
   Size of this header:               52 (bytes)
   Size of program headers:           32 (bytes)
   Number of program headers:         3
   Size of section headers:           40 (bytes)
   Number of section headers:         16
-  Section header string table index: 13
+  Section header string table index: 15
+#+end_example
+
+参考程序段
+#+BEGIN_SRC sh :exports both
+  readelf -l kernel
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+Elf file type is EXEC (Executable file)
+Entry point 0x10000c
+There are 3 program headers, starting at offset 52
+
+Program Headers:
+  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
+  LOAD           0x001000 0x80100000 0x00100000 0x07b6b 0x07b6b R E 0x1000
+  LOAD           0x009000 0x80108000 0x00108000 0x804a5c6 0x8055590 RW  0x1000
+  GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RWE 0x10
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     .text .rodata
+   01     .data .bss
+   02
 #+end_example
 
 * 总结
