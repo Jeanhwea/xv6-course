@@ -80,7 +80,7 @@
       [  Memory  ]
 #+END_EXAMPLE
 
-* xv6 分页机制分析
+* entry.S 阶段分页机制分析
 xv6 在 entry.S 中开启分页
 
 启用分页机制需要完成下面三步
@@ -90,7 +90,7 @@ xv6 在 entry.S 中开启分页
 
 [[file:../../study/os/xv6-public/entry.S]]
 
-开启分页后通过 qemu 查看页面映射流程
+该阶段使用 CR4_PSE 的 4M 大页映射，通过 qemu 验证开启分页后
 #+BEGIN_EXAMPLE
   (qemu) help info tlb
   info tlb  -- show virtual to physical memory mappings
@@ -102,14 +102,6 @@ xv6 在 entry.S 中开启分页
   (qemu) info mem
   0000000000000000-0000000000400000 0000000000400000 -rw
   0000000080000000-0000000080400000 0000000000400000 -rw
-  (qemu) x/8x 0x80103060
-  80103060: 0x04244c8d 0xfff0e483 0x8955fc71 0x835153e5
-  80103070: 0x006808ec 0x68804000 0x801154d0 0xfff58fe8
-  (qemu) xp/8x 0x103060
-  0000000000103060: 0x04244c8d 0xfff0e483 0x8955fc71 0x835153e5
-  0000000000103070: 0x006808ec 0x68804000 0x801154d0 0xfff58fe8
-  (qemu) xp/8x 0x80103060
-  0000000080103060: Cannot access memory
   (qemu)
 #+END_EXAMPLE
 
@@ -142,7 +134,7 @@ gdb 调试分页
   man 3 end
 #+END_SRC
 
-* 内存初始化
+* kvmalloc 设置正式分页阶段
 1. kinit1 初始化内存
    - kmem.freelist 初始化链表
 2. kvmalloc 初始化内存页表，核心调研 setupkvm 初始化内核分页表
@@ -168,7 +160,6 @@ gdb 调试分页
   }
   (gdb)
 #+END_EXAMPLE
-
 
 * 物理内存分布
 1. 0x0 ~ 0x100000: BIOS 地址空间 (total 1MB)
