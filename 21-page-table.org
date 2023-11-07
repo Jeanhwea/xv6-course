@@ -80,102 +80,21 @@
       [  Memory  ]
 #+END_EXAMPLE
 
-* entry.S 阶段分页机制分析
-xv6 在 entry.S 中开启分页
+* 分页代码实验
+[[file:../../study/os/xv6-public/mmu.h]]
 
-启用分页机制需要完成下面三步
-1. 准备好页目录表和页表
-2. 将页表地址写入控制寄存器 cr3
-3. 将寄存器 cr0 的 PG 位置 1
+#+BEGIN_SRC c
+  // A virtual address 'la' has a three-part structure as follows:
+  //
+  // +--------10------+-------10-------+---------12----------+
+  // | Page Directory |   Page Table   | Offset within Page  |
+  // |      Index     |      Index     |                     |
+  // +----------------+----------------+---------------------+
+  //  \--- PDX(va) --/ \--- PTX(va) --/
 
-[[file:../../study/os/xv6-public/entry.S]]
+  // page directory index
+  #define PDX(va)         (((uint)(va) >> PDXSHIFT) & 0x3FF)
 
-entry 阶段使用 CR4_PSE 的 4M 大页映射，这里的前提是做以下操作
-1. 需要 Pentium 以上的 CPU
-2. CR4 中的 PSE 位（第 4 位）为 1
-3. 页目录项的 PS 位（第 7 位）为 1
-
-通过 qemu 验证开启分页后
-#+BEGIN_EXAMPLE
-  (qemu) help info tlb
-  info tlb  -- show virtual to physical memory mappings
-  (qemu) help info mem
-  info mem  -- show the active virtual memory mappings
-  (qemu) info tlb
-  0000000000000000: 0000000000000000 --P-A---W
-  0000000080000000: 0000000000000000 --P-----W
-  (qemu) info mem
-  0000000000000000-0000000000400000 0000000000400000 -rw
-  0000000080000000-0000000080400000 0000000000400000 -rw
-  (qemu)
-#+END_EXAMPLE
-
-gdb 调试分页
-#+BEGIN_EXAMPLE
-  (gdb) b main
-  Breakpoint 2 at 0x80103060: file main.c, line 20.
-  (gdb) c
-  Continuing.
-  => 0x80103060 <main>:   lea    0x4(%esp),%ecx
-
-  Thread 1 hit Breakpoint 2, main () at main.c:20
-  20        kinit1(end, P2V(4*1024*1024)); // phys page allocator
-  (gdb) info reg cr3
-  cr3            0x109000            [ PDBR=265 PCID=0 ]
-  (gdb) x/8x 0x109000
-  0x109000:       0x000000a3      0x00000000      0x00000000      0x00000000
-  0x109010:       0x00000000      0x00000000      0x00000000      0x00000000
-  (gdb) p *(int *)0x109000
-  $1 = 163
-  (gdb) p/x *(int *)0x109000
-  $2 = 0xa3
-  (gdb) p/t *(int *)0x109000
-  $3 = 10100011
-  (gdb)
-#+END_EXAMPLE
-
-查看手册，获取 ~extern char end[];~ 细节
-#+BEGIN_SRC sh
-  man 3 end
+  // page table index
+  #define PTX(va)         (((uint)(va) >> PTXSHIFT) & 0x3FF)
 #+END_SRC
-
-* kvmalloc 设置正式分页阶段
-1. kinit1 初始化内存
-   - kmem.freelist 初始化链表
-2. kvmalloc 初始化内存页表，核心调研 setupkvm 初始化内核分页表
-   - kalloc 申请 4K 物理页
-     1) pgdir 页目录
-   - memset 设置内存值
-   - mappages 初始化页表项, 初始化 kmap
-     1. walkpgdir 创建页表项
-     2. 设置权限
-#+BEGIN_EXAMPLE
-  (gdb) p pgdir
-  $10 = (pde_t *) 0x803ff000
-  (gdb) x/8x 0x803ff000
-  0x803ff000:     0x803fe000      0x01010101      0x01010101      0x01010101
-  0x803ff010:     0x01010101      0x01010101      0x01010101      0x01010101
-  (gdb) set print array on
-  (gdb) p/x kmap
-  $4 = {
-    {virt = 0x80000000, phys_start = 0x0, phys_end = 0x100000, perm = 0x2},
-    {virt = 0x80100000, phys_start = 0x100000, phys_end = 0x108000, perm = 0x0},
-    {virt = 0x80108000, phys_start = 0x108000, phys_end = 0xe000000, perm = 0x2},
-    {virt = 0xfe000000, phys_start = 0xfe000000, phys_end = 0x0, perm = 0x2}
-  }
-  (gdb)
-#+END_EXAMPLE
-
-* 物理内存分布
-1. 0x0 ~ 0x100000: BIOS 地址空间 (total 1MB)
-   - 0x7c00 ~ 0x7e00 MBR
-   - 0xa0000 ~ 0x100000 device memory region
-2. EXTMEM(0x100000) ~ end: BIOS extended memory start
-   - kernel text+data
-   - end 0x1154d0 in main.c
-4. end ~ PHYSTOP(0xe000000): Free Memory
-   - end ~ 4M kinit1 初始化
-   - PHYSTOP 物理内存终点
-5. DEVSPACE(0xfe000000) ~ 4G: Memory-mapped 32-bit I/O Devices
-   - DEVSPACE memory mapped direct
-   - devices such as ioapic
