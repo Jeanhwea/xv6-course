@@ -31,7 +31,7 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
    - [[file:12-from-asm-to-c.org][从汇编到 C 语言]] | [[https://www.bilibili.com/video/BV1hM411Q7eb/][视频]] | [[https://www.bilibili.com/video/BV1a94y1G7HV/][补充视频]]
    - [[file:13-xv6-startup.org][xv6 启动流程分析]] | [[https://www.bilibili.com/video/BV1az4y1A7zU/][视频]]
 3. 内存管理
-   - [[file:21-page-table.org][分页及 xv6 页表初始化]]
+   - [[file:21-page-table.org][x86 体系结构分页机制]]
 4. TODO 进程管理
 5. TODO 文件系统
 
