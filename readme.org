@@ -22,19 +22,19 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
 3. 目前 MIT XV6 操作系统支持 x86 和 riscv 两种体系结构
 
 * 主题
-1. 序言
-   - 01 [[file:01-x86-arch.org][x86 体系结构]] | [[https://www.bilibili.com/video/BV1cw411z7Ro][视频]]
-   - 02 [[file:02-qemu-simulator.org][QEMU 模拟器]] | [[https://www.bilibili.com/video/BV1me411R7MN][视频]]
-   - 03 [[file:03-minimal-os.org][编写最小操作系统]] | [[https://www.bilibili.com/video/BV1Fe411975E][视频]]
-2. 走进操作系统
-   - 11 [[file:11-os-overview.org][操作系统概览]] | [[https://www.bilibili.com/video/BV1vu4y1h7mR/][视频]]
-   - 12 [[file:12-from-asm-to-c.org][从汇编到 C 语言]] | [[https://www.bilibili.com/video/BV1hM411Q7eb/][视频]] | [[https://www.bilibili.com/video/BV1a94y1G7HV/][补充视频]]
-   - 13 [[file:13-xv6-startup.org][xv6 启动流程分析]] | [[https://www.bilibili.com/video/BV1az4y1A7zU/][视频]]
-3. 内存管理
-   - 21 [[file:21-page-table.org][x86 体系结构分页机制]]
-   - xv6 内存初始化分析
-4. TODO 进程管理
-5. TODO 文件系统
+- 序言
+  1) [[file:01-x86-arch.org][x86 体系结构]] | [[https://www.bilibili.com/video/BV1cw411z7Ro][视频01]]
+  2) [[file:02-qemu-simulator.org][QEMU 模拟器]] | [[https://www.bilibili.com/video/BV1me411R7MN][视频02]]
+  3) [[file:03-minimal-os.org][编写最小操作系统]] | [[https://www.bilibili.com/video/BV1Fe411975E][视频03]]
+- 走进操作系统
+  1) [[file:11-os-overview.org][操作系统概览]] | [[https://www.bilibili.com/video/BV1vu4y1h7mR/][视频11]]
+  2) [[file:12-from-asm-to-c.org][从汇编到 C 语言]] | [[https://www.bilibili.com/video/BV1hM411Q7eb/][视频12]] | [[https://www.bilibili.com/video/BV1a94y1G7HV/][补充视频12a]]
+  3) [[file:13-xv6-startup.org][xv6 启动流程分析]] | [[https://www.bilibili.com/video/BV1az4y1A7zU/][视频13]]
+- 内存管理
+  1) [[file:21-page-table.org][x86 体系结构分页机制]]
+  2) xv6 内存初始化分析
+- TODO 进程管理
+- TODO 文件系统
 
 * 答疑
 ** 视频(编号 11) 中的地址空间看起来有问题？
