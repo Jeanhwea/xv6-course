@@ -90,7 +90,12 @@ xv6 在 entry.S 中开启分页
 
 [[file:../../study/os/xv6-public/entry.S]]
 
-该阶段使用 CR4_PSE 的 4M 大页映射，通过 qemu 验证开启分页后
+entry 阶段使用 CR4_PSE 的 4M 大页映射，这里的前提是做以下操作
+1. 需要 Pentium 以上的 CPU
+2. CR4 中的 PSE 位（第 4 位）为 1
+3. 页目录项的 PS 位（第 7 位）为 1
+
+通过 qemu 验证开启分页后
 #+BEGIN_EXAMPLE
   (qemu) help info tlb
   info tlb  -- show virtual to physical memory mappings
