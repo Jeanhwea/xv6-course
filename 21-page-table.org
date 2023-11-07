@@ -98,3 +98,44 @@
   // page table index
   #define PTX(va)         (((uint)(va) >> PTXSHIFT) & 0x3FF)
 #+END_SRC
+
+qemu 调试过程
+#+BEGIN_EXAMPLE
+  (qemu) info mem
+  0000000080000000-0000000080100000 0000000000100000 -rw
+  0000000080100000-0000000080108000 0000000000008000 -r-
+  0000000080108000-000000008e000000 000000000def8000 -rw
+  00000000fe000000-0000000100000000 0000000002000000 -rw
+  (qemu) xp/8x 0x3ff000 + 0x200*4
+  00000000003ff800: 0x003fe027 0x003fd007 0x003fc007 0x003fb007
+  00000000003ff810: 0x003fa007 0x003f9007 0x003f8007 0x003f7007
+  (qemu) xp/8x 0x3fe000 + 0x103*4
+  00000000003fe40c: 0x00103001 0x00104001 0x00105001 0x00106021
+  00000000003fe41c: 0x00107001 0x00108003 0x00109003 0x0010a003
+  (qemu) xp/8x 0x103086
+  0000000000103086: 0x000185e8 0xf760e800 0xabe8ffff 0xe8000038
+  0000000000103096: 0x00000376 0xfff331e8 0xd9bce8ff 0x27e8ffff
+  (qemu)
+#+END_EXAMPLE
+
+gdb 调试过程
+#+BEGIN_EXAMPLE
+  (gdb) n
+  => 0x80103086 <main+38>:        call   0x80103210 <mpinit>
+  22        mpinit();                               // detect other processors
+  (gdb) source custom.gdb
+  (gdb) idx 0x80103086
+  VA(0x80103086): PDX=0x200 PTX=0x103 OFFSET=0x86
+  (gdb) p/x $cr3
+  $1 = 0x3ff000
+  (gdb) ppn 0x003fe027
+  PTE(0x3fe027): PPN=0x3fe000 FLAGS=0x27
+  (gdb) ppn 0x00103001
+  PTE(0x103001): PPN=0x103000 FLAGS=0x1
+  (gdb) p/x 0x103000 | 0x86
+  $2 = 0x103086
+  (gdb) x/8x 0x80103086
+  0x80103086 <main+38>:   0x000185e8      0xf760e800      0xabe8ffff      0xe8000038
+  0x80103096 <main+54>:   0x00000376      0xfff331e8      0xd9bce8ff      0x27e8ffff
+  (gdb)
+#+END_EXAMPLE
