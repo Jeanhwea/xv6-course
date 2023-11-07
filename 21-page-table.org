@@ -80,7 +80,7 @@
       [  Memory  ]
 #+END_EXAMPLE
 
-* 分页代码实验
+* 分页代码讲解
 [[file:../../study/os/xv6-public/mmu.h]]
 
 #+BEGIN_SRC c
