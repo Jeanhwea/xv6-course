@@ -60,11 +60,19 @@ gdb 调试分页
   (gdb)
 #+END_EXAMPLE
 
-* kmem.freelist
-1. kinit1 初始化内存
-   - kmem.freelist 初始化链表
-2. memset 初始化块内存
-3. end 查看手册，获取 ~extern char end[];~ 细节
+* kmem.freelist 空闲页面初始化
+1. end 查看手册，获取 ~extern char end[];~ 细节
    #+BEGIN_SRC sh
      man 3 end
    #+END_SRC
+2. kinit1 初始化内存
+   - kmem.freelist 初始化链表
+   - 头插法
+   - kfree 初始化页面
+   #+BEGIN_EXAMPLE
+     (gdb) x/8x 0x803fc000
+     0x803fc000:     0x803fb000      0x01010101      0x01010101      0x01010101
+     0x803fc010:     0x01010101      0x01010101      0x01010101      0x01010101
+   #+END_EXAMPLE
+3. memset 初始化块内存
+   - 内联汇编设置内存值
