@@ -1,0 +1,26 @@
+#+TITLE: 多处理器探测
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-08 Wed>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+
+
+* mpinit
+mp.h 配置头文件 [[file:../../study/os/xv6-public/mp.h]]
+#+BEGIN_EXAMPLE
+  $3 = {
+    signature = "PCMP",
+    length = 208,
+    version = 4 '\004',
+    checksum = 233 '\351',
+    product = "BOCHSCPU0.1         ",
+    oemtable = 0x0,
+    oemlength = 0,
+    entry = 19,
+    lapicaddr = 0xfee00000,
+    xlength = 0,
+    xchecksum = 0 '\000',
+    reserved = 0 '\000'
+  }
+#+END_EXAMPLE
