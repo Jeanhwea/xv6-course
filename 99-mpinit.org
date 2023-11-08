@@ -24,3 +24,24 @@ mp.h 配置头文件 [[file:../../study/os/xv6-public/mp.h]]
     reserved = 0 '\000'
   }
 #+END_EXAMPLE
+
+APIC 全称是 Advanced Programmable Interrupt Controller
+1. APIC 高级可编程中断控制器
+2. APIC 的目的是把中断传递给多个 cpu. 分成 LAPIC 和 IOAPIC
+3. LAPIC 和 IOAPIC 的寄存器都是一块内存地址
+   - [[file:../../study/os/xv6-public/lapic.c]] 中的宏定义
+4. 在现在的计算机它通常由两个部分组成
+   - LAPIC : Local APIC 本地高级可编程中断控制器
+     1) 每个 CPU 都有一个, 里面有一些寄存器, 定时器, 和 2 条 IRQ 线 LINT0 和 LINT1
+     2) ICR 用于发送 IPI(中断的信息)
+     3) IRR 当前 LAPIC 接收的消息
+     4) ISR 当前 CPU 增长处理的中断
+     5) TPR 和 PPR CPU 中断处理的优先级
+     6) lapic 地址 0xfee00000
+   - IOAPIC : I/O 高级可编程中断控制器
+     - IOAPIC 通常在所谓的南桥, 负责接收外部 IO 设备发送来的中断
+
+LAPIC 初始化
+#+BEGIN_SRC c
+  volatile uint *lapic;  // Initialized in mp.c
+#+END_SRC
