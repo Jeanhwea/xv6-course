@@ -25,23 +25,33 @@ mp.h 配置头文件 [[file:../../study/os/xv6-public/mp.h]]
   }
 #+END_EXAMPLE
 
-APIC 全称是 Advanced Programmable Interrupt Controller
-1. APIC 高级可编程中断控制器
-2. APIC 的目的是把中断传递给多个 cpu. 分成 LAPIC 和 IOAPIC
-3. LAPIC 和 IOAPIC 的寄存器都是一块内存地址
-   - [[file:../../study/os/xv6-public/lapic.c]] 中的宏定义
-4. 在现在的计算机它通常由两个部分组成
+* PIC
+PIC 全称是 Programmable Interrupt Controller, APIC 是高级可编程中断控制器, 多了
+个 Advanced
+
+1. CPU 需要路由中断到处理查询(handler)
+2. APIC 的目的是把中断传递给多个 CPU. 分成 LAPIC 和 IOAPIC
+3. LAPIC 和 IOAPIC 的寄存器都是一块内存地址, 对应实现文件中有定义
+   - [[file:../../study/os/xv6-public/ioapic.c]] 0xfec00000
+   - [[file:../../study/os/xv6-public/lapic.c]]  0xfee00000
+4. 现代计算机它通常由两个部分组成
    - LAPIC : Local APIC 本地高级可编程中断控制器
-     1) 每个 CPU 都有一个, 里面有一些寄存器, 定时器, 和 2 条 IRQ 线 LINT0 和 LINT1
-     2) ICR 用于发送 IPI(中断的信息)
-     3) IRR 当前 LAPIC 接收的消息
-     4) ISR 当前 CPU 增长处理的中断
-     5) TPR 和 PPR CPU 中断处理的优先级
-     6) lapic 地址 0xfee00000
+     1) 每个 CPU 都有 LAPIC
+     2) LAPIC 里面有一些寄存器, 定时器
+     3) LAPIC 还有 2 条 IRQ 线 LINT0 和 LINT1
    - IOAPIC : I/O 高级可编程中断控制器
      - IOAPIC 通常在所谓的南桥, 负责接收外部 IO 设备发送来的中断
+     - 例如：键盘字符输入
+5. xv6 只处理 APIC 和 IOAPIC, 而忽略 PIC
 
 LAPIC 初始化
 #+BEGIN_SRC c
   volatile uint *lapic;  // Initialized in mp.c
 #+END_SRC
+
+
+* 中断流程
+1. 一个 CPU 给其他 CPU 发送中断的时候, 就在自己的 ICR 中, 放中断向量和目标 LAPIC
+   ID, 然后通过总线发送到对应 LAPIC
+2. 目标 LAPIC 根据自己的 LVT(Local Vector Table) 来对不同的中断进行处理.
+3. 处理完了写 EOI 表示处理完了
