@@ -40,7 +40,6 @@
        {virt = 0x80108000, phys_start = 0x108000, phys_end = 0xe000000, perm = 0x2},
        {virt = 0xfe000000, phys_start = 0xfe000000, phys_end = 0x0, perm = 0x2}
      }
-
    #+END_EXAMPLE
 
 * kvmalloc 初始化页表
