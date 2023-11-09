@@ -14,7 +14,7 @@
 
 安装 32 位的库
 #+BEGIN_SRC sh
-  sudo apt-get install gcc-multilib
+  sudo apt-get install gcc-multilib build-essential gdb
 #+END_SRC
 
 * 编译 QEMU
