@@ -7,7 +7,41 @@
 
 * 上个视频
 1. entry.S 开启分页 CR0_PG
-2. kinit1 -> freelist
+2. main():kinit1 -> freelist
+   #+BEGIN_EXAMPLE
+     (qemu) info tlb
+     0000000000000000: 0000000000000000 --P-A---W
+     0000000080000000: 0000000000000000 --PDA---W
+     (qemu) info mem
+     0000000000000000-0000000000400000 0000000000400000 -rw
+     0000000080000000-0000000080400000 0000000000400000 -rw
+     (qemu)
+   #+END_EXAMPLE
+
+   #+BEGIN_EXAMPLE
+     (gdb) xv-freelist
+     #1: 0x803ff000 -> use
+     #2: 0x803fe000 -> use
+     #3: 0x803fd000
+     #4: 0x803fc000
+     #5: 0x803fb000
+     #6: 0x803fa000
+     #7: 0x803f9000
+     #8: 0x803f8000
+     #9: 0x803f7000
+     total=746 size=746.00M 782237696
+   #+END_EXAMPLE
+
+   #+BEGIN_EXAMPLE
+     (gdb) p/x kmap
+     $6 = {
+       {virt = 0x80000000, phys_start = 0x0, phys_end = 0x100000, perm = 0x2},
+       {virt = 0x80100000, phys_start = 0x100000, phys_end = 0x108000, perm = 0x0},
+       {virt = 0x80108000, phys_start = 0x108000, phys_end = 0xe000000, perm = 0x2},
+       {virt = 0xfe000000, phys_start = 0xfe000000, phys_end = 0x0, perm = 0x2}
+     }
+
+   #+END_EXAMPLE
 
 * kvmalloc 初始化页表
 kvmalloc 初始化内存页表，核心调研 setupkvm 初始化内核分页表
@@ -47,9 +81,3 @@ kvmalloc 初始化内存页表，核心调研 setupkvm 初始化内核分页表
 5. DEVSPACE(0xfe000000) ~ 4G: Memory-mapped 32-bit I/O Devices
    - DEVSPACE memory mapped direct
    - devices such as ioapic
-
-* s
-1. cr3 -> entrypgdir
-   - entry.S
-   - Map 4M
-2. cs
