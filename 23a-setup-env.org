@@ -1,0 +1,34 @@
+#+TITLE: Title
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-09 Thu>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+#+HTML_LINK_UP: ../readme.html
+#+HTML_LINK_HOME: ../index.html
+#+SETUPFILE: ~/.emacs.d/site-lisp/org-html-themes/setup/theme-readtheorg-local.setup
+
+
+* 下载源码
+下载 xv6 的 x86 版本的源码
+#+BEGIN_SRC sh
+  git clone git://github.com/mit-pdos/xv6-public.git
+#+END_SRC
+
+安装 32 位的库
+#+BEGIN_SRC sh
+  sudo apt-get install gcc-multilib
+#+END_SRC
+
+* 编译 QEMU
+
+#+BEGIN_SRC sh
+  git clone https://github.com/mit-pdos/6.828-qemu.git qemu
+  # built 6.828 QEMU on Debian/Ubuntu 16.04 after installing the following packages:
+  sudo apt-get install -y libsdl1.2-dev libtool-bin libglib2.0-dev libz-dev libpixman-1-dev
+  # Linux
+  ./configure --disable-kvm --disable-werror --prefix=/opt/qemu-6.828 --target-list="i386-softmmu x86_64-softmmu"
+  # OS X
+  # ./configure --disable-kvm --disable-werror --disable-sdl [--prefix=PFX] [--target-list="i386-softmmu x86_64-softmmu"]
+  make && make install
+#+END_SRC
