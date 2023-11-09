@@ -1,4 +1,4 @@
-#+TITLE: 内存操作再谈
+#+TITLE: 内核页表初始化
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-08 Wed>
