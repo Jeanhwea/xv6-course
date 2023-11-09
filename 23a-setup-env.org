@@ -24,7 +24,7 @@
   # built 6.828 QEMU on Debian/Ubuntu 16.04 after installing the following packages:
   sudo apt-get install -y libsdl1.2-dev libtool-bin libglib2.0-dev libz-dev libpixman-1-dev
   # Linux
-  ./configure --disable-kvm --disable-werror --prefix=/opt/qemu-6.828 --target-list="i386-softmmu x86_64-softmmu"
+  ./configure --disable-kvm --disable-werror --prefix=/opt/qemu-6.828 --target-list="i386-softmmu x86_64-softmmu" --python=/usr/bin/python2
   # OS X
   # ./configure --disable-kvm --disable-werror --disable-sdl [--prefix=PFX] [--target-list="i386-softmmu x86_64-softmmu"]
   make && make install
