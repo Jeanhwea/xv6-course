@@ -5,6 +5,9 @@
 #+STARTUP: overview num indent
 #+OPTIONS: ^:nil
 
+* 上个视频
+1. entry.S 开启分页 CR0_PG
+2. kinit1 -> freelist
 
 * kvmalloc 初始化页表
 kvmalloc 初始化内存页表，核心调研 setupkvm 初始化内核分页表
@@ -44,3 +47,9 @@ kvmalloc 初始化内存页表，核心调研 setupkvm 初始化内核分页表
 5. DEVSPACE(0xfe000000) ~ 4G: Memory-mapped 32-bit I/O Devices
    - DEVSPACE memory mapped direct
    - devices such as ioapic
+
+* s
+1. cr3 -> entrypgdir
+   - entry.S
+   - Map 4M
+2. cs
