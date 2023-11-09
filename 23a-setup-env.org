@@ -1,12 +1,9 @@
-#+TITLE: Title
+#+TITLE: xv6 调试环境配置
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-09 Thu>
 #+STARTUP: overview num indent
 #+OPTIONS: ^:nil
-#+HTML_LINK_UP: ../readme.html
-#+HTML_LINK_HOME: ../index.html
-#+SETUPFILE: ~/.emacs.d/site-lisp/org-html-themes/setup/theme-readtheorg-local.setup
 
 
 * 下载源码
