@@ -6,7 +6,7 @@
 #+OPTIONS: ^:nil
 
 
-* mpinit
+* mpinit 信息收集
 mp.h 配置头文件 [[file:../../study/os/xv6-public/mp.h]]
 #+BEGIN_EXAMPLE
   $3 = {
