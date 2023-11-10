@@ -5,6 +5,7 @@
 #+STARTUP: overview num indent
 #+OPTIONS: ^:nil
 
+* 多处理器启动流程
 
 * mpinit 信息收集
 mp.h 配置头文件 [[file:../../study/os/xv6-public/mp.h]]
