@@ -4,6 +4,7 @@ APIC_ID  equ 0xfee00020
 APIC_SVR equ 0xfee000f0
 APIC_ICR equ 0xfee00300
 
+VGA      equ 0x000b8a00
 AP_ENTRY equ 0x00008000
 
 
@@ -34,35 +35,36 @@ s32_bsp:
 	mov	ebp, 0x90000
 	mov	esp, ebp
 
-	mov	esi, s_ap_entry
-	mov	edi, AP_ENTRY
-	mov	ecx, s_ap_entry - s_ap
-	cld
-	rep movsb
+	; mov	esi, s_ap_entry
+	; mov	edi, AP_ENTRY
+	; mov	ecx, s_ap_entry - s_ap
+	; cld
+	; rep movsb
 
-	; enable apic
-	mov	eax, [APIC_SVR]
-	or	eax, 0x00000100	; APIC software enable
-	mov	[APIC_SVR], eax
+	; ; enable APIC
+	; mov	eax, [APIC_SVR]
+	; or	eax, 0x00000100	; APIC software enable
+	; mov	[APIC_SVR], eax
 
-	; sync other APs
-	mov	eax, 0x000c4500
-	mov	[APIC_ICR], eax
+	; ; sync other APs
+	; mov	eax, 0x000c4500
+	; mov	[APIC_ICR], eax
 
-	mov	ecx, 100000000	; sleep for while
-	loop	$
+	; mov	ecx, 100000000	; sleep for while
+	; loop	$
 
-	;; send SIPI to other APs
-	mov	eax, 0x000c4600 | (AP_ENTRY) >> 12
-	mov	[APIC_SVR], eax
+	; ;; send SIPI to other APs
+	; mov	eax, 0x000c4600 | (AP_ENTRY) >> 12
+	; mov	[APIC_SVR], eax
 
-	mov	ecx, 100000000	; sleep for while
-	loop	$
+	; mov	ecx, 100000000	; sleep for while
+	; loop	$
 
-	mov	ebx, [APIC_ID]
-	shr	ebx, 24
+	; mov	ebx, [APIC_ID]
+	mov	ebx, 5
+	; shr	ebx, 24
 
-	mov	edi, 0x000b8a00
+	mov	edi, VGA
 	mov	eax, ebx
 	mov	cl, 10
 	div	cl
@@ -70,7 +72,7 @@ s32_bsp:
 	mov	[edi+2*ebx], ah	; print local_apic_id % 10
 	mov	byte [edi+2*ebx+1], 0x1f
 
-	hlt
+	; hlt
 	jmp	$
 
 
@@ -107,7 +109,7 @@ s32_ap:
 	mov	ebx, [APIC_ID]
 	shr	ebx, 24
 
-	mov	edi, 0x000b8a00
+	mov	edi, VGA
 	mov	eax, ebx
 	mov	cl, 10
 	div	cl
