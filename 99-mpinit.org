@@ -25,9 +25,8 @@ mp.h 配置头文件 [[file:../../study/os/xv6-public/mp.h]]
   }
 #+END_EXAMPLE
 
-* PIC
-PIC 全称是 Programmable Interrupt Controller, APIC 是高级可编程中断控制器, 多了
-个 Advanced
+* PIC 控制器
+参考 Intel64 手册 volume 3 - chapter 11 ADVANCED PROGRAMMABLE INTERRUPT CONTROLLER (APIC)
 
 1. CPU 需要路由中断到处理查询(handler)
 2. APIC 的目的是把中断传递给多个 CPU. 分成 LAPIC 和 IOAPIC
