@@ -49,7 +49,6 @@ LAPIC 初始化
   volatile uint *lapic;  // Initialized in mp.c
 #+END_SRC
 
-
 * 中断流程
 1. 一个 CPU 给其他 CPU 发送中断的时候, 就在自己的 ICR 中, 放中断向量和目标 LAPIC
    ID, 然后通过总线发送到对应 LAPIC
