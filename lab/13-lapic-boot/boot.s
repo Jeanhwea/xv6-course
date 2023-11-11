@@ -72,7 +72,7 @@ s32_bsp:
 	mov	[edi+2*ebx], ah	; print local_apic_id % 10
 	mov	byte [edi+2*ebx+1], 0x1f
 
-	; hlt
+	hlt
 	jmp	$
 
 
@@ -120,14 +120,17 @@ s32_ap:
 	hlt
 	jmp	$
 
+;; setup gdt
 gdt_begin:
-    dd 0, 0
+	dd 0, 0			; dummy
 
 gdt_code:
-    dd 0x0000ffff, 0x00cf9a00
+	dd 0x000007ff
+	dd 0x00c09a00
 
 gdt_data:
-    dd 0x0000ffff, 0x00cf9200
+	dd 0x000007ff
+	dd 0x00c09200
 
 gdt_end:
 
