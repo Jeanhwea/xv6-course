@@ -5,6 +5,9 @@
 #+STARTUP: overview num indent
 #+OPTIONS: ^:nil
 
+* 疑问
+1. 如何构建调试环境
+2. 如何学习操作系统
 
 * 下载源码
 下载 xv6 的 x86 版本的源码
@@ -17,8 +20,23 @@
   sudo apt-get install gcc-multilib build-essential gdb
 #+END_SRC
 
-* 编译 QEMU
+安装 qemu
+#+BEGIN_SRC sh
+  apt install qemu-system-i386
+#+END_SRC
 
+* 编译调试
+启动 qemu 并开启 gdb server
+#+BEGIN_SRC sh
+  make qemu-nox-gdb
+#+END_SRC
+
+gdb 链接
+#+BEGIN_SRC sh
+  gdb
+#+END_SRC
+
+* 编译 QEMU
 #+BEGIN_SRC sh
   git clone https://github.com/mit-pdos/6.828-qemu.git qemu
   # built 6.828 QEMU on Debian/Ubuntu 16.04 after installing the following packages:
