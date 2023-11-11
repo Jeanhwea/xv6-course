@@ -39,39 +39,33 @@ s32_bsp:
 	; cld
 	; rep movsb
 
-	; ; enable APIC
-	; mov	eax, [APIC_SVR]
-	; or	eax, 0x00000100	; APIC software enable
-	; mov	[APIC_SVR], eax
+	; enable APIC
+	mov	eax, [APIC_SVR]
+	or	eax, 0x00000100	; APIC software enable
+	mov	[APIC_SVR], eax
+	mov	ebx, [APIC_ID]	; wait for write finish, by reading
 
-	; ; sync other APs
-	; mov	eax, 0x000c4500
-	; mov	[APIC_ICR], eax
+	; sync other APs
+	mov	eax, 0x000c4500
+	mov	[APIC_ICR], eax
+	mov	ebx, [APIC_ID]	; wait for write finish, by reading
 
-	; mov	ecx, 100000000	; sleep for while
-	; loop	$
+	;; send SIPI to other APs
+	mov	eax, 0x000c4600 | (AP_ENTRY) >> 12
+	mov	[APIC_SVR], eax
+	mov	ebx, [APIC_ID]	; wait for write finish, by reading
+	shr	ebx, 24
 
-	; ;; send SIPI to other APs
-	; mov	eax, 0x000c4600 | (AP_ENTRY) >> 12
-	; mov	[APIC_SVR], eax
-
-	; mov	ecx, 100000000	; sleep for while
-	; loop	$
-
-	; mov	ebx, [APIC_ID]
-	mov	ebx, 5
-	; shr	ebx, 24
-
+	; print local_apic_id % 10
 	mov	edi, VGA
 	mov	eax, ebx
 	mov	cl, 10
 	div	cl
 	add	ah, '0'
-	mov	[edi+2*ebx], ah	; print local_apic_id % 10
+	mov	[edi+2*ebx], ah
 	mov	byte [edi+2*ebx+1], 0x1f
 
 	hlt
-	jmp	$
 
 
 ;; application processor
