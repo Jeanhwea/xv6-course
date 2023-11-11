@@ -7,7 +7,22 @@
 
 * 疑问
 1. 如何构建调试环境
+   - modern
+     - linux
+     - macos
 2. 如何学习操作系统
+   - 资料
+   - xv6-book
+   - manual
+   - debuging
+3. 如何学习操作系统概念
+   - 《操作系统概念》
+   - 操作系统
+   - Linux
+     - LKD linux 内核设计与实现
+       linux kernel developement
+     - ULK
+       understand linux kernel
 
 * 下载源码
 下载 xv6 的 x86 版本的源码
