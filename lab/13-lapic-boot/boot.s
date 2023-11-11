@@ -32,8 +32,6 @@ s32_bsp:
 	mov	es, ax
 	mov	fs, ax
 	mov	gs, ax
-	mov	ebp, 0x90000
-	mov	esp, ebp
 
 	; mov	esi, s_ap_entry
 	; mov	edi, AP_ENTRY
@@ -135,8 +133,8 @@ gdt_data:
 gdt_end:
 
 desc:
-    dw gdt_end - gdt_begin - 1
-    dd gdt_begin
+	dw gdt_end - gdt_begin - 1
+	dd gdt_begin
 
 CODE_SEG equ gdt_code - gdt_begin
 DATA_SEG equ gdt_data - gdt_begin
