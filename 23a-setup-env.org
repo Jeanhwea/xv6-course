@@ -7,7 +7,7 @@
 
 * 疑问
 1. 如何构建调试环境
-   - modern
+   - Morden
      - linux
      - macos
 2. 如何学习操作系统
