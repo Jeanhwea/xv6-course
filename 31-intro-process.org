@@ -45,7 +45,6 @@
 2. allocproc() 分配进程数据结构体 proc
    - ptable 记录所有进程表
    - 查找到 proc 结构体, 设置 p->state = EMBRYO
-   - p->pgdir 0x8dffe000
    - 分配内核栈 p->kstack, 页面大小 KSTACKSIZE
    #+BEGIN_EXAMPLE
       0x8e000000  |-------------| TOP STACK (total KSTACKSIZE(4K))
@@ -71,6 +70,7 @@
         0x8dfff000
    #+END_EXAMPLE
 3. setupkvm 初始化页表
+   - p->pgdir 0x8dffe000
 4. inituvm 初始化, 加载用户代码
    - 地址范围 0 ~ PGSIZE
    - memmove 复制数据
