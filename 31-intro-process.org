@@ -30,6 +30,9 @@
    - 进程在内核态和用户态上下文切换时需要保存一些状态
      - ~p->kstack~ 内核栈
      - ~p->state~ 进程状态
+       #+BEGIN_SRC c
+         enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
+       #+END_SRC
 
 [[file:../../study/os/xv6-public/proc.h::struct proc {]]
 
@@ -37,7 +40,9 @@
 1. userinit 创建第一个进程
    - [[file:../../study/os/xv6-public/main.c::userinit(); // first user process]]
    - 加载 initcode.S 并启动
-2. setupkvm 初始化页表
-3. inituvm 初始化, 加载用户代码
+2. allocproc() 分配进程数据结构体 proc
+   - ptable 记录所有进程表
+3. setupkvm 初始化页表
+4. inituvm 初始化, 加载用户代码
    - 地址范围 0 ~ PGSIZE
    - memmove 复制数据
