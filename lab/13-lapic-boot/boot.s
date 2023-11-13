@@ -1,12 +1,13 @@
 [org 0x7c00]
-
-APIC_ID  equ 0xfee00020		; local apic id register
-APIC_SVR equ 0xfee000f0		; spurious interrupt vector register
-APIC_ICR equ 0xfee00300		; interrupt command register
-
+;; COMMON
 VGA         equ 0x000b8a00	; vga address
 PT_AP_ENTRY equ 0x8000		; AP entry address
 PT_STACK    equ 0x9000		; stack pointer
+
+;; APIC
+APIC_ID     equ 0xfee00020	; local apic id register
+APIC_SVR    equ 0xfee000f0	; spurious interrupt vector register
+APIC_ICR    equ 0xfee00300	; interrupt command register
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; BSP: Bootstrap Processor
@@ -38,22 +39,23 @@ bsp_start32:
 
 	;; Enable APIC
 	mov	eax, [APIC_SVR]
-	or	eax, (1 << 8)	; APIC software enable
+	or	eax, 0x100	; APIC software enable
 	mov	[APIC_SVR], eax
 	; mov	eax, [APIC_ID]	; barrier
 
-	;; Sync other APs
+	;; Send INIT to other APs, bit(9-10) 101=INIT
 	mov	eax, 0x000c4500
 	mov	[APIC_ICR], eax
 	; mov	eax, [APIC_ID]	; barrier
 
-	;; Send SIPI to other APs
+	;; Send STARTUP to other APs, bit(9-10) 110=STARTUP, bit(0-7) vector
 	mov	eax, 0x000c4600 | (PT_AP_ENTRY >> 12)
 	mov	[APIC_ICR], eax
 
 	;; Read APIC ID
 	mov	ebx, [APIC_ID]	; wait for write finish, by reading
 	shr	ebx, 24
+	; mov	bh, 0xf2
 	call	print_lsb_digit
 
 	hlt
@@ -93,9 +95,10 @@ s32_ap:
 
 	hlt
 
-;; print lsb digit in ebx
+;; print lsb digit in ebx, bl:digit, bh:color
 print_lsb_digit:
 	pusha
+	; xor	eax, eax
 	mov	edi, VGA
 	mov	eax, ebx
 	mov	cl, 10
