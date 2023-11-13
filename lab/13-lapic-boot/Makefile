@@ -4,10 +4,10 @@ BOCHS  = bochs
 all: boot.bin
 
 qemu: boot.bin
-	$(QEMU) -smp 4 -boot a -fda boot.bin
+	$(QEMU) -smp 4 -m 1M -boot a -fda boot.bin
 
 qemu-debug: boot.bin
-	$(QEMU) -s -S -smp 1 -boot a -fda boot.bin
+	$(QEMU) -s -S -smp 1 -m 1M -boot a -fda boot.bin
 
 bochs: boot.bin
 	$(BOCHS) -q -f bochsrc.bxrc

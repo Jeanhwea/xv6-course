@@ -54,7 +54,7 @@ s32_bsp:
 	mov	ebx, [APIC_ID]	; wait for write finish, by reading
 
 	;; Send SIPI to other APs
-	mov	eax, 0x000c4600 | (AP_ENTRY) >> 12
+	mov	eax, 0x000c4600 | (AP_ENTRY >> 12)
 	mov	[APIC_ICR], eax
 
 	;; Read APIC ID
@@ -62,13 +62,13 @@ s32_bsp:
 	shr	ebx, 24
 
 	;; Print Local APIC ID LSB digital
-	; mov	edi, VGA
-	; mov	eax, ebx
-	; mov	cl, 10
-	; div	cl
-	; add	ah, '0'
-	; mov	[edi+2*ebx], ah
-	; mov	byte [edi+2*ebx+1], 0x1f
+	mov	edi, VGA
+	mov	eax, ebx
+	mov	cl, 10
+	div	cl
+	add	ah, '0'
+	mov	[edi+2*ebx], ah
+	mov	byte [edi+2*ebx+1], 0x2f
 
 	hlt
 
