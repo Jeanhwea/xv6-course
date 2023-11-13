@@ -8,7 +8,7 @@ VGA      equ 0x000b8a00
 AP_ENTRY equ 0x00008000
 
 
-;; bootstrap processor
+;; BSP: Bootstrap Processor
 [bits 16]
 s_bsp:
 	xor	ax, ax
@@ -26,6 +26,7 @@ s_bsp:
 
 [bits 32]
 s32_bsp:
+	;; Initial selector
 	mov	ax, DATA_SEG
 	mov	ds, ax
 	mov	ss, ax
@@ -33,30 +34,31 @@ s32_bsp:
 	mov	fs, ax
 	mov	gs, ax
 
+	;; Load AP's jump text
 	; mov	esi, s_ap_entry
 	; mov	edi, AP_ENTRY
 	; mov	ecx, s_ap_entry - s_ap
 	; cld
 	; rep movsb
 
-	; enable APIC
+	;; Enable APIC
 	mov	eax, [APIC_SVR]
 	or	eax, 0x00000100	; APIC software enable
 	mov	[APIC_SVR], eax
 	mov	ebx, [APIC_ID]	; wait for write finish, by reading
 
-	; sync other APs
+	; Sync other APs
 	mov	eax, 0x000c4500
 	mov	[APIC_ICR], eax
 	mov	ebx, [APIC_ID]	; wait for write finish, by reading
 
-	;; send SIPI to other APs
+	;; Send SIPI to other APs
 	mov	eax, 0x000c4600 | (AP_ENTRY) >> 12
 	mov	[APIC_SVR], eax
 	mov	ebx, [APIC_ID]	; wait for write finish, by reading
 	shr	ebx, 24
 
-	; print local_apic_id % 10
+	; Print Local APIC ID LSB digital
 	mov	edi, VGA
 	mov	eax, ebx
 	mov	cl, 10
@@ -68,7 +70,7 @@ s32_bsp:
 	hlt
 
 
-;; application processor
+;; AP: Application Processor
 [bits 16]
 s_ap:
 	jmp	0x0000:s_ap_entry
