@@ -3,6 +3,7 @@
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-13 Mon>
 #+STARTUP: overview num indent
+#+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 #+OPTIONS: ^:nil
 
 
@@ -70,3 +71,13 @@
 4. inituvm 初始化, 加载用户代码
    - 地址范围 0 ~ PGSIZE
    - memmove 复制数据
+  #+BEGIN_SRC sh :results output :exports both
+    make -nB | grep -i initcode
+  #+END_SRC
+
+  #+RESULTS:
+  : gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer -fno-stack-protector -fno-pie -no-pie -nostdinc -I. -c initcode.S
+  : ld -m    elf_i386 -N -e start -Ttext 0 -o initcode.out initcode.o
+  : objcopy -S -O binary initcode.out initcode
+  : objdump -S initcode.o > initcode.asm
+  : ld -m    elf_i386 -T kernel.ld -o kernel entry.o bio.o console.o exec.o file.o fs.o ide.o ioapic.o kalloc.o kbd.o lapic.o log.o main.o mp.o picirq.o pipe.o proc.o sleeplock.o spinlock.o string.o swtch.o syscall.o sysfile.o sysproc.o trapasm.o trap.o uart.o vectors.o vm.o  -b binary initcode entryother
