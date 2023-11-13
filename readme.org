@@ -36,6 +36,7 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
   3) [[file:23-kmem-pgtab.org][内核页表初始化]] | [[https://www.bilibili.com/video/BV1Ew411x77A/][视频 23]] | [[https://www.bilibili.com/video/BV1ng4y19751/][视频 23a]]
 - 进程管理
   1) [[file:31-intro-process.org][进程初探]]
+  2) 进程启动
 - TODO 文件系统
 
 * 答疑
