@@ -40,7 +40,6 @@ bsp_start32:
 	mov	eax, [APIC_SVR]
 	or	eax, (1 << 8)	; APIC software enable
 	mov	[APIC_SVR], eax
-
 	; mov	eax, [APIC_ID]	; barrier
 
 	;; Sync other APs
