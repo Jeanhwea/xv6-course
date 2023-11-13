@@ -21,6 +21,7 @@ cd bochs-2.7-gdb
             --enable-cpu-level=6 \
             --enable-fpu \
             --enable-x86_64 \
+            --enable-smp \
             --enable-vmx \
             --enable-svm \
             --enable-avx \
@@ -51,6 +52,7 @@ cd bochs-2.7-native
             --enable-all-optimizations \
             --enable-x86-64 \
             --enable-pci \
+            --enable-smp \
             --enable-vmx \
             --enable-readline \
             --enable-debugger \
