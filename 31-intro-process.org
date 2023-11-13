@@ -1,4 +1,4 @@
-#+TITLE: 进程初探
+#+TITLE: 进程创建
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-13 Mon>
