@@ -21,7 +21,6 @@ cd bochs-2.7-gdb
             --enable-cpu-level=6 \
             --enable-fpu \
             --enable-x86_64 \
-            --enable-smp \
             --enable-vmx \
             --enable-svm \
             --enable-avx \
