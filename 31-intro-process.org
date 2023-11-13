@@ -37,7 +37,7 @@
 
 [[file:../../study/os/xv6-public/proc.h::struct proc {]]
 
-* 创建的第一个进程
+* 创建第一个进程
 1. userinit 创建第一个进程
    - [[file:../../study/os/xv6-public/main.c::userinit(); // first user process]]
    - 加载 initcode.S 并启动
