@@ -32,3 +32,12 @@
      - ~p->state~ 进程状态
 
 [[file:../../study/os/xv6-public/proc.h::struct proc {]]
+
+* 操作系统的第一个进程
+1. userinit 创建第一个进程
+   - [[file:../../study/os/xv6-public/main.c::userinit(); // first user process]]
+   - 加载 initcode.S 并启动
+2. setupkvm 初始化页表
+3. inituvm 初始化, 加载用户代码
+   - 地址范围 0 ~ PGSIZE
+   - memmove 复制数据
