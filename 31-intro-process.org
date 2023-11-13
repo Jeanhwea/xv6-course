@@ -24,10 +24,11 @@
      - process 动态的 / 运行的 CPU
    - 同一个 a.out 在不同时刻运行产生的实体(也就是进程)，拥有自己的资源
      - CPU 时间片
-     - 地址空间
+     - 地址空间 (分页)
      - 相关属性 (pid), 在 xv6 中的 ~struct proc~ 结构体
+       - pid
+       - parent id: ppid ~fork()~
      - 打开的文件
-     - 等等
    - 进程在内核态和用户态上下文切换时需要保存一些状态
      - ~p->kstack~ 内核栈
      - ~p->state~ 进程状态
@@ -44,28 +45,30 @@
 2. allocproc() 分配进程数据结构体 proc
    - ptable 记录所有进程表
    - 查找到 proc 结构体, 设置 p->state = EMBRYO
+   - p->pgdir 0x8dffe000
    - 分配内核栈 p->kstack, 页面大小 KSTACKSIZE
    #+BEGIN_EXAMPLE
-                  |-------------| TOP STACK (total KSTACKSIZE(4K))
+      0x8e000000  |-------------| TOP STACK (total KSTACKSIZE(4K))
                   |    esp      |
                   |    ...      |
                   |    eip      |
                   |    ...      |
                   |    edi      |
-                  |-------------| <- p->tf
+      0x8dffffb4  |-------------| <- p->tf
                   |  trapret    |
                   |-------------| <- fork() return address
                   |    eip      |
                   |             |
                   |    ...      |
                   |    edi      |
-                  |-------------| <- p->context
+      0x8dffff9c  |-------------| <- p->context
                   |             |
                   |             |
                   |   (empty)   |
                   |             |
                   |             |
      p->kstack -> |-------------|
+        0x8dfff000
    #+END_EXAMPLE
 3. setupkvm 初始化页表
 4. inituvm 初始化, 加载用户代码
@@ -81,3 +84,5 @@
   : objcopy -S -O binary initcode.out initcode
   : objdump -S initcode.o > initcode.asm
   : ld -m    elf_i386 -T kernel.ld -o kernel entry.o bio.o console.o exec.o file.o fs.o ide.o ioapic.o kalloc.o kbd.o lapic.o log.o main.o mp.o picirq.o pipe.o proc.o sleeplock.o spinlock.o string.o swtch.o syscall.o sysfile.o sysproc.o trapasm.o trap.o uart.o vectors.o vm.o  -b binary initcode entryother
+5. 设置 p->state = RUNNABLE
+6. p->proc 插入 RUNNING proc 结构体
