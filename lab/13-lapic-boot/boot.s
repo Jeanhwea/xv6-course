@@ -5,8 +5,8 @@ APIC_SVR equ 0xfee00000		; spurious interrupt vector register
 APIC_ICR equ 0xfee00300		; interrupt command register
 
 VGA      equ 0x000b8a00		; vga address
-AP_ENTRY equ 0x00008000		; AP entry
-PT_STACK equ 0x90000		; stack pointer
+AP_ENTRY equ 0x8000		; AP entry
+PT_STACK equ 0x10000		; stack pointer
 
 
 ;; BSP: Bootstrap Processor
@@ -42,16 +42,24 @@ s32_bsp:
 	cld
 	rep movsb
 
+	; Set up the APIC base address in MSR
+	mov	ecx, 0x1b
+	rdmsr
+	or	eax, 1 << 11   ; Set the ENABLE bit
+	wrmsr
+
 	;; Enable APIC
 	mov	eax, [APIC_SVR]
 	or	eax, (1 << 8)	; APIC software enable
 	mov	[APIC_SVR], eax
-	mov	ebx, [APIC_ID]	; wait for write finish, by reading
+
+	mov	eax, [APIC_ID]	; wait for write finish, by reading
 
 	;; Sync other APs
 	mov	eax, 0x000c4500
 	mov	[APIC_ICR], eax
-	mov	ebx, [APIC_ID]	; wait for write finish, by reading
+
+	mov	eax, [APIC_ID]	; wait for write finish, by reading
 
 	;; Send SIPI to other APs
 	mov	eax, 0x000c4600 | (AP_ENTRY >> 12)
