@@ -1,7 +1,7 @@
 [org 0x7c00]
 
 APIC_ID  equ 0xfee00020		; local apic id register
-APIC_SVR equ 0xfee000f0		; spurious interrupt vector register
+APIC_SVR equ 0xfee00000		; spurious interrupt vector register
 APIC_ICR equ 0xfee00300		; interrupt command register
 
 VGA      equ 0x000b8a00		; vga address
@@ -44,7 +44,7 @@ s32_bsp:
 
 	;; Enable APIC
 	mov	eax, [APIC_SVR]
-	or	eax, 0x00000100	; APIC software enable
+	or	eax, (1 << 8)	; APIC software enable
 	mov	[APIC_SVR], eax
 	mov	ebx, [APIC_ID]	; wait for write finish, by reading
 
@@ -70,7 +70,12 @@ s32_bsp:
 	mov	[edi+2*ebx], ah
 	mov	byte [edi+2*ebx+1], 0x2f
 
-	hlt
+
+spin:
+	;; Send SIPI to other APs
+	mov	eax, 0x000c4600 | (AP_ENTRY >> 12)
+	mov	[APIC_ICR], eax
+	jmp	spin
 
 
 ;; AP: Application Processor
@@ -120,12 +125,12 @@ gdt_begin:
 	dd 0, 0			; dummy
 
 gdt_code:
-	dd 0x000007ff
-	dd 0x00c09a00
+	dd 0x0000ffff
+	dd 0x00cf9a00
 
 gdt_data:
-	dd 0x000007ff
-	dd 0x00c09200
+	dd 0x0000ffff
+	dd 0x00cf9200
 
 gdt_end:
 
