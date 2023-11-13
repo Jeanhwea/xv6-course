@@ -85,4 +85,4 @@
   : objdump -S initcode.o > initcode.asm
   : ld -m    elf_i386 -T kernel.ld -o kernel entry.o bio.o console.o exec.o file.o fs.o ide.o ioapic.o kalloc.o kbd.o lapic.o log.o main.o mp.o picirq.o pipe.o proc.o sleeplock.o spinlock.o string.o swtch.o syscall.o sysfile.o sysproc.o trapasm.o trap.o uart.o vectors.o vm.o  -b binary initcode entryother
 5. 设置 p->state = RUNNABLE
-6. p->proc 插入 RUNNING proc 结构体
+6. ptable->proc[] 数组插入 RUNNABLE proc 结构体
