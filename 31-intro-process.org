@@ -1,0 +1,25 @@
+#+TITLE: 进程初探
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-13 Mon>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+
+
+* 究竟什么是进程
+进程是一个抽象概念，它是操作系统对计算资源的抽象
+
+1. 编译时程序可以假设它独占一台机器，编译器在编译时就可以产生固定的地址
+   #+BEGIN_SRC sh
+     cc hello.c
+   #+END_SRC
+2. 操作系统需要管理所有用户提交的程序，所以抽象出进程的概念
+   #+BEGIN_SRC sh
+     top
+   #+END_SRC
+3. 编译好的程序 (a.out) 执行代码相当于与把控制权交给操作系统
+   - 操作系统会给 a.out 分配虚拟地址空间，通过分页机制使得进程彼此隔离
+   - 同一个 a.out 在不同时刻运行产生的实体(也就是进程)，拥有自己的资源
+     - CPU 时间片
+     - 地址空间
+     - 相关属性 (pid), 在 xv6 中的 ~struct proc~ 结构体
