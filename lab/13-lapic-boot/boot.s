@@ -55,7 +55,7 @@ bsp_start32:
 	;; Read APIC ID
 	mov	ebx, [APIC_ID]	; wait for write finish, by reading
 	shr	ebx, 24
-	; mov	bh, 0xf2
+	mov	dl, 0xcf	; RED
 	call	print_lsb_digit
 
 	hlt
@@ -91,6 +91,7 @@ s32_ap:
 	;; Read APIC ID
 	mov	ebx, [APIC_ID]
 	shr	ebx, 24
+	mov	dl, 0xaf	; GREEN
 	call	print_lsb_digit
 
 	hlt
@@ -104,8 +105,8 @@ print_lsb_digit:
 	mov	cl, 10
 	div	cl
 	add	ah, '0'
-	mov	[edi+2*ebx], ah
-	mov	byte [edi+2*ebx+1], 0xcf
+	mov	[edi+2*ebx], ah	       ; char
+	mov	byte [edi+2*ebx+1], dl ; color
 	popa
 	ret
 
