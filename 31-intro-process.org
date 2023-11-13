@@ -47,27 +47,28 @@
    - 查找到 proc 结构体, 设置 p->state = EMBRYO
    - 分配内核栈 p->kstack, 页面大小 KSTACKSIZE
    #+BEGIN_EXAMPLE
-      0x8e000000  |-------------| TOP STACK (total KSTACKSIZE(4K))
-                  |    esp      |
-                  |    ...      |
-                  |    eip      |
-                  |    ...      |
-                  |    edi      |
-      0x8dffffb4  |-------------| <- p->tf
-                  |  trapret    |
-                  |-------------| <- fork() return address
-                  |    eip      |
-                  |             |
-                  |    ...      |
-                  |    edi      |
-      0x8dffff9c  |-------------| <- p->context
-                  |             |
-                  |             |
-                  |   (empty)   |
-                  |             |
-                  |             |
-     p->kstack -> |-------------|
-        0x8dfff000
+                |             |
+     0x8e000000 |-------------| TOP STACK (total KSTACKSIZE(4K))
+                |    esp      |
+                |    ...      |
+                |    eip      |
+                |    ...      |
+                |    edi      |
+     0x8dffffb4 |-------------| <= p->tf
+                |  trapret    |
+                |-------------| <= fork() return address
+                |    eip      |
+                |             |
+                |    ...      |
+                |    edi      |
+     0x8dffff9c |-------------| <= p->context
+                |             |
+                |             |
+                |   (empty)   |
+                |             |
+                |             |
+     0x8dfff000 |-------------| <= p->kstack
+                |             |
    #+END_EXAMPLE
 3. setupkvm 初始化页表
    - p->pgdir 0x8dffe000
