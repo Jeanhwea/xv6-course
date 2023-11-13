@@ -6,6 +6,7 @@ APIC_ICR equ 0xfee00300
 
 VGA      equ 0x000b8a00
 AP_ENTRY equ 0x00008000
+PT_STACK equ 0x90000
 
 
 ;; BSP: Bootstrap Processor
@@ -15,8 +16,8 @@ s_bsp:
 	mov	ds, ax
 	mov	ss, ax
 	mov	es, ax
-	mov	fs, ax
-	mov	gs, ax
+	mov	ebp, PT_STACK
+	mov	esp, ebp
 
 	lgdt	[desc]
 	mov	eax, cr0
@@ -26,20 +27,20 @@ s_bsp:
 
 [bits 32]
 s32_bsp:
-	;; Initial selector
+	;; Init Core
 	mov	ax, DATA_SEG
 	mov	ds, ax
 	mov	ss, ax
 	mov	es, ax
-	mov	fs, ax
-	mov	gs, ax
+	mov	ebp, PT_STACK
+	mov	esp, ebp
 
 	;; Load AP's jump text
-	; mov	esi, s_ap_entry
-	; mov	edi, AP_ENTRY
-	; mov	ecx, s_ap_entry - s_ap
-	; cld
-	; rep movsb
+	mov	esi, s_ap_entry
+	mov	edi, AP_ENTRY
+	mov	ecx, s_ap_entry - s_ap
+	cld
+	rep movsb
 
 	;; Enable APIC
 	mov	eax, [APIC_SVR]
@@ -47,7 +48,7 @@ s32_bsp:
 	mov	[APIC_SVR], eax
 	mov	ebx, [APIC_ID]	; wait for write finish, by reading
 
-	; Sync other APs
+	;; Sync other APs
 	mov	eax, 0x000c4500
 	mov	[APIC_ICR], eax
 	mov	ebx, [APIC_ID]	; wait for write finish, by reading
@@ -55,10 +56,12 @@ s32_bsp:
 	;; Send SIPI to other APs
 	mov	eax, 0x000c4600 | (AP_ENTRY) >> 12
 	mov	[APIC_SVR], eax
+
+	;; Read APIC ID
 	mov	ebx, [APIC_ID]	; wait for write finish, by reading
 	shr	ebx, 24
 
-	; Print Local APIC ID LSB digital
+	;; Print Local APIC ID LSB digital
 	mov	edi, VGA
 	mov	eax, ebx
 	mov	cl, 10
@@ -80,8 +83,6 @@ s_ap_entry:
 	mov	ds, ax
 	mov	ss, ax
 	mov	es, ax
-	mov	fs, ax
-	mov	gs, ax
 
 	lgdt	[desc]
 	mov	eax, cr0
@@ -91,28 +92,28 @@ s_ap_entry:
 
 [bits 32]
 s32_ap:
+	;; Init Core
 	mov	ax, DATA_SEG
 	mov	ds, ax
 	mov	ss, ax
 	mov	es, ax
-	mov	fs, ax
-	mov	gs, ax
-	mov	ebp, 0x90000
+	mov	ebp, PT_STACK
 	mov	esp, ebp
 
+	;; Read APIC ID
 	mov	ebx, [APIC_ID]
 	shr	ebx, 24
 
+	; Print Local APIC ID LSB digital
 	mov	edi, VGA
 	mov	eax, ebx
 	mov	cl, 10
 	div	cl
 	add	ah, '0'
-	mov	[edi+2*ebx], ah	; print local_apic_id % 10
+	mov	[edi+2*ebx], ah
 	mov	byte [edi+2*ebx+1], 0x1f
 
 	hlt
-	jmp	$
 
 ;; setup gdt
 gdt_begin:
