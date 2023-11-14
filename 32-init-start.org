@@ -1,4 +1,4 @@
-#+TITLE: 进程启动 scheduler
+#+TITLE: 进程启动及用户态执行
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-14 Tue>
@@ -7,122 +7,43 @@
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 
-* 启动首个进程
+* 唤醒首个进程
 mpmain 完成初始化并启动 scheduler
 1. idtinit 加载 IDT (中断描述符表)
+   #+BEGIN_SRC c
+     struct gatedesc idt[256];
+   #+END_SRC
 2. xchg 设置 CPU 启动
 3. scheduler() 执行调度
 
-
 * scheduler 开始调度进程
+scheduler 目的是调度进程 p 到 cpu 上执行
+
 1. 查找 RUNNABLE 进程，等待调度
-2. switchuvm 切换到进程 p
-   - 关中断 pushcli
-   - 切换 TSS 段 (Task Status Segment)
-     + TSS Descriptor 提供硬件级的进程切换机制
-     + TSS 是一段内存区域，存放进程相关的执行环境信息
-     + 初始化的 TSS 是由用户提供，进程切换时的保存信息由 processor 执行
-     + TSS selector => TR 寄存器，其结构与 segment registers 是完全一致的
-     + ltr 指令
-       - 使用提供的 selector 在 GDT / LDT 里索引查找 TSS descriptor
-       - 查找结果加载到 TR 寄存器里
-       #+BEGIN_EXAMPLE
-         (qemu) info registers
-         TR =0000 00000000 0000ffff 00008b00 DPL=0 TSS32-busy
-         (qemu) info registers
-         TR =0028 801117a8 00000067 00408900 DPL=0 TSS32-avl
-       #+END_EXAMPLE
-   - 切换页表
-     + lcr3 加载 p->pgdir 的页目录
-   - 开中断 popcli, 让中断控制器调度进程运行
+   - 当前 mycpu()
+   - 轮训 ptable.proc ，调度算法 RR (Round ribbon)
+   - 当前可执行进程 p
+2. switchuvm 用户态执行
+3. 设置 p->state = RUNNING
+4. swtch(...) 切换内核态
+5. switchkvm 执行内核态
 
-* swtch 切换进程上下文
-切换 kernel 上下文到当前进程
-#+BEGIN_SRC c
-  void swtch(struct context** old, struct context* new);
-  swtch(&(c->scheduler), p->context);
-#+END_SRC
-
-1. 传值 old, new
-2. 保存旧的寄存器 struct context
-3. 上下文切换
-4. 恢复新的寄存器
-
-[[file:../../study/os/xv6-public/swtch.S::swtch:]]
-
-#+BEGIN_EXAMPLE
-  (gdb) p/x &(c->scheduler) // **old
-  $2 = 0x801117a4
-  (gdb) p/x p->context      // *new
-  $3 = 0x8dffff9c
-
-  1. Initial
-    eax = 0x801117a4 old
-    edx = 0x8dffff9c new
-
-    | ???  |
-    | ???  |
-    |      | <- esp
-    |      |
-
-
-  2. Save old callee
-
-  h |      |
-    | ???  |
-    | ebp  |
-    | ebx  |
-    | esi  |
-    | edi  |
-    |      | <- esp = 0x8011544c
-  l |      |
-
-  3. Switch stacks
-
-    eax = 0x801117a4 old  *(c->scheduler)=0x8011544c
-    edx = 0x8dffff9c new
-
-  3.1 Before:
-  h |      |
-    | ???  |
-    | ebp  |
-    | ebx  |
-    | esi  |
-    | edi  |
-    |      | <- esp = 0x8011544c
-    |      |
-  l |      |
-
-  3.2 After:
-  h |      |
-    | xxx  |
-    | xxx  |
-    | xxx  |
-    | xxx  |
-    | xxx  |
-    |      | <- esp = 0x8dffff9c
-    |      |
-  l |      |
-
-  3.3 Recall (struct context):
-  h |      |
-    | xxx  |
-    | eip  |
-    | ebp  |
-    | ebx  |
-    | esi  |
-    | edi  |
-    |      | <- esp = 0x8dffff9c (struct context)
-  l |      |
-
-
-  4. Load new callee
-  h |      |
-    | xxx  |
-    | eip  | <- esp = 0x8dffff9c - 16
-    | ebp  |
-    | ebx  |
-    | esi  |
-    | edi  |
-  l |      |
-#+END_EXAMPLE
+* switchuvm 执行用户态进程
+1. 关中断 pushcli
+2. 切换 TSS 段 (Task Status Segment)
+   - TSS Descriptor 提供硬件级的进程切换机制
+   - TSS 是一段内存区域，存放进程相关的执行环境信息
+   - 初始化的 TSS 是由用户提供，进程切换时的保存信息由 processor 执行
+   - TSS selector => TR 寄存器，其结构与 segment registers 是完全一致的
+   - ltr 指令
+     1) 使用提供的 selector 在 GDT / LDT 里索引查找 TSS descriptor
+     2) 查找结果加载到 TR 寄存器里
+     #+BEGIN_EXAMPLE
+       (qemu) info registers
+       TR =0000 00000000 0000ffff 00008b00 DPL=0 TSS32-busy
+       (qemu) info registers
+       TR =0028 801117a8 00000067 00408900 DPL=0 TSS32-avl
+     #+END_EXAMPLE
+3. 切换页表
+   - lcr3 加载 p->pgdir 的页目录
+4. 开中断 popcli, 让中断控制器调度进程运行

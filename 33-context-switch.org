@@ -1,0 +1,103 @@
+#+TITLE: 上下文切换及内核态执行
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-14 Tue>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+#+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
+
+* swtch 切换进程上下文
+
+切换 kernel 上下文到当前进程
+#+BEGIN_SRC c
+  void swtch(struct context** old, struct context* new);
+  swtch(&(c->scheduler), p->context);
+#+END_SRC
+
+1. 传值 old, new
+2. 保存旧的寄存器 struct context
+3. 上下文切换
+4. 恢复新的寄存器
+
+[[file:../../study/os/xv6-public/swtch.S::swtch:]]
+
+#+BEGIN_EXAMPLE
+  (gdb) p/x &(c->scheduler) // **old
+  $2 = 0x801117a4
+  (gdb) p/x p->context      // *new
+  $3 = 0x8dffff9c
+
+  1. Initial
+    eax = 0x801117a4 old
+    edx = 0x8dffff9c new
+
+    | ???  |
+    | ???  |
+    |      | <- esp
+    |      |
+
+
+  2. Save old callee
+
+  h |      |
+    | ???  |
+    | ebp  |
+    | ebx  |
+    | esi  |
+    | edi  |
+    |      | <- esp = 0x8011544c
+  l |      |
+
+  3. Switch stacks
+
+    eax = 0x801117a4 old  *(c->scheduler)=0x8011544c
+    edx = 0x8dffff9c new
+
+  3.1 Before:
+  h |      |
+    | ???  |
+    | ebp  |
+    | ebx  |
+    | esi  |
+    | edi  |
+    |      | <- esp = 0x8011544c
+    |      |
+  l |      |
+
+  3.2 After:
+  h |      |
+    | xxx  |
+    | xxx  |
+    | xxx  |
+    | xxx  |
+    | xxx  |
+    |      | <- esp = 0x8dffff9c
+    |      |
+  l |      |
+
+  3.3 Recall (struct context):
+  h |      |
+    | xxx  |
+    | eip  |
+    | ebp  |
+    | ebx  |
+    | esi  |
+    | edi  |
+    |      | <- esp = 0x8dffff9c (struct context)
+  l |      |
+
+
+  4. Load new callee
+  h |      |
+    | xxx  |
+    | eip  | <- esp = 0x8dffff9c - 16
+    | ebp  |
+    | ebx  |
+    | esi  |
+    | edi  |
+  l |      |
+#+END_EXAMPLE
+
+* forkret 初始化工作
+
+* trapret 陷阱返回
