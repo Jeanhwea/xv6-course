@@ -17,6 +17,7 @@ mpmain 完成初始化并启动 scheduler
 * scheduler 开始调度进程
 1. 查找 RUNNABLE 进程，等待调度
 2. switchuvm 切换到进程 p
+   - 关中断 pushcli
    - 切换 TSS 段 (Task Status Segment)
      + TSS Descriptor 提供硬件级的进程切换机制
      + TSS 是一段内存区域，存放进程相关的执行环境信息
@@ -33,8 +34,15 @@ mpmain 完成初始化并启动 scheduler
        #+END_EXAMPLE
    - 切换页表
      + lcr3 加载 p->pgdir 的页目录
+   - 开中断 popcli, 让中断控制器调度进程运行
 
 * swtch 切换进程上下文
+切换 kernel 上下文到当前进程
+#+BEGIN_SRC c
+  void swtch(struct context** old, struct context* new);
+  swtch(&(c->scheduler), p->context);
+#+END_SRC
+
 1. 传值 old, new
 2. 保存旧的寄存器 struct context
 3. 上下文切换
