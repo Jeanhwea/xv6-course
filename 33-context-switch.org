@@ -178,3 +178,45 @@ trapret 时 forkret 返回的 pc, 在 trapret 中调用 iret 将控制权交给�
 #+END_EXAMPLE
 
 用于唤醒是通过中断，所以返回 trap 使得最终控制器交给操作系统
+#+BEGIN_SRC nasm
+  iret
+  ;; 依次取出
+  pop ip
+  pop cs
+  popf
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+  (gdb) x/4x $esp
+  0x8dffffec:     0x00000000      0x0000001b      0x00000200      0x00001000
+  (gdb) set print pretty
+  (gdb) p/x *(struct trapframe *)0x8dffffb4
+  $4 = {
+    edi = 0x0,
+    esi = 0x0,
+    ebp = 0x0,
+    oesp = 0x0,
+    ebx = 0x0,
+    edx = 0x0,
+    ecx = 0x0,
+    eax = 0x0,
+    gs = 0x0,
+    padding1 = 0x0,
+    fs = 0x0,
+    padding2 = 0x0,
+    es = 0x23,
+    padding3 = 0x0,
+    ds = 0x23,
+    padding4 = 0x0,
+    trapno = 0x0,
+    err = 0x0,
+    eip = 0x0,
+    cs = 0x1b,
+    padding5 = 0x0,
+    eflags = 0x200,
+    esp = 0x1000,
+    ss = 0x23,
+    padding6 = 0x0
+  }
+  (gdb)
+#+END_EXAMPLE
