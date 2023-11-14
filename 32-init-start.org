@@ -16,7 +16,7 @@ mpmain 完成初始化并启动 scheduler
 2. xchg 设置 CPU 启动
 3. scheduler() 执行调度
 
-* scheduler 开始调度进程
+* scheduler 进程调度
 scheduler 目的是调度进程 p 到 cpu 上执行
 
 1. 查找 RUNNABLE 进程，等待调度
@@ -28,7 +28,7 @@ scheduler 目的是调度进程 p 到 cpu 上执行
 4. swtch(...) 切换内核态
 5. switchkvm 执行内核态
 
-* switchuvm 执行用户态进程
+* switchuvm 用户态进程执行
 1. 关中断 pushcli
 2. 切换 TSS 段 (Task Status Segment)
    - TSS Descriptor 提供硬件级的进程切换机制
