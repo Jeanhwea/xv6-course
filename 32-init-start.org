@@ -1,0 +1,10 @@
+#+TITLE: 进程启动
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-14 Tue>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+#+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
+
+
+* 启动首个进程

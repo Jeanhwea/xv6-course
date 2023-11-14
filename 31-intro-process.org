@@ -3,8 +3,8 @@
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-13 Mon>
 #+STARTUP: overview num indent
-#+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 #+OPTIONS: ^:nil
+#+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 
 * 究竟什么是进程
