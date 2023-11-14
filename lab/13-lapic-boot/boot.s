@@ -1,13 +1,13 @@
 [org 0x7c00]
 ;; COMMON
-VGA         equ 0x000b8a00	; vga address
-PT_AP_ENTRY equ 0x8000		; AP entry address
-PT_STACK    equ 0x9000		; stack pointer
+VGA         equ 0x000b8a00	; VGA Address
+PT_AP_ENTRY equ 0x8000		; AP Entry Address
+PT_STACK    equ 0x9000		; Stack Pointer
 
 ;; APIC
-APIC_ID     equ 0xfee00020	; local apic id register
-APIC_SVR    equ 0xfee000f0	; spurious interrupt vector register
-APIC_ICR    equ 0xfee00300	; interrupt command register
+APIC_ID     equ 0xfee00020	; Local APIC ID Register
+APIC_SVR    equ 0xfee000f0	; Spurious interrupt Vector Register
+APIC_ICR    equ 0xfee00300	; Interrupt Command Register
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; BSP: Bootstrap Processor
