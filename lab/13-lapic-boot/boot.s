@@ -37,18 +37,18 @@ bsp_start32:
 	cld
 	rep movsb
 
-	;; Enable APIC
+	;; Step 1 - Enable APIC
 	mov	eax, [APIC_SVR]
 	or	eax, 0x100	; APIC software enable
 	mov	[APIC_SVR], eax
 	; mov	eax, [APIC_ID]	; barrier
 
-	;; Send INIT to other APs, bit(9-10) 101=INIT
+	;; Step 2 - Send INIT to other APs, bit(9-10) 101=INIT
 	mov	eax, 0x000c4500
 	mov	[APIC_ICR], eax
 	; mov	eax, [APIC_ID]	; barrier
 
-	;; Send STARTUP to other APs, bit(9-10) 110=STARTUP, bit(0-7) vector
+	;; Step 3 - Send STARTUP to other APs, bit(9-10) 110=STARTUP, bit(0-7) vector
 	mov	eax, 0x000c4600 | (PT_AP_ENTRY >> 12)
 	mov	[APIC_ICR], eax
 
