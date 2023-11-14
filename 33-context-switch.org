@@ -7,7 +7,6 @@
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 * swtch 切换进程上下文
-
 切换 kernel 上下文到当前进程
 #+BEGIN_SRC c
   void swtch(struct context** old, struct context* new);
@@ -99,5 +98,83 @@
 #+END_EXAMPLE
 
 * forkret 初始化工作
+调用 swtch 前的堆栈
+#+BEGIN_EXAMPLE
+  (gdb) b swtch
+  Breakpoint 1 at 0x8010487b: file swtch.S, line 11.
+  (gdb) c
+  Continuing.
+  The target architecture is set to "i386".
+  => 0x8010487b <swtch>:  mov    0x4(%esp),%eax
+
+  Thread 1 hit Breakpoint 1, swtch () at swtch.S:11
+  11        movl 4(%esp), %eax
+  (gdb) bt
+  #0  swtch () at swtch.S:11
+  #1  0x80103c97 in scheduler () at proc.c:343
+  #2  0x8010303f in mpmain () at main.c:57
+  #3  0x8010318c in main () at main.c:37
+  (gdb) si
+  => 0x8010487f <swtch+4>:        mov    0x8(%esp),%edx
+  12        movl 8(%esp), %edx
+  (gdb)
+#+END_EXAMPLE
+
+- swtch.S 返回 ret 时的，跳转到 forkret
+- allocproc 时设置的返回值 $eip
+#+BEGIN_EXAMPLE
+  (gdb) si
+  => 0x80103880 <forkret>:        push   %ebp
+  forkret () at proc.c:398
+  398       release(&ptable.lock);
+  (gdb) bt
+  #0  forkret () at proc.c:398
+  (gdb)
+#+END_EXAMPLE
 
 * trapret 陷阱返回
+trapret 时 forkret 返回的 pc, 在 trapret 中调用 iret 将控制权交给内核
+#+BEGIN_EXAMPLE
+  (gdb) b forkret
+  Breakpoint 1 at 0x80103880: forkret. (2 locations)
+  (gdb) c
+  Continuing.
+  The target architecture is set to "i386".
+  => 0x80103880 <forkret>:        push   %ebp
+
+  Thread 1 hit Breakpoint 1, forkret () at proc.c:398
+  398       release(&ptable.lock);
+  (gdb) n
+  => 0x80103890 <forkret+16>:     mov    0x8010a000,%eax
+  400       if (first) {
+  (gdb) si
+  => 0x80103895 <forkret+21>:     add    $0x10,%esp
+  0x80103895      400       if (first) {
+  (gdb)
+  => 0x80103898 <forkret+24>:     test   %eax,%eax
+  0x80103898      400       if (first) {
+  (gdb)
+  => 0x8010389a <forkret+26>:     jne    0x801038a0 <forkret+32>
+  0x8010389a      400       if (first) {
+  (gdb)
+  => 0x801038a0 <forkret+32>:     movl   $0x0,0x8010a000
+
+  Thread 1 hit Breakpoint 1, forkret () at proc.c:404
+  404         first = 0;
+  (gdb)
+  => 0x801038aa <forkret+42>:     sub    $0xc,%esp
+  405         iinit(ROOTDEV);
+  (gdb) n
+  => 0x801038b4 <forkret+52>:     movl   $0x1,(%esp)
+  406         initlog(ROOTDEV);
+  (gdb) n
+  => 0x80105852 <trapret>:        popa
+  trapret () at trapasm.S:26
+  26        popal
+  (gdb) bt
+  #0  trapret () at trapasm.S:26
+  (gdb)
+
+#+END_EXAMPLE
+
+用于唤醒是通过中断，所以返回 trap 使得最终控制器交给操作系统
