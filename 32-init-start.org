@@ -32,6 +32,10 @@ scheduler 目的是调度进程 p 到 cpu 上执行
 * switchuvm 用户态地址空间
 1. 关中断 pushcli
 2. 切换 TSS 段 (Task Status Segment)
+   #+BEGIN_EXAMPLE
+     TR 0000 00000000 0000ffff 00008b00 DPL=0 TSS32-busy
+   #+END_EXAMPLE
+
    - TSS Descriptor 提供硬件级的进程切换机制
    - TSS 是一段内存区域，存放进程相关的执行环境信息
    - 初始化的 TSS 是由用户提供，进程切换时的保存信息由 processor 执行
