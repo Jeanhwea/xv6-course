@@ -1,4 +1,4 @@
-#+TITLE: 进程启动及用户态执行
+#+TITLE: scheduler 启动及 switchuvm 切换用户态地址空间
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-14 Tue>
@@ -29,7 +29,7 @@ scheduler 目的是调度进程 p 到 cpu 上执行
 5. swtch(...) 执行程序
 6. switchkvm 执行内核态
 
-* switchuvm 用户态进程执行
+* switchuvm 用户态地址空间
 1. 关中断 pushcli
 2. 切换 TSS 段 (Task Status Segment)
    - TSS Descriptor 提供硬件级的进程切换机制
