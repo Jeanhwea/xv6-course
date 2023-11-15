@@ -7,7 +7,7 @@
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 
-* TSS
+* 上个视频
 对于多任务 OS 来说，TSS segment 是必不可少的，系统至少需要一个 TSS segment，但是
 现在的 OS 系统不使用 TSS 机制来进行任务的切换。
 
@@ -43,19 +43,18 @@
 
     | ???  |
     | ???  |
-    |      | <- esp
+    | eip  | <- esp
     |      |
 
 
   2. Save old callee
 
-  h |      |
-    | ???  |
+  h | ???  |
+    | eip  |
     | ebp  |
     | ebx  |
     | esi  |
-    | edi  |
-    |      | <- esp = 0x8011544c
+    | edi  | <- esp = 0x8011544c
   l |      |
 
   3. Switch stacks
@@ -69,8 +68,7 @@
     | ebp  |
     | ebx  |
     | esi  |
-    | edi  |
-    |      | <- esp = 0x8011544c
+    | edi  | <- esp = 0x8011544c
     |      |
   l |      |
 
@@ -80,8 +78,7 @@
     | xxx  |
     | xxx  |
     | xxx  |
-    | xxx  |
-    |      | <- esp = 0x8dffff9c
+    | xxx  | <- esp = 0x8dffff9c
     |      |
   l |      |
 
@@ -92,8 +89,7 @@
     | ebp  |
     | ebx  |
     | esi  |
-    | edi  |
-    |      | <- esp = 0x8dffff9c (struct context)
+    | edi  | <- esp = 0x8dffff9c (struct context)
   l |      |
 
 
