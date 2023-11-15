@@ -21,6 +21,9 @@
    - 父进程等待
    - 如果子进程退出，则重新拉起 sh
 
+* sh.c 启动 shell
+[[file:../../study/os/xv6-public/sh.c]]
+
 * exec 系统调用
 #+BEGIN_SRC c
   void exec(init, argv)
