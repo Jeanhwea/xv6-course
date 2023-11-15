@@ -220,3 +220,35 @@ trapret 时 forkret 返回的 pc, 在 trapret 中调用 iret 将控制权交给�
   }
   (gdb)
 #+END_EXAMPLE
+
+* 回顾
+虚拟地址数据
+#+BEGIN_EXAMPLE
+  (gdb) xv-v2p 0
+  Prepare: VA=0x00000000 PDX=0x00000000 PTX=0x00000000 OFFSET=0x00000000
+  Stage 1: CR3=0x0dffe000 PDX=0x00000000 ADDR1=0x0dffe000 PDE=0x0dfbc027
+  Stage 2: PPN=0x0dfbc000 PTX=0x00000000 ADDR2=0x0dfbc000 PTE=0x0dfbd067
+  Final  : PPN2=0x0dfbd000 OFFSET=0x00000000 PA=0x0dfbd000
+  Summary: VA=0x00000000 -> PA=0x0dfbd000
+  (gdb) x/16h 0
+  0x0:    0x2468  0x0000  0x6800  0x001c  0x0000  0x006a  0x07b8  0x0000
+  0x10:   0xcd00  0xb840  0x0002  0x0000  0x40cd  0xf7eb  0x692f  0x696e
+  (gdb)
+#+END_EXAMPLE
+
+物理地址数据
+#+BEGIN_EXAMPLE
+  (qemu) xp/16h 0x0dfbd000
+  000000000dfbd000: 0x2468 0x0000 0x6800 0x001c 0x0000 0x006a 0x07b8 0x0000
+  000000000dfbd010: 0xcd00 0xb840 0x0002 0x0000 0x40cd 0xf7eb 0x692f 0x696e
+  (qemu)
+#+END_EXAMPLE
+
+磁盘镜像数据
+#+BEGIN_EXAMPLE
+  xv6-public $ hexdump -n 32 initcode
+  0000000 2468 0000 6800 001c 0000 006a 07b8 0000
+  0000010 cd00 b840 0002 0000 40cd f7eb 692f 696e
+  0000020
+  xv6-public $
+#+END_EXAMPLE
