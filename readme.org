@@ -37,7 +37,7 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
 - 进程管理
   1) [[file:31-intro-process.org][进程创建]] | [[https://www.bilibili.com/video/BV1Nz4y1A7BW/][视频 31]]
   2) [[file:32-init-start.org][scheduler 启动及 switchuvm 切换用户态地址空间]] | [[https://www.bilibili.com/video/BV1fu4y1N7D4/][视频 32]]
-  3) [[file:33-context-switch.org][swtch上下文切换及内核态执行]]
+  3) [[file:33-context-switch.org][swtch上下文切换及内核态执行]] | [[https://www.bilibili.com/video/BV11g4y1Q7Ux/][视频 33]]
 - TODO 文件系统
 
 * 答疑
