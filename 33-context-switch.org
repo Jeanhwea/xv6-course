@@ -32,76 +32,83 @@
 [[file:../../study/os/xv6-public/swtch.S::swtch:]]
 
 #+BEGIN_EXAMPLE
-  (gdb) p/x &(c->scheduler) // **old
-  $2 = 0x801117a4
-  (gdb) p/x p->context      // *new
-  $3 = 0x8dffff9c
+  swtch(&(c->scheduler), p->context);
+  (gdb) p/x &(c->scheduler)
+  $1 = 0x801117a4
+  (gdb) p/x  p->context
+  $2 = 0x8dffff9c
+  (gdb) p/x $eip
+  $3 = 0x80103c92
+  (gdb) info reg eax
+  eax            0x801117a4          -2146363484
+  (gdb) info reg edx
+  edx            0x8dffff9c          -1912602724
+  (gdb)
 
   1. Initial
-    eax = 0x801117a4 old
-    edx = 0x8dffff9c new
+    eax = 0x801117a4 old &(c->scheduler)
+    edx = 0x8dffff9c new p->context
 
-    | ???  |
-    | ???  |
-    | eip  | <- esp
-    |      |
+    | ???             |
+    | ???             |
+    | eip(0x80103c97) | <- esp
+    |                 |
 
+  2. Save
+    | ???             |
+    | ???             |
+    | eip(0x80103c97) |
+    | ebp             |
+    | ebx             |
+    | esi             |
+    | edi             | <- esp (0x8011544c)
 
-  2. Save old callee
+  3.1 Switch stack: set eax
+    | ???             |
+    | ???             |
+    | eip(0x80103c97) |
+    | ebp             |
+    | ebx             |
+    | esi             |
+    | edi             | <- esp (0x8011544c)
 
-  h | ???  |
-    | eip  |
-    | ebp  |
-    | ebx  |
-    | esi  |
-    | edi  | <- esp = 0x8011544c
-  l |      |
+    ,*(c->scheduler) = 0x8011544c
 
-  3. Switch stacks
+  3.2 Switch stack: set esp <= edx
+    | ??????????????? |
+    | ??????????????? |
+    | ??????????????? |
+    | ??????????????? |
+    | ??????????????? |
+    | ??????????????? |
+    | ??????????????? | <- esp (0x8dffff9c)
 
-    eax = 0x801117a4 old  *(c->scheduler)=0x8011544c
-    edx = 0x8dffff9c new
+    ,*(c->scheduler) = 0x8011544c
 
-  3.1 Before:
-  h |      |
-    | ???  |
-    | ebp  |
-    | ebx  |
-    | esi  |
-    | edi  | <- esp = 0x8011544c
-    |      |
-  l |      |
+  3.3 Switch stack: 脑补 p->context
+    | ??????????????? |
+    | ??????????????? |
+    | eip             |
+    | ebp             |
+    | ebx             |
+    | esi             |
+    | edi             | <- esp (0x8dffff9c)
 
-  3.2 After:
-  h |      |
-    | xxx  |
-    | xxx  |
-    | xxx  |
-    | xxx  |
-    | xxx  | <- esp = 0x8dffff9c
-    |      |
-  l |      |
+    ,*(c->scheduler) = 0x8011544c
 
-  3.3 Recall (struct context):
-  h |      |
-    | xxx  |
-    | eip  |
-    | ebp  |
-    | ebx  |
-    | esi  |
-    | edi  | <- esp = 0x8dffff9c (struct context)
-  l |      |
+  4. Pop
+    | ??????????????? |
+    | ??????????????? |
+    | eip (0x80103880)| <- esp (0x8dffff9c)
+    | ebp             |
+    | ebx             |
+    | esi             |
+    | edi             |
 
+    ,*(c->scheduler) = 0x8011544c
 
-  4. Load new callee
-  h |      |
-    | xxx  |
-    | eip  | <- esp = 0x8dffff9c - 16
-    | ebp  |
-    | ebx  |
-    | esi  |
-    | edi  |
-  l |      |
+  5. ret
+    => forkret
 #+END_EXAMPLE
 
 * forkret 初始化工作
@@ -273,3 +280,12 @@ trapret 时 forkret 返回的 pc, 在 trapret 中调用 iret 将控制权交给�
   0000020
   xv6-public $
 #+END_EXAMPLE
+
+* 总结
+1. swtch => p->context
+2. ret => forkret
+   - allocproc
+3. forkret => trapret
+4. trapret iret => eip(0x0)
+   - user space
+   - 开始执行 initcode.S
