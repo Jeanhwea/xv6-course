@@ -1,0 +1,12 @@
+#+TITLE: 启动 shell
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-15 Wed>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+
+
+* initcode.S
+调用 exec 系统调用加载 sh 启动用户 shell
+
+[[file:../../study/os/xv6-public/initcode.S]]
