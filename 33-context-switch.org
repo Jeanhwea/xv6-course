@@ -181,9 +181,11 @@ trapret 时 forkret 返回的 pc, 在 trapret 中调用 iret 将控制权交给�
 #+BEGIN_SRC nasm
   iret
   ;; 依次取出
-  pop ip
+  pop eip
   pop cs
   popf
+  pop esp
+  pop ss
 #+END_SRC
 
 #+BEGIN_EXAMPLE
