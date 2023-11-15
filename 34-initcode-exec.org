@@ -10,3 +10,5 @@
 调用 exec 系统调用加载 sh 启动用户 shell
 
 [[file:../../study/os/xv6-public/initcode.S]]
+
+* exec 系统调用
