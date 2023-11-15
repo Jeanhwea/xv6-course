@@ -22,3 +22,6 @@
    - 如果子进程退出，则重新拉起 sh
 
 * exec 系统调用
+#+BEGIN_SRC c
+  void exec(init, argv)
+#+END_SRC
