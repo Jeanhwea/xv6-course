@@ -6,6 +6,17 @@
 #+OPTIONS: ^:nil
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
+
+* TSS
+对于多任务 OS 来说，TSS segment 是必不可少的，系统至少需要一个 TSS segment，但是
+现在的 OS 系统不使用 TSS 机制来进行任务的切换。
+
+情景提示：
+1. TSS 存在的唯一理由是：需要提供 0 ~ 2 权限级别的 stack pointer，当发生 stack
+   切换时，必须使用 TSS 提供的相应的 stack pointer
+2. 若提供空的 TSS segment，或者可以考虑以直接传递 stack pointer 的方式实现 stack
+   切换，即便是这样设计 processor 要读取 TSS segment 这一工作是必不可少的
+
 * swtch 切换进程上下文
 切换 kernel 上下文到当前进程
 #+BEGIN_SRC c
