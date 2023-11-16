@@ -72,7 +72,7 @@
     | esi             |
     | edi             | <- esp (0x8011544c)
 
-    ,*(c->scheduler) = 0x8011544c
+    # *(c->scheduler) = 0x8011544c
 
   3.2 Switch stack: set esp <= edx
     | ??????????????? |
@@ -83,7 +83,7 @@
     | ??????????????? |
     | ??????????????? | <- esp (0x8dffff9c)
 
-    ,*(c->scheduler) = 0x8011544c
+    # *(c->scheduler) = 0x8011544c
 
   3.3 Switch stack: 脑补 p->context
     | ??????????????? |
@@ -94,18 +94,19 @@
     | esi             |
     | edi             | <- esp (0x8dffff9c)
 
-    ,*(c->scheduler) = 0x8011544c
+    # *(c->scheduler) = 0x8011544c
 
   4. Pop
     | ??????????????? |
     | ??????????????? |
-    | eip (0x80103880)| <- esp (0x8dffff9c)
+    | eip (0x80103880)| <- esp (0x8dffffac)
     | ebp             |
     | ebx             |
     | esi             |
     | edi             |
 
-    ,*(c->scheduler) = 0x8011544c
+    # *(c->scheduler) = 0x8011544c
+    # 0x80103880 <forkret>
 
   5. ret
     => forkret
