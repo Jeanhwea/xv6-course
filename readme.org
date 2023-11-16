@@ -39,7 +39,8 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
   2) [[file:32-init-start.org][scheduler 启动及 switchuvm 切换用户态地址空间]] | [[https://www.bilibili.com/video/BV1fu4y1N7D4/][视频 32]]
   3) [[file:33-context-switch.org][swtch上下文切换及内核态执行]] | [[https://www.bilibili.com/video/BV11g4y1Q7Ux/][视频 33]]
   4) [[file:34-enter-shell.org][从 initcode 到 shell 启动]]
-- TODO 文件系统
+- 中断及系统调用
+- 文件系统
 
 * 答疑
 ** 视频(编号 11) 中的地址空间看起来有问题？
