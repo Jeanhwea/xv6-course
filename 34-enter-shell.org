@@ -13,6 +13,17 @@
 1. 调用 exec 系统调用加载 sh 启动用户 shell
 2. 通过系统调用 exec() 执行 /init 文件
 
+#+BEGIN_SRC sh :results output :exports both
+  make -nB fs.img | sed 's/gcc.*-c/gcc -c/' | grep init
+#+END_SRC
+
+#+RESULTS:
+: gcc -c -o init.o init.c
+: ld -m    elf_i386 -N -e main -Ttext 0 -o _init init.o ulib.o usys.o printf.o umalloc.o
+: objdump -S _init > init.asm
+: objdump -t _init | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > init.sym
+: ./mkfs fs.img README _cat _echo _forktest _grep _init _kill _ln _ls _mkdir _rm _sh _stressfs _usertests _wc _zombie
+
 * init.c 到 sh.c
 [[file:../../study/os/xv6-public/init.c]]
 
