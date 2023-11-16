@@ -46,3 +46,33 @@ init.c 运行 shell
      - 子进程解析命令并运行命令
 
 [[file:../../study/os/xv6-public/sh.c]]
+
+* 总结
+1. initcode (kernel)
+2. int 0x40 (exec) => init.c
+3. init.c (exec) => sh.c
+   - open
+4. sh.c (shell)
+  1. 检测 console 文件打开
+  2. 死循环执行命令
+     - 获取命令 getcmd
+     - cd 命令的特殊处理
+     - fork1 创建子进程
+       - 父进程循环
+       - 子进程解析命令并运行命令
+
+#+BEGIN_EXAMPLE
+  (gdb) xv-ps
+  ptable.proc[0]: pid=1 state=2 name=init
+  ptable.proc[1]: pid=2 state=2 name=sh
+  ptable.proc[2]: pid=4 state=2 name=sh
+  ptable.proc[3]: pid=5 state=4 name=wc
+
+  init(1)
+    |
+    --- sh(2)
+        |
+        |--- sh(4)
+             |
+             --- wc(5)
+#+END_EXAMPLE
