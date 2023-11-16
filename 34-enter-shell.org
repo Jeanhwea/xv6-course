@@ -1,4 +1,4 @@
-#+TITLE: initcode 系统调用 exec 函数流程
+#+TITLE: initcode 系统调用到 shell 启动
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-15 Wed>
@@ -7,12 +7,36 @@
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 
-* 从 initcode.S 到 exec()
+* 从 initcode.S 到 shell
 1. 调用 exec 系统调用加载 sh 启动用户 shell
 2. 通过系统调用 exec() 执行 /init 文件
 
 [[file:../../study/os/xv6-public/initcode.S]]
 
+init.c 运行 shell
+1. 打开 console 文件
+2. 设置 stdout, stderr
+3. 循环创建 shell
+   - fork 子进程启动 sh
+   - 父进程等待
+   - 如果子进程退出，则重新拉起 sh
+
+[[file:../../study/os/xv6-public/init.c]]
+
+
+调用 sh.c 实现用户 shell
+1. 检测 console 文件打开
+2. 死循环执行命令
+   - 获取命令 getcmd
+   - cd 命令的特殊处理
+   - fork1 创建子进程
+     - 父进程循环
+     - 子进程解析命令并运行命令
+
+[[file:../../study/os/xv6-public/sh.c]]
+
+
+* initcode 的系统调用流程分析
 1. int 0x40 => 跳转到中断处理向量
    - vector64
      #+BEGIN_SRC asm
@@ -37,6 +61,10 @@
 6. exec
 
 * exec() 系统调用
+#+BEGIN_SRC c
+  void exec(init, argv)
+#+END_SRC
+
 1. 创建用户地址空间
 2. 从磁盘加载 path 文件, 到内存中
    - 打开文件, namei
@@ -96,19 +124,3 @@
    - elf.entry
    - pgdir
    - eip/esp
-
-* init.c 运行 shell
-1. 打开 console 文件
-2. 设置 stdout, stderr
-3. 循环创建 shell
-   - fork 子进程启动 sh
-   - 父进程等待
-   - 如果子进程退出，则重新拉起 sh
-
-* sh.c 启动 shell
-[[file:../../study/os/xv6-public/sh.c]]
-
-* exec 系统调用
-#+BEGIN_SRC c
-  void exec(init, argv)
-#+END_SRC
