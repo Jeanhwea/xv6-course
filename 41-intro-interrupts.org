@@ -62,6 +62,50 @@
 4. 特权等级切换
    - 用户态切换内核态，内核不能使用用户的堆栈，可能存在恶意攻击
    - 内核态切换用户态，从 TSS 中恢复用户堆栈，见 switchuvm
+5. 当 trap 发生时，处理器会做下面一些事
+   - 用户态时，它会从任务段描述符中加载 esp 和 ss，把老的 ss 和 esp 压入新的栈中
+   - 内核态时，上面的事件就不会发生。处理器接下来会把 eflags，cs，eip 压栈
+   - 另外，对于某些 trap 来说，处理器会压入一个 errno
+#+BEGIN_EXAMPLE
+  (gdb) si
+  => 0x80105859 <trapret+7>:	add    $0x8,%esp
+  31	  addl $0x8, %esp  # trapno and errcode
+  (gdb) xv-ctx
+  ctx: cs=0x8 eip=0x80105859 ss=0x10 esp=0x8dffffe4 eflags=0x282
+  (gdb) si
+  => 0x8010585c <trapret+10>:	iret
+  32	  iret
+  (gdb) xv-ctx
+  ctx: cs=0x8 eip=0x8010585c ss=0x10 esp=0x8dffffec eflags=0x282
+  (gdb) si
+  => 0x0:	push   $0x24
+  0x00000000 in ?? ()
+  (gdb) xv-ctx
+  ctx: cs=0x1b eip=0x0 ss=0x23 esp=0x1000 eflags=0x202
+  (gdb) si
+  => 0x5:	push   $0x1c
+  0x00000005 in ?? ()
+  (gdb)
+  => 0xa:	push   $0x0
+  0x0000000a in ?? ()
+  (gdb)
+  => 0xc:	mov    $0x7,%eax
+  0x0000000c in ?? ()
+  (gdb)
+  => 0x11:	int    $0x40
+  0x00000011 in ?? ()
+  (gdb) xv-ctx
+  ctx: cs=0x1b eip=0x11 ss=0x23 esp=0xff4 eflags=0x202
+  (gdb) si
+  => 0x80105f57 <vector64>:	push   $0x0
+  319	  pushl $0
+  (gdb) xv-ctx
+  ctx: cs=0x8 eip=0x80105f57 ss=0x10 esp=0x8dffffec eflags=0x202
+  (gdb) x/8x 0x8dffffec
+  0x8dffffec:	0x00000013	0x0000001b	0x00000202	0x00000ff4
+  0x8dfffffc:	0x00000023	Cannot access memory at address 0x8e000000
+  (gdb)
+#+END_EXAMPLE
 
 * initcode 的系统调用流程分析
 1. int 0x40 => 跳转到中断处理向量
