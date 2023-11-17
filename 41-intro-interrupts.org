@@ -1,4 +1,4 @@
-#+TITLE: 中断介绍
+#+TITLE: 中断调用流程
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-16 Thu>
@@ -6,9 +6,10 @@
 #+OPTIONS: ^:nil
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
+
 * int 指令
-在 x86 中，中断处理程序的入口在中断描述符表(IDT)中被定义。这个表有 256 个表项，每
-一个都提供了相应的 cs 和 eip
+在 x86 中，中断处理程序的入口在中断描述符表(IDT)中被定义。这个表有 256 个表项，
+每一个都提供了相应的 cs 和 eip
 
 程序进行一个系统调用，它需要调用 int n 指令，这里 n 就是 IDT 的索引
 #+BEGIN_SRC asm
@@ -49,6 +50,18 @@
    - 中断 i 的处理向量为 vectors[i]
    - 0x40 设置成系统调用 T_SYSCALL
    - 中断映射定义 [[file:../../study/os/xv6-public/traps.h]]
+2. xv6 中断编号
+   - 0-31  软件中断: divide error、 page fault
+   - 32-63 硬件中断
+   - 64    系统调用: syscall
+3. syscall 特殊处理
+   - 设置 trap 位为 1 指定 syscall 时陷阱门，即处理系统调用时可以同时处理其它中断
+   - 设置 syscall 调用权限 DPL_USER，阻止用户程序产生其它中断
+     1) 例如用户不能产生设备中断
+     2) 如果用户产生不合法的中断，会抛出 general protection fault, 即 int 13
+4. 特权等级切换
+   - 用户态切换内核态，内核不能使用用户的堆栈，可能存在恶意攻击
+   - 内核态切换用户态，从 TSS 中恢复用户堆栈，见 switchuvm
 
 * initcode 的系统调用流程分析
 1. int 0x40 => 跳转到中断处理向量
@@ -73,68 +86,3 @@
    - 获取 argv
    - 调用 exec
 6. exec
-
-* exec() 系统调用
-#+BEGIN_SRC c
-  void exec(init, argv)
-#+END_SRC
-
-1. 创建用户地址空间
-2. 从磁盘加载 path 文件, 到内存中
-   - 打开文件, namei
-   - 读取 ELF 头, readi
-     #+BEGIN_SRC sh :results output :exports both
-       readelf -h _init
-     #+END_SRC
-
-     #+RESULTS:
-     #+begin_example
-     ELF Header:
-       Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00
-       Class:                             ELF32
-       Data:                              2's complement, little endian
-       Version:                           1 (current)
-       OS/ABI:                            UNIX - System V
-       ABI Version:                       0
-       Type:                              EXEC (Executable file)
-       Machine:                           Intel 80386
-       Version:                           0x1
-       Entry point address:               0x0
-       Start of program headers:          52 (bytes into file)
-       Start of section headers:          14252 (bytes into file)
-       Flags:                             0x0
-       Size of this header:               52 (bytes)
-       Size of program headers:           32 (bytes)
-       Number of program headers:         2
-       Size of section headers:           40 (bytes)
-       Number of section headers:         18
-       Section header string table index: 17
-     #+end_example
-   - 解析代码段, readi/allocuvm/loaduvm
-     #+BEGIN_SRC sh :results output :exports both
-       readelf -l _init
-     #+END_SRC
-
-     #+RESULTS:
-     #+begin_example
-
-     Elf file type is EXEC (Executable file)
-     Entry point 0x0
-     There are 2 program headers, starting at offset 52
-
-     Program Headers:
-       Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
-       LOAD           0x000080 0x00000000 0x00000000 0x00b2c 0x00b38 RWE 0x10
-       GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RWE 0x10
-
-      Section to Segment mapping:
-       Segment Sections...
-        00     .text .rodata .eh_frame .data .bss
-        01
-     #+end_example
-3. 申请用户堆栈页面, allocuvm
-4. 设置参数 args, 准备堆栈, copyout
-5. 提交用户态，跳转用户态, switchuvm
-   - elf.entry
-   - pgdir
-   - eip/esp
