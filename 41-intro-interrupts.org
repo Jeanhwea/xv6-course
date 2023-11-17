@@ -7,44 +7,6 @@
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 
-* int 指令
-在 x86 中，中断处理程序的入口在中断描述符表(IDT)中被定义。这个表有 256 个表项，
-每一个都提供了相应的 cs 和 eip
-
-程序进行一个系统调用，它需要调用 int n 指令，这里 n 就是 IDT 的索引
-#+BEGIN_SRC asm
-  int 0x40
-#+END_SRC
-
-~int~ 指令进行下面一些步骤：
-1. 从 IDT 中获得第 n 个描述符，n 就是 int 的参数
-2. 检查 cs 的域 CPL <= DPL，DPL 是描述符中记录的特权级
-3. 如果目标段选择符的 PL < CPL，就在 CPU 内部的寄存器中保存 esp 和 ss 的值
-4. 从一个 TSS 任务段描述符中加载 ss 和 esp, 记做 esp0
-5. push ss
-6. push esp
-7. push eflags
-8. push cs
-9. push eip
-10. 清除 eflags 的一些位
-11. 设置 cs 和 eip 为描述符中的值
-
-#+BEGIN_EXAMPLE
-                     | ?????? | <- esp0 from TSS
-  Present on       / | ss     |
-  privilege change \ | esp    |
-                     | eflags |
-                     | cs     |
-                     | eip    |
-                     | errno  | <- esp
-                     |        |
-                     |        |
-#+END_EXAMPLE
-
-操作系统可以使用 ~iret~ 指令来从一个 ~int~ 指令中返回
-- 它从栈中弹出 ~int~ 指令保存的值
-- 然后通过恢复保存的 eip 的值来继续用户程序的执行
-
 * tvinit 初始中断向量 IDT
 1. 设置了 IDT 表中的 256 个表项
    - 中断 i 的处理向量为 vectors[i]
@@ -130,3 +92,41 @@
    - 获取 argv
    - 调用 exec
 6. exec
+
+* int 指令
+在 x86 中，中断处理程序的入口在中断描述符表(IDT)中被定义。这个表有 256 个表项，
+每一个都提供了相应的 cs 和 eip
+
+程序进行一个系统调用，它需要调用 int n 指令，这里 n 就是 IDT 的索引
+#+BEGIN_SRC asm
+  int 0x40
+#+END_SRC
+
+~int~ 指令进行下面一些步骤：
+1. 从 IDT 中获得第 n 个描述符，n 就是 int 的参数
+2. 检查 cs 的域 CPL <= DPL，DPL 是描述符中记录的特权级
+3. 如果目标段选择符的 PL < CPL，就在 CPU 内部的寄存器中保存 esp 和 ss 的值
+4. 从一个 TSS 任务段描述符中加载 ss 和 esp, 记做 esp0 ~cpus[0].ts.esp0~
+5. push ss
+6. push esp
+7. push eflags
+8. push cs
+9. push eip
+10. 清除 eflags 的一些位
+11. 设置 cs 和 eip 为描述符中的值
+
+#+BEGIN_EXAMPLE
+                     | ?????? | <- esp0 from TSS
+  Present on       / | ss     |
+  privilege change \ | esp    |
+                     | eflags |
+                     | cs     |
+                     | eip    |
+                     | errno  | <- esp
+                     |        |
+                     |        |
+#+END_EXAMPLE
+
+操作系统可以使用 ~iret~ 指令来从一个 ~int~ 指令中返回
+- 它从栈中弹出 ~int~ 指令保存的值
+- 然后通过恢复保存的 eip 的值来继续用户程序的执行
