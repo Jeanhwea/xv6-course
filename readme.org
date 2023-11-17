@@ -76,7 +76,6 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
 #+RESULTS:
 : Entry point 0x1120
 
-
 ** 为什么视频编码看起来不是连续的？
 视频顺序采用三段式来编码，具体含义如下
 #+BEGIN_EXAMPLE
