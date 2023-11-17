@@ -54,20 +54,20 @@
                 |    eip      |
                 |    ...      |
                 |    edi      |
-     0x8dffffb4 |-------------| <= p->tf
+     0x8dffffb4 |-------------| <- p->tf
                 |  trapret    |
-                |-------------| <= fork() return address
-                |    eip      |
+                |-------------|
+                |    eip      | <= fork() return address
                 |             |
                 |    ...      |
                 |    edi      |
-     0x8dffff9c |-------------| <= p->context
+     0x8dffff9c |-------------| <- p->context
                 |             |
                 |             |
                 |   (empty)   |
                 |             |
                 |             |
-     0x8dfff000 |-------------| <= p->kstack
+     0x8dfff000 |-------------| <- p->kstack
                 |             |
    #+END_EXAMPLE
 3. setupkvm 初始化页表
