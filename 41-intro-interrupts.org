@@ -19,7 +19,7 @@
 1. 从 IDT 中获得第 n 个描述符，n 就是 int 的参数
 2. 检查 cs 的域 CPL <= DPL，DPL 是描述符中记录的特权级
 3. 如果目标段选择符的 PL < CPL，就在 CPU 内部的寄存器中保存 esp 和 ss 的值
-4. 从一个 TSS 任务段描述符中加载 ss 和 esp
+4. 从一个 TSS 任务段描述符中加载 ss 和 esp, 记做 esp0
 5. push ss
 6. push esp
 7. push eflags
@@ -29,15 +29,15 @@
 11. 设置 cs 和 eip 为描述符中的值
 
 #+BEGIN_EXAMPLE
-                   | ?????? |
-  Stack Pointer  / | ss     |
-  Load from TSS  \ | esp    |
-                   | eflags |
-                   | cs     |
-                   | eip    |
-                   | errno  | <- esp
-                   |        |
-                   |        |
+                     | ?????? | <- esp0 from TSS
+  Present on       / | ss     |
+  privilege change \ | esp    |
+                     | eflags |
+                     | cs     |
+                     | eip    |
+                     | errno  | <- esp
+                     |        |
+                     |        |
 #+END_EXAMPLE
 
 操作系统可以使用 ~iret~ 指令来从一个 ~int~ 指令中返回
