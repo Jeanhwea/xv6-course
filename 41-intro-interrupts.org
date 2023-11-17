@@ -69,30 +69,6 @@
   (gdb)
 #+END_EXAMPLE
 
-* initcode 的系统调用流程分析
-1. int 0x40 => 跳转到中断处理向量
-   - vector64
-     #+BEGIN_SRC asm
-       vector64:
-         pushl $0
-         pushl $64
-         jmp alltraps
-     #+END_SRC
-   - vector64 跳转 alltraps
-2. alltraps 是所有 trap 的入口
-   - 设置 trapframe
-   - 修改寄存器
-   - 返回内核态, ~call trap~
-3. trap 中判断系统调用 syscall()
-4. syscall 处理系统调用
-   - 获取当前执行进程
-   - 从系统调用表 syscalls 中调用系统调用函数 sys_exec
-5. sys_exec
-   - 检查
-   - 获取 argv
-   - 调用 exec
-6. exec
-
 * int 指令
 在 x86 中，中断处理程序的入口在中断描述符表(IDT)中被定义。这个表有 256 个表项，
 每一个都提供了相应的 cs 和 eip
@@ -130,3 +106,27 @@
 操作系统可以使用 ~iret~ 指令来从一个 ~int~ 指令中返回
 - 它从栈中弹出 ~int~ 指令保存的值
 - 然后通过恢复保存的 eip 的值来继续用户程序的执行
+
+* initcode 的系统调用流程分析
+1. int 0x40 => 跳转到中断处理向量
+   - vector64
+     #+BEGIN_SRC asm
+       vector64:
+         pushl $0
+         pushl $64
+         jmp alltraps
+     #+END_SRC
+   - vector64 跳转 alltraps
+2. alltraps 是所有 trap 的入口
+   - 设置 trapframe
+   - 修改寄存器
+   - 返回内核态, ~call trap~
+3. trap 中判断系统调用 syscall()
+4. syscall 处理系统调用
+   - 获取当前执行进程
+   - 从系统调用表 syscalls 中调用系统调用函数 sys_exec
+5. sys_exec
+   - 检查
+   - 获取 argv
+   - 调用 exec
+6. exec
