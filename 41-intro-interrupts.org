@@ -1,4 +1,4 @@
-#+TITLE: 再谈 trap 及 exec
+#+TITLE: 中断介绍
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-16 Thu>
