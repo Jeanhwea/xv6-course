@@ -96,8 +96,7 @@
   privilege change \ | esp    |
                      | eflags |
                      | cs     |
-                     | eip    |
-                     | errno  | <- esp
+                     | eip    | <- esp
                      |        |
                      |        |
 #+END_EXAMPLE
