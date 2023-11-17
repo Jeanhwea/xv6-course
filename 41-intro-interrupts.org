@@ -15,7 +15,7 @@
   int 0x40
 #+END_SRC
 
-int 指令进行下面一些步骤：
+~int~ 指令进行下面一些步骤：
 1. 从 IDT 中获得第 n 个描述符，n 就是 int 的参数
 2. 检查 cs 的域 CPL <= DPL，DPL 是描述符中记录的特权级
 3. 如果目标段选择符的 PL < CPL，就在 CPU 内部的寄存器中保存 esp 和 ss 的值
@@ -28,10 +28,28 @@ int 指令进行下面一些步骤：
 10. 清除 eflags 的一些位
 11. 设置 cs 和 eip 为描述符中的值
 
+#+BEGIN_EXAMPLE
+                   | ?????? |
+  Stack Pointer  / | ss     |
+  Load from TSS  \ | esp    |
+                   | eflags |
+                   | cs     |
+                   | eip    |
+                   | errno  | <- esp
+                   |        |
+                   |        |
+#+END_EXAMPLE
+
+
+操作系统可以使用 ~iret~ 指令来从一个 ~int~ 指令中返回
+- 它从栈中弹出 ~int~ 指令保存的值
+- 然后通过恢复保存的 eip 的值来继续用户程序的执行
+
 * tvinit 初始中断向量 IDT
 1. 设置了 IDT 表中的 256 个表项
-   - 中断 i的处理向量为 vectors[i]
+   - 中断 i 的处理向量为 vectors[i]
    - 0x40 设置成系统调用 T_SYSCALL
+   - 中断映射定义 [[file:../../study/os/xv6-public/traps.h]]
 
 * initcode 的系统调用流程分析
 1. int 0x40 => 跳转到中断处理向量
