@@ -28,7 +28,7 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
   3) [[file:03-minimal-os.org][编写最小操作系统]] | [[https://www.bilibili.com/video/BV1Fe411975E][视频 03]]
 - 走进操作系统
   1) [[file:11-os-overview.org][操作系统概览]] | [[https://www.bilibili.com/video/BV1vu4y1h7mR/][视频 11]]
-  2) [[file:12-from-asm-to-c.org][从汇编到 C 语言]] | [[https://www.bilibili.com/video/BV1hM411Q7eb/][视频 12]] | [[https://www.bilibili.com/video/BV1a94y1G7HV/][补充视频 12a]]
+  2) [[file:12-from-asm-to-c.org][从汇编到 C 语言]] | [[https://www.bilibili.com/video/BV1hM411Q7eb/][视频 12]] | [[https://www.bilibili.com/video/BV1a94y1G7HV/][视频 12a]]
   3) [[file:13-xv6-startup.org][xv6 启动流程分析]] | [[https://www.bilibili.com/video/BV1az4y1A7zU/][视频 13]]
 - 内存管理
   1) [[file:21-page-table.org][x86 体系结构分页机制]] | [[https://www.bilibili.com/video/BV1CC4y1778j/][视频 21]]
