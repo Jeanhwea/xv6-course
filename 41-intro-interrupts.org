@@ -1,4 +1,4 @@
-#+TITLE: 中断调用流程
+#+TITLE: 中断初始化及调用流程
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-16 Thu>
@@ -11,8 +11,7 @@
 1. 设置了 IDT 表中的 256 个表项
    - 中断 i 的处理向量为 vectors[i]
    - 0x40 设置成系统调用 T_SYSCALL
-   - 中断映射定义 [[file:../../study/os/xv6-public/traps.h]]
-2. xv6 中断编号
+2. xv6 中断编号 [[file:../../study/os/xv6-public/traps.h]]
    - 0-31  软件中断: divide error、 page fault
    - 32-63 硬件中断
    - 64    系统调用: syscall
