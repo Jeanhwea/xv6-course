@@ -1,4 +1,4 @@
-#+TITLE: exec 系统调用
+#+TITLE: 系统调用流程分析
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-17 Fri>
@@ -6,6 +6,15 @@
 #+OPTIONS: ^:nil
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
+*  syscall 到 exec 调用
+1. syscall 处理系统调用
+   - 获取当前执行进程
+   - 从系统调用表 syscalls 中调用系统调用函数 sys_exec
+2. sys_exec
+   - 检查
+   - 获取 argv
+   - 调用 exec
+3. exec
 
 * exec() 系统调用
 #+BEGIN_SRC c
