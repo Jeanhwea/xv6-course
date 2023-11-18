@@ -90,15 +90,35 @@
 10. 清除 eflags 的一些位
 11. 设置 cs 和 eip 为描述符中的值
 
+Before int
 #+BEGIN_EXAMPLE
-                     | ?????? | <- esp0 from TSS
-  Present on       / | ss     |
-  privilege change \ | esp    |
-                     | eflags |
-                     | cs     |
-                     | eip    | <- esp
-                     |        |
-                     |        |
+  ctx: cs=0x1b eip=0x11 ss=0x23 esp=0xff4 eflags=0x202
+#+END_EXAMPLE
+
+After int
+#+BEGIN_EXAMPLE
+  (gdb) x/i $pc
+  => 0x11:        int    $0x40
+  (gdb) si
+  => 0x80105f57 <vector64>:       push   $0x0
+  319       pushl $0
+  (gdb) x/8x $esp
+  0x8dffffec:     0x00000013      0x0000001b      0x00000202      0x00000ff4
+  0x8dfffffc:     0x00000023      Cannot access memory at address 0x8e000000
+  (gdb) xv-ctx
+  ctx: cs=0x8 eip=0x80105f57 ss=0x10 esp=0x8dffffec eflags=0x202
+  (gdb)
+#+END_EXAMPLE
+
+Stack layout
+#+BEGIN_EXAMPLE
+                     | ??????            | <- esp0(0x8e000000) ss(0x10) from TSS
+  Present on       / | ss     0x00000023 |
+  privilege change \ | esp    0x00000ff4 |
+                     | eflags 0x00000202 |
+                     | cs     0x0000001b |
+                     | eip    0x00000013 | <- esp(0x8dffffec)
+                     |                   |
 #+END_EXAMPLE
 
 操作系统可以使用 ~iret~ 指令来从一个 ~int~ 指令中返回
@@ -120,3 +140,13 @@
    - 修改寄存器
    - 返回内核态, ~call trap~
 3. trap 中判断系统调用 syscall()
+
+* 总结
+1. 初始化 IDT, tvinit 256 vectors.S
+2. 加载 IDTR, main.c -> mpinit -> idtinita
+3. int 语义
+   - int 0x40
+   - vector64
+   - alltraps 准备 trampframe
+   - trap(tf)
+   - tf.trapno => syscall()
