@@ -55,7 +55,7 @@
                 |    ...      |
                 |    edi      |
      0x8dffffb4 |-------------| <- p->tf
-                |  trapret    |
+                |  trapret    | (0x80105852)
                 |-------------|
                 |    eip      | <= fork() return address
                 |             |

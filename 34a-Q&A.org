@@ -6,14 +6,67 @@
 #+OPTIONS: ^:nil
 
 
-* 是否预计将 riscv 架构
+* 是否预计讲 xv6-riscv 架构
 1. 暂时没有计划讲
 2. 体系结构比较多, 建议先掌握一个, 用的时候再查手册
+   - riscv
+   - mips
+   - arm
+3. riscv 建议 MIT
 
 * 视频 33 中 forkret 如何跳转到 trapret
+答案: ret 的语义, x86 手册
 详细调试
+#+BEGIN_EXAMPLE
+  (gdb) x/8i $pc
+  => 0x80103890 <forkret+16>:     mov    0x8010a000,%eax
+     0x80103895 <forkret+21>:     add    $0x10,%esp
+     0x80103898 <forkret+24>:     test   %eax,%eax
+     0x8010389a <forkret+26>:     jne    0x801038a0 <forkret+32>
+     0x8010389c <forkret+28>:     leave
+     0x8010389d <forkret+29>:     ret
+     0x8010389e <forkret+30>:     xchg   %ax,%ax
+     0x801038a0 <forkret+32>:     movl   $0x0,0x8010a000
+  (gdb) n
+  => 0x801038a0 <forkret+32>:     movl   $0x0,0x8010a000
+  394     forkret(void)
+  (gdb) lay asm
+  (gdb)
+  (gdb) x/x $esp
+  0x8dffffb0:     0x80105852
+  (gdb) f
+  #0  0x801038c4 in forkret () at proc.c:410
+  410     }
+  (gdb) x/i $pc
+  => 0x801038c4 <forkret+68>:     ret
+  (gdb) si
+  => 0x80105852 <trapret>:        popa
+  trapret () at trapasm.S:26
+  26        popal
+  (gdb) p/x $pc
+  $1 = 0x80105852
+  (gdb) bt
+  #0  trapret () at trapasm.S:26
+  (gdb)
+  #0  trapret () at trapasm.S:26
+  (gdb)
+#+END_EXAMPLE
 
 * 视频 34 中 如何调试用户进程
+- init.c
+- sh.c
+#+BEGIN_EXAMPLE
+  kernel
+#+END_EXAMPLE
+
+就是手工切换符号文件
+
+init.c
 #+BEGIN_EXAMPLE
   (gdb) symbol-file _init
+#+END_EXAMPLE
+
+sh.c
+#+BEGIN_EXAMPLE
+  (gdb) symbol-file _sh
 #+END_EXAMPLE
