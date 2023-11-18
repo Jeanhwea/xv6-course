@@ -1,0 +1,18 @@
+#+TITLE: 答疑二
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-18 Sat>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+
+
+* 是否预计将 riscv 架构
+1. 暂时没有计划讲
+
+* forkret 如何跳转到 trapret
+详细调试
+
+* 如何调试用户进程
+#+BEGIN_EXAMPLE
+  (gdb) symbol-file _init
+#+END_EXAMPLE
