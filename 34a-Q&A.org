@@ -9,10 +9,10 @@
 * 是否预计将 riscv 架构
 1. 暂时没有计划讲
 
-* forkret 如何跳转到 trapret
+* 视频 33 中 forkret 如何跳转到 trapret
 详细调试
 
-* 如何调试用户进程
+* 视频 34 中 如何调试用户进程
 #+BEGIN_EXAMPLE
   (gdb) symbol-file _init
 #+END_EXAMPLE
