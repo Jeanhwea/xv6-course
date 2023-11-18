@@ -24,6 +24,7 @@
 1. 创建用户地址空间
 2. 从磁盘加载 path 文件, 到内存中
    - 打开文件, namei
+   - 申请页目录 setupkvm
    - 读取 ELF 头, readi
      #+BEGIN_SRC sh :results output :exports both
        readelf -h _init
@@ -52,7 +53,7 @@
        Number of section headers:         18
        Section header string table index: 17
      #+end_example
-   - 解析代码段, readi/allocuvm/loaduvm
+   - 解析代码段, allocuvm/loaduvm/readi
      #+BEGIN_SRC sh :results output :exports both
        readelf -l _init
      #+END_SRC
