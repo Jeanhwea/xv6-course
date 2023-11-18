@@ -75,9 +75,41 @@
         00     .text .rodata .eh_frame .data .bss
         01
      #+end_example
-3. 申请用户堆栈页面, allocuvm
-4. 设置参数 args, 准备堆栈, copyout
-5. 提交用户态，跳转用户态, switchuvm
+3. 初始化用户堆栈 ustack
+   - 设置参数 args, copyout
+   - ustack 前 3 个分别是: fake pc, argc, argv pointer
+4. 提交用户态，跳转用户态, switchuvm
    - elf.entry
    - pgdir
    - eip/esp
+
+_init 用户虚拟地址空间
+#+BEGIN_EXAMPLE
+  0x3000 |--------------| <- sp
+         | \0 \0 \0 t   |
+         |  i n  i  /   |
+         | \0           |
+         | argv1        |
+         | argv         |
+         | argc         |
+         | fake pc      | <- sp 0x2fe4
+         |              |
+         |              |
+         |              |
+         |              |
+  0x2000 |--------------|
+         |xxxxxxxxxxxxxx|
+         |xxxxxxxxxxxxxx|
+         |xxxxxxxxxxxxxx|
+         |xxxxxxxxxxxxxx|
+         |xxxxxxxxxxxxxx|
+         |xxxxxxxxxxxxxx|
+  0x1000 |--------------|
+         |              |
+         |              |
+         |              |
+  0x0b38 |--------------| <- end
+         |   _init      |
+         | Text  & Data |
+  0x0    |--------------| <- entry
+#+END_EXAMPLE
