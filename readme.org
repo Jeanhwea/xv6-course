@@ -40,7 +40,7 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
   3) [[file:33-context-switch.org][swtch上下文切换及内核态执行]] | [[https://www.bilibili.com/video/BV11g4y1Q7Ux/][视频 33]]
   4) [[file:34-enter-shell.org][从 initcode 到 shell 启动]] | [[https://www.bilibili.com/video/BV1Fw411K7pE/][视频 34]] | [[https://www.bilibili.com/video/BV1eb4y1M7ie/][视频 34a]]
 - 中断管理
-  1) [[file:41-intro-interrupt.org][中断初始化及调用流程]]
+  1) [[file:41-intro-interrupt.org][中断初始化及调用流程]] | [[https://www.bilibili.com/video/BV14G411D74x][视频 41]]
   2) [[file:42-exec-syscall.org][系统调用流程分析]]
 - 文件系统
 
