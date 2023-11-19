@@ -16,8 +16,12 @@
    - 获取 argv
    - 调用 exec
 3. exec
-   - path = "/init"
-   - argv = {"/init", \0, ... }, len=32
+   #+BEGIN_EXAMPLE
+     (gdb) p path
+     $3 = 0x1c "/init"
+     (gdb) p argv
+     $4 = {0x1c "/init", 0x0 <repeats 31 times>}
+   #+END_EXAMPLE
 
 * exec() 系统调用
 #+BEGIN_SRC c
@@ -86,50 +90,23 @@
    - pgdir
    - eip/esp
 
-_init 用户虚拟地址空间
-#+BEGIN_EXAMPLE
-  0x3000 |--------------| <- sp
-         | \0 \0 \0 t   |
-         |  i n  i  /   |
-         | \0           |
-         | argv1        |
-         | argv         |
-         | argc         |
-         | fake pc      | <- sp 0x2fe4
-         |              |
-         |              |
-         |              |
-         |              |
-  0x2000 |--------------|
-         |xxxxxxxxxxxxxx|
-         |xxxxxxxxxxxxxx|
-         |xxxxxxxxxxxxxx|
-         |xxxxxxxxxxxxxx|
-         |xxxxxxxxxxxxxx|
-         |xxxxxxxxxxxxxx|
-  0x1000 |--------------|
-         |              |
-         |              |
-         |              |
-  0x0b38 |--------------| <- end
-         |   _init      |
-         | Text  & Data |
-  0x0    |--------------| <- entry
-#+END_EXAMPLE
-
-* Note
-当前
-cr3 - pgdir -> 0xdffe000
+* _init 堆栈调试
+当前内核态
+pgdir = cr3 = 0xdffe000
 ustack[] , len=3+32+1, addr=0x8dfffe00
 
+(gdb) xv-ps
+ptable.proc[0]: pid=1 state=4 name=init
+(gdb) x/8x $esp
+0x2fe4: 0xffffffff      0x00000001      0x00002ff0      0x00002ff8
+0x2ff4: 0x00000000      0x696e692f      0x00000074      Cannot access memory at address 0x3000
 
-目标
+目标 _init 虚拟地址空间
+pgdir  = 0x8dfbb000
 #+BEGIN_EXAMPLE
-  pgdir -> 0x8dfbb000
-
   0x3000 |--------------| <- sp
          | \0 \0 \0 t   |
-         |  i n  i  /   |
+         |  i n  i  /   | <- 0x2ff8
          | \0           |
          | *argv1       |
          | **argv       |
