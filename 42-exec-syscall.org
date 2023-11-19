@@ -7,14 +7,17 @@
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 * syscall 到 exec 调用
-1. syscall 处理系统调用
+1. syscall() 处理系统调用
    - 获取当前执行进程
    - 从系统调用表 syscalls 中调用系统调用函数 sys_exec
 2. sys_exec
-   - 检查
+   - 检查, 并从栈上获取参数
+   - 命令行路径 path
    - 获取 argv
    - 调用 exec
 3. exec
+   - path = "/init"
+   - argv = {"/init", \0, ... }, len=32
 
 * exec() 系统调用
 #+BEGIN_SRC c
@@ -104,6 +107,45 @@ _init 用户虚拟地址空间
          |xxxxxxxxxxxxxx|
          |xxxxxxxxxxxxxx|
          |xxxxxxxxxxxxxx|
+  0x1000 |--------------|
+         |              |
+         |              |
+         |              |
+  0x0b38 |--------------| <- end
+         |   _init      |
+         | Text  & Data |
+  0x0    |--------------| <- entry
+#+END_EXAMPLE
+
+* Note
+当前
+cr3 - pgdir -> 0xdffe000
+ustack[] , len=3+32+1, addr=0x8dfffe00
+
+
+目标
+#+BEGIN_EXAMPLE
+  pgdir -> 0x8dfbb000
+
+  0x3000 |--------------| <- sp
+         | \0 \0 \0 t   |
+         |  i n  i  /   |
+         | \0           |
+         | *argv1       |
+         | **argv       |
+         | argc (1)     |
+         | fake pc      | <- sp 0x2fe4
+         |              |
+         |              |
+         |              |
+         |              |
+  0x2000 |--------------|
+         | xxxxxxxxxxxx |
+         | xxxxxxxxxxxx |
+         | xxxxxxxxxxxx |
+         | xxxxxxxxxxxx |
+         | xxxxxxxxxxxx |
+         | xxxxxxxxxxxx |
   0x1000 |--------------|
          |              |
          |              |
