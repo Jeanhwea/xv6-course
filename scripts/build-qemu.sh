@@ -14,3 +14,9 @@ sudo apt-get install -y git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev
      libnfs-dev libiscsi-dev
 
 # https://wiki.qemu.org/Hosts/Linux
+
+wget -c https://download.qemu.org/qemu-5.2.0.tar.xz
+tar xvf qemu-5.2.0.tar.xz
+../qemu-5.2.0/configure --prefix=/opt/qemu-5.2.0
+make
+make install
