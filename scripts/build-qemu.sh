@@ -25,5 +25,5 @@ tar xvf $FILEGZ
 mkdir qemu-build-5.2.0
 cd qemu-build-5.2.0
 ../qemu-5.2.0/configure --prefix=/opt/qemu-5.2.0
-make $(nproc)
+make -j$(nproc)
 make install
