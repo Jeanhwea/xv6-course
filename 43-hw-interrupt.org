@@ -100,4 +100,5 @@
    - COM1 设置: baud, data bits, stop bit, parity
    - 开启 COM1
 8. IDE 磁盘中断
-   － ideinit enable IRQ_IDE
+   －ideinit enable IRQ_IDE
+   - isic
