@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 PREFIX=/opt/qemu
-FILEGZ="$HOME/down/bochs-2.7.tar.gz"
+FILEGZ="$HOME/down/qemu-5.2.0.tar.xz"
 
+if [ ! -f $FILEGZ ]; then
+    curl https://download.qemu.org/qemu-5.2.0.tar.xz -o $FILEGZ
+fi
+
+# https://wiki.qemu.org/Hosts/Linux
 sudo apt-get install -y git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build \
      git-email \
      libaio-dev libbluetooth-dev libcapstone-dev libbrlapi-dev libbz2-dev \
@@ -13,10 +18,11 @@ sudo apt-get install -y git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev
      valgrind xfslibs-dev \
      libnfs-dev libiscsi-dev
 
-# https://wiki.qemu.org/Hosts/Linux
 
-wget -c https://download.qemu.org/qemu-5.2.0.tar.xz
-tar xvf qemu-5.2.0.tar.xz
+cd ~/build
+tar xvf $FILEGZ
+mkdir qemu-build-5.2.0
+cd qemu-build-5.2.0
 ../qemu-5.2.0/configure --prefix=/opt/qemu-5.2.0
 make
 make install
