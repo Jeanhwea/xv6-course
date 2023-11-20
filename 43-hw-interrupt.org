@@ -101,4 +101,4 @@
    - 开启 COM1
 8. IDE 磁盘中断
    －ideinit enable IRQ_IDE
-   - isic
+   - SCSI/SATA
