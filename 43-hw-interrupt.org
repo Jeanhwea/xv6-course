@@ -1,4 +1,4 @@
-#+TITLE: 中断
+#+TITLE: 中断及设备初始化
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-20 Mon>
@@ -7,7 +7,7 @@
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 
-* 中断产生
+* 硬件中断
 1. 主板上的设备会产生中断, 常见的中断有
    - 用户键盘输入
    - 读写磁盘存储
@@ -99,3 +99,5 @@
 7. UART 串口通信协议 uartinit
    - COM1 设置: baud, data bits, stop bit, parity
    - 开启 COM1
+8. IDE 磁盘中断
+   － ideinit enable IRQ_IDE
