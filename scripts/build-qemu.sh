@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
+VERSION=5.2.0
 PREFIX=/opt/qemu
-FILEGZ="$HOME/down/qemu-5.2.0.tar.xz"
+FILEGZ="$HOME/down/qemu-${VERSION}.tar.xz"
 
 if [ ! -f $FILEGZ ]; then
-    curl https://download.qemu.org/qemu-5.2.0.tar.xz -o $FILEGZ
+    curl https://download.qemu.org/qemu-${VERSION}.tar.xz -o $FILEGZ
 fi
 
 # https://wiki.qemu.org/Hosts/Linux
@@ -22,8 +23,8 @@ sudo apt-get install -y git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev
 cd ~/build
 rm -rf qemu-*
 tar xvf $FILEGZ
-mkdir qemu-build-5.2.0
-cd qemu-build-5.2.0
-../qemu-5.2.0/configure --prefix=/opt/qemu-5.2.0
+mkdir qemu-build-${VERSION}
+cd qemu-build-${VERSION}
+../qemu-${VERSION}/configure --prefix=/opt/qemu-${VERSION}
 make -j$(nproc)
 make install
