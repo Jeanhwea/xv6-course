@@ -92,18 +92,24 @@
 
 * _init 堆栈调试
 当前内核态
-pgdir = cr3 = 0xdffe000
-ustack[] , len=3+32+1, addr=0x8dfffe00
+#+BEGIN_EXAMPLE
+  pgdir = cr3 = 0xdffe000
+  ustack[] , len=3+32+1, addr=0x8dfffe00
+#+END_EXAMPLE
 
-(gdb) xv-ps
-ptable.proc[0]: pid=1 state=4 name=init
-(gdb) x/8x $esp
-0x2fe4: 0xffffffff      0x00000001      0x00002ff0      0x00002ff8
-0x2ff4: 0x00000000      0x696e692f      0x00000074      Cannot access memory at address 0x3000
+_init 起始堆栈 dump
+#+BEGIN_EXAMPLE
+  (gdb) xv-ps
+  ptable.proc[0]: pid=1 state=4 name=init
+  (gdb) x/8x $esp
+  0x2fe4: 0xffffffff      0x00000001      0x00002ff0      0x00002ff8
+  0x2ff4: 0x00000000      0x696e692f      0x00000074      Cannot access memory at address 0x3000
+#+END_EXAMPLE
 
 目标 _init 虚拟地址空间
-pgdir  = 0x8dfbb000
 #+BEGIN_EXAMPLE
+  pgdir  = 0x8dfbb000
+
   0x3000 |--------------| <- sp
          | \0 \0 \0 t   |
          |  i n  i  /   | <- 0x2ff8
