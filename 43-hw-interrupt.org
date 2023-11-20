@@ -1,0 +1,101 @@
+#+TITLE: 中断
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-20 Mon>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+#+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
+
+
+* 中断产生
+1. 主板上的设备会产生中断, 常见的中断有
+   - 用户键盘输入
+   - 读写磁盘存储
+   - 时钟中断
+2. xv6 需要设置中断处理程序，来保证操作系统可以正常运行
+   - 中断处理流程和系统调用过程类似
+   - 大体流程是：主板硬件产生一个信号，我们对设备编程产生中断，然后 CPU 接受中断
+3. 可以理解中断是来自硬件的
+
+* PIC 中断
+1. PIC 早期单核中断处理单元
+   - 处理程序位于 picirq.c
+   - 早期单个 PIC 最多支持 8 个中断，受限与设备引脚数量
+     - 主 PIC: IRQ0 ~ IRQ7
+     - 从 PIC: IRQ8 ~ IRQ16
+   - inb/outb 指令配置主 PIC 产出 IRQ0 ~ IRQ7
+   - xv6 直接关闭 PIC
+2. 多核处理中断分为两个部分
+   - lapic
+   - ioapic
+3. Local APIC
+   - 本地 APIC, 位于单个 CPU 核心
+   - lapicinit
+   - 内存映射方式操作，而不是 inb/outb
+4. IO APIC
+   - I/O 系统中断
+   - 内存映射方式操作，而不是 inb/outb
+   - ioapicinit
+
+#+BEGIN_EXAMPLE
+  (qemu) info lapic
+  dumping local APIC state for CPU 0
+
+  LVT0     0x00010000 active-hi edge  masked                      Fixed  (vec 0)
+  LVT1     0x00010000 active-hi edge  masked                      Fixed  (vec 0)
+  LVTPC    0x00010000 active-hi edge  masked                      Fixed  (vec 0)
+  LVTERR   0x00000033 active-hi edge                              Fixed  (vec 51)
+  LVTTHMR  0x00010000 active-hi edge  masked                      Fixed  (vec 0)
+  LVTT     0x00020020 active-hi edge                 periodic     Fixed  (vec 32)
+  Timer    DCR=0xb (divide by 1) initial_count = 10000000 current_count = 7172266
+  SPIV     0x0000013f APIC enabled, focus=off, spurious vec 63
+  ICR      0x00088500 physical level de-assert all-self
+  ICR2     0x00000000
+  ESR      0x00000000
+  ISR      (none)
+  IRR      32
+
+  APR 0x00 TPR 0x00 DFR 0x0f LDR 0x00 PPR 0x00
+  (qemu) info pic
+  pic1: irr=40 imr=ff isr=00 hprio=0 irq_base=70 rr_sel=0 elcr=0c fnm=0
+  pic0: irr=15 imr=ff isr=00 hprio=0 irq_base=08 rr_sel=0 elcr=00 fnm=0
+  ioapic0: ver=0x20 id=0x00 sel=0x00
+    pin 0  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 1  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 2  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 3  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 4  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 5  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 6  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 7  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 8  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 9  0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 10 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 11 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 12 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 13 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 14 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 15 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 16 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 17 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 18 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 19 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 20 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 21 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 22 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    pin 23 0x0000000000010000 dest=0 vec=0   active-hi edge  masked fixed  physical
+    IRR      (none)
+    Remote IRR (none)
+  (qemu)
+#+END_EXAMPLE
+
+* 中断初始化
+1. Local APIC 初始化 lapicinit
+2. 时钟中断 [[file:../../study/os/xv6-public/lapic.c::lapicw(TICR, 10000000);]]
+3. PIC 关闭 [[file:../../study/os/xv6-public/picirq.c::picinit(void)]]
+4. IO APIC 初始化 ioapicinit
+5. console 初始化 consoleinit
+6. 键盘中断 [[file:../../study/os/xv6-public/console.c::ioapicenable(IRQ_KBD, 0);]]
+7. UART 串口通信协议 uartinit
+   - COM1 设置: baud, data bits, stop bit, parity
+   - 开启 COM1
