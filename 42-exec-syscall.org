@@ -1,4 +1,4 @@
-#+TITLE: 系统调用流程分析
+#+TITLE: exec 系统调用流程分析
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-17 Fri>
