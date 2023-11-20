@@ -28,7 +28,7 @@ mkdir qemu-build-${VERSION}
 cd qemu-build-${VERSION}
 
 CFG_EXTRA=""
-if [ X"$VERSION" == "2.3.0"]; then
+if [ X"$VERSION" == X"2.3.0" ]; then
     CFG_EXTRA="--python=/usr/bin/python2"
 fi
 
