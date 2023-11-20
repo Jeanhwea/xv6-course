@@ -26,6 +26,15 @@ rm -rf qemu-*
 tar xvf $FILEGZ
 mkdir qemu-build-${VERSION}
 cd qemu-build-${VERSION}
-../qemu-${VERSION}/configure --prefix=/opt/qemu-${VERSION}
+
+CFG_EXTRA=""
+if [ X"$VERSION" == "2.3.0"]; then
+    CFG_EXTRA="--python=/usr/bin/python2"
+fi
+
+echo "configure"
+../qemu-${VERSION}/configure --prefix=/opt/qemu-${VERSION} $CFG_EXTRA
+
+echo "make"
 make -j$(nproc)
 make install
