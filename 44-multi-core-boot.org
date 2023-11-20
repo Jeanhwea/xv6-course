@@ -1,7 +1,7 @@
 #+TITLE: 多处理器启动逻辑
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
-#+DATE: <2023-11-08 Wed>
+#+DATE: <2023-11-20 Mon>
 #+STARTUP: overview num indent
 #+OPTIONS: ^:nil
 
