@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# VERSION=5.2.0
-VERSION=2.3.0
+VERSION=5.2.0
+# VERSION=2.3.0
 PREFIX=/opt/qemu
 FILEGZ="$HOME/down/qemu-${VERSION}.tar.xz"
 
