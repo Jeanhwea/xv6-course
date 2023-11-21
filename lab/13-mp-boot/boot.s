@@ -46,7 +46,6 @@ bsp_start32:
 	;; Step 2 - Send INIT to other APs, bit(9-10) 101=INIT
 	mov	eax, 0x000c4500
 	mov	[APIC_ICR], eax
-	; mov	eax, [APIC_ID]	; barrier
 
 	;; Step 3 - Send STARTUP to other APs, bit(9-10) 110=STARTUP, bit(0-7) vector
 	mov	eax, 0x000c4600 | (PT_AP_ENTRY >> 12)

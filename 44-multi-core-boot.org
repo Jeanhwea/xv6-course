@@ -9,6 +9,9 @@
 * 多处理器启动流程
 1. BSP Bootstrap Processor
 2. AP Application Processor
+3. BSP 作为主启动首先启动
+4. BSP 设置好基础环境后，再拉起 AP
+5. AP 设置各自的环境，最后达到所有处理器都启动
 
 * mpinit 信息收集
 mp.h 配置头文件 [[file:../../study/os/xv6-public/mp.h]]
