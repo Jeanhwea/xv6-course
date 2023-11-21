@@ -1,10 +1,11 @@
 QEMU   = qemu-system-i386
 BOCHS  = bochs
+N      = 4
 
 all: boot.bin
 
 qemu: boot.bin
-	$(QEMU) -smp 4 -m 1M -boot a -fda boot.bin
+	$(QEMU) -smp $(N) -m 1M -boot a -fda boot.bin
 
 qemu-debug: boot.bin
 	$(QEMU) -s -S -smp 1 -m 1M -boot a -fda boot.bin
