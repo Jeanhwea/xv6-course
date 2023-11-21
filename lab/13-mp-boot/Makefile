@@ -14,7 +14,7 @@ bochs: boot.bin
 	$(BOCHS) -q -f bochsrc.bxrc
 
 boot.bin: boot.s
-	nasm -f bin -o boot.bin boot.s
+	nasm -f bin -l boot.lst -o boot.bin boot.s
 
 .PHONY: clean qemu
 clean:
