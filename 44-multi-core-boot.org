@@ -4,6 +4,7 @@
 #+DATE: <2023-11-20 Mon>
 #+STARTUP: overview num indent
 #+OPTIONS: ^:nil
+#+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 * 多处理器启动流程
 1. BSP Bootstrap Processor
