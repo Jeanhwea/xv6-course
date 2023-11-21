@@ -7,5 +7,31 @@
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 
-* 磁盘
-1. 磁盘是
+* 磁盘驱动
+1. xv6 使用的时 IDE 磁盘驱动，有别于目前比较流行的 SCSI 和 SATA 盘
+2. 磁盘控制器初始化 ideinit
+   - ioapicenable 开启 IDE 磁盘，但是只打开最后一个处理器中断 (ncpu-1)
+   - idewait 获取 busy 状态位 (IDE_BSY), 如果是 IDE_READY 表示磁盘就绪
+3. 读写 IDE 磁盘 idestart, 根据标志位更新一个锁住的缓冲区
+   - 如果 B_DIRTY 被设置，iderw 将缓冲区的内容写到磁盘
+   - 如果 B_VALID 没有被设置，iderw 从磁盘中读出数据到缓冲区
+4. struct buf 表示缓存的数据结构 [[file:../../study/os/xv6-public/buf.h]]
+   - dev 设备号
+   - blockno 块号
+   - data 数据缓存, BSIZE=512
+   - 1 buf = 1 sector, 真实情景中怡宝 1 buf = 多 sector
+   - flag 标记数据是否是最新的 B_VALID/B_DIRTY
+
+* 磁盘设计思路 iderw
+1. 磁盘的访问相对于 CPU 的指令计算速度来说非常慢
+2. ide 驱动维护一个 idequeue 的缓存队列
+3. 通过 iderw 来同步 idequeue 的队列到磁盘中
+4. iderw 将缓冲区 b 送到队列的末尾
+   - 如果这个缓冲区在队首，iderw 通过 idestart 将它送到磁盘上
+   - 否则，一个缓冲区被开始处理当且仅当它前面的缓冲区被处理完
+
+* 实际情况
+1. 想要完美的支持所有的设备需要投入大量的工作
+2. 这是因为各种各样的设备有各种各样的特性
+3. 设备和驱动之间的协议有时会很复杂
+4. 在很多操作系统当中，各种驱动合起来的代码数量要比系统内核的数量更多
