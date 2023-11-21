@@ -1,0 +1,9 @@
+#+TITLE: 答疑三
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-21 Tue>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+
+
+* 视频 33 中 swtch 中 bt 输出变化是为什么
