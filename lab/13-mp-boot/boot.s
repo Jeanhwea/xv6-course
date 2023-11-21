@@ -41,7 +41,6 @@ bsp_start32:
 	mov	eax, [APIC_SVR]
 	or	eax, 0x100	; APIC software enable
 	mov	[APIC_SVR], eax
-	; mov	eax, [APIC_ID]	; barrier
 
 	;; Step 2 - Send INIT to other APs, bit(9-10) 101=INIT
 	mov	eax, 0x000c4500
