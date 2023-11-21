@@ -53,6 +53,7 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
 * 答疑
 1. 12a 答疑一 [[file:12a-Q&A.org]]
 2. 34a 答疑二 [[file:34a-Q&A.org]]
+
 * 资源
 1. MIT 课程官网 [[https://pdos.csail.mit.edu/6.828/2018/][6.828]]
 2. x86 版本 [[https://github.com/mit-pdos/xv6-public][xv6-public]]
