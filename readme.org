@@ -42,7 +42,7 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
 - 中断管理
   1) [[file:41-intro-interrupt.org][中断初始化及调用流程]] | [[https://www.bilibili.com/video/BV14G411D74x][视频 41]]
   2) [[file:42-exec-syscall.org][exec系统调用流程分析]] | [[https://www.bilibili.com/video/BV1194y1H7Wt/][视频 42]]
-  3) [[file:43-hw-interrupt.org][中断及设备初始化]]
+  3) [[file:43-hw-interrupt.org][中断及设备初始化]] | [[https://www.bilibili.com/video/BV1XN411T7V7/][视频 43]]
   4) 多核处理器启动流程
   5) fork 系统调用
 - 其他主题
