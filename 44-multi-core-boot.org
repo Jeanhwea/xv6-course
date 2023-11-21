@@ -6,27 +6,13 @@
 #+OPTIONS: ^:nil
 
 * 多处理器启动流程
+1. BSP Bootstrap Processor
+2. AP Application Processor
 
 * mpinit 信息收集
 mp.h 配置头文件 [[file:../../study/os/xv6-public/mp.h]]
-#+BEGIN_EXAMPLE
-  $3 = {
-    signature = "PCMP",
-    length = 208,
-    version = 4 '\004',
-    checksum = 233 '\351',
-    product = "BOCHSCPU0.1         ",
-    oemtable = 0x0,
-    oemlength = 0,
-    entry = 19,
-    lapicaddr = 0xfee00000,
-    xlength = 0,
-    xchecksum = 0 '\000',
-    reserved = 0 '\000'
-  }
-#+END_EXAMPLE
+1. volatile uint *lapic
 
-* PIC 控制器
 参考 Intel64 手册 volume 3 - chapter 11 ADVANCED PROGRAMMABLE INTERRUPT CONTROLLER (APIC)
 
 1. CPU 需要路由中断到处理查询(handler)
