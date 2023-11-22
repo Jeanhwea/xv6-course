@@ -19,7 +19,7 @@
    - dev 设备号
    - blockno 块号
    - data 数据缓存, BSIZE=512
-   - 1 buf = 1 sector, 真实情景中怡宝 1 buf = 多 sector
+   - 1 buf = 1 sector, 真实情景中 1 buf = 多 sector
    - flag 标记数据是否是最新的 B_VALID/B_DIRTY
 
 * 磁盘设计思路 iderw
