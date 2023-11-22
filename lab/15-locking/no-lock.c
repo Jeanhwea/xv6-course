@@ -7,12 +7,13 @@
 #include <pthread.h>
 
 #define NUM_THREADS 5
+#define NUM_INCRESE 100000
 
 int count;
 
 void *run(void *t)
 {
-	for (int i = 0; i < 100000; ++i) {
+	for (int i = 0; i < NUM_INCRESE; ++i) {
 		count++;
 	}
 	pthread_exit(NULL);

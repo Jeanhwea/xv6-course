@@ -7,13 +7,14 @@
 #include <pthread.h>
 
 #define NUM_THREADS 5
+#define NUM_INCRESE 100000
 
 int count;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void *run(void *t)
 {
-	for (int i = 0; i < 100000; ++i) {
+	for (int i = 0; i < NUM_INCRESE; ++i) {
 		pthread_mutex_lock(&mutex);
 		count++;
 		pthread_mutex_unlock(&mutex);
