@@ -19,8 +19,8 @@ count 自增
 x86 汇编 CPU 执行流程分析
 1. Fetch Instruction
 2. Decode Instruction
-3. Execute
-4. Memory Access
+3. Memory Access
+4. Execute
 5. Write Back
 
 #+BEGIN_EXAMPLE
@@ -28,15 +28,15 @@ x86 汇编 CPU 执行流程分析
          -----------------------------
   CPU1:  |F  |   |   |   |   |   |   |
          |   |D  |   |   |   |   |   |
-         |   |   |E  |   |   |   |   |
-         |   |   |   |M  |   |   |   |
+         |   |   |M  |   |   |   |   |
+         |   |   |   |E  |   |   |   |
          |   |   |   |   |W  |   |   |
          |   |   |   |   |   |   |   |
          -----------------------------
   CPU2:  |   |F  |   |   |   |   |   |
          |   |   |D  |   |   |   |   |
-         |   |   |   |E  |   |   |   |
-         |   |   |   |   |M  |   |   |
+         |   |   |   |M  |   |   |   |
+         |   |   |   |   |E  |   |   |
          |   |   |   |   |   |W  |   |
          |   |   |   |   |   |   |   |
 #+END_EXAMPLE
