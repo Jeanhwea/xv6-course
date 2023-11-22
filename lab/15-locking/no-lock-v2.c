@@ -9,15 +9,12 @@
 #define NUM_THREADS 5
 #define NUM_INCRESE 100000
 
-int count = 0;
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+register int count = 0;
 
 void *run(void *t)
 {
 	for (int i = 0; i < NUM_INCRESE; ++i) {
-		pthread_mutex_lock(&mutex);
-		count++;
-		pthread_mutex_unlock(&mutex);
+		asm volatile("add $1, %0" : "=r"(count) : "0"(count));
 	}
 	pthread_exit(NULL);
 }
@@ -43,7 +40,5 @@ int main()
 
 	// print result
 	printf("Main: count=%d\n", count);
-
-	pthread_mutex_destroy(&mutex);
 	return 0;
 }
