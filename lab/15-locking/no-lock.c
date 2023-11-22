@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -7,7 +8,7 @@
 
 #define NUM_THREADS 5
 
-int count = 0;
+int count;
 
 void *run(void *t)
 {
@@ -24,22 +25,19 @@ int main()
 	int t;
 	void *result;
 
+	// create threads
 	for (t = 0; t < NUM_THREADS; t++) {
 		rc = pthread_create(&threads[t], NULL, run, (void *)t);
-		if (rc) {
-			printf("pthread_create() fails with code=%d\n", rc);
-			exit(-1);
-		}
+		assert(rc == 0);
 	}
 
+	// join threads
 	for (t = 0; t < NUM_THREADS; t++) {
 		rc = pthread_join(threads[t], &result);
-		if (rc) {
-			printf("pthread_join() fails with code=%d\n", rc);
-			exit(-1);
-		}
+		assert(rc == 0);
 	}
 
+	// print result
 	printf("Main: count=%d\n", count);
 	return 0;
 }
