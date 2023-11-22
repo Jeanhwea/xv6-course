@@ -7,11 +7,25 @@
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 * 多处理器启动流程
-1. BSP Bootstrap Processor
+1. BSP BootStrap Processor
+   - 主启动 core
 2. AP Application Processor
+   - 从启动 core
 3. BSP 作为主启动首先启动
+   - 跳转实模式
+   - 初始化
+   - 读取 AP 代码 jmp 语句
+     + 0x8000
 4. BSP 设置好基础环境后，再拉起 AP
+   - 开启 APIC
+   - INIT => APs
+     + 初始化 core
+   - STARTUP => APs
+     + AP 入口点 0x8000
+   - Print apicid RED
 5. AP 设置各自的环境，最后达到所有处理器都启动
+   - AP => 0x8000
+   - Print apicid(12) => 2 GREEN
 
 * mpinit 信息收集
 mp.h 配置头文件 [[file:../../study/os/xv6-public/mp.h]]
