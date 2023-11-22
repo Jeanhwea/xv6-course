@@ -1,0 +1,42 @@
+#+TITLE: 同步与锁
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-23 Thu>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+
+
+* 同步问题: 锁逻辑
+count 自增
+1. 无锁 [[file:lab/15-locking/no-lock.c]]
+2. 有锁 [[file:lab/15-locking/lock.c]]
+
+* 汇编指令执行简述
+#+BEGIN_SRC asm
+  inc $eax
+#+END_SRC
+
+x86 汇编 CPU 执行流程分析
+1. Fetch Instruction
+2. Decode Instruction
+3. Execute
+4. Memory Access
+5. Write Back
+
+#+BEGIN_EXAMPLE
+      t: 0   1   2   3   4   5   6
+         -----------------------------
+  CPU1:  |F  |   |   |   |   |   |   |
+         |   |D  |   |   |   |   |   |
+         |   |   |E  |   |   |   |   |
+         |   |   |   |M  |   |   |   |
+         |   |   |   |   |W  |   |   |
+         |   |   |   |   |   |   |   |
+         -----------------------------
+  CPU2:  |   |F  |   |   |   |   |   |
+         |   |   |D  |   |   |   |   |
+         |   |   |   |E  |   |   |   |
+         |   |   |   |   |M  |   |   |
+         |   |   |   |   |   |W  |   |
+         |   |   |   |   |   |   |   |
+#+END_EXAMPLE
