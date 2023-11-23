@@ -21,7 +21,20 @@ sched() 主要目的是要将进程上下文切换到 mycpu()->scheduler
 
 * 调度流程
 1. 获取 ptable.lock, 释放其他锁
-   - 这里保持 swtch 时, 进程 p 的 state 和 context 不会被修改
+   - 这里保证在调用 swtch 时, 进程 p 的 state 和 context 不会被修改
    - 释放其他锁确保在进程切换时不会出现死锁
 2. 修改 p->state = RUNNABLE
 3. 调用 sched()
+
+* kernel/user 状态切换点
+1. kernel thread 唯一让出 CPU 的执行点就是 ~sched()~
+2. 一旦 sched 让出 CPU 后续进入 kernel thread 的点在 ~scheduler()~ 函数的调度
+3. 这也是 swtch 的两个调用的地方
+
+* scheduler 中锁的使用
+1. 在遍历 ptable 是先获取 ptable.lock
+2. 如果没有可调度的进程 (RUNNABLE), 则 Round Robin 结束后释放锁
+3. 否则出现上下文切换 swtch
+   - 这时会在 forkret 中释放 ptable.lock 锁
+   - 后续如果进程调用 ~sched()~, 根据之前的推导则又持有锁
+   - 如此反复，不会出现死锁
