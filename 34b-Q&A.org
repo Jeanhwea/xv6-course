@@ -8,3 +8,5 @@
 
 * 视频 33 中 swtch 中 bt 输出变化是为什么
 ebp
+
+* 如何系统地学习 makefile 和 ld 链接脚本
