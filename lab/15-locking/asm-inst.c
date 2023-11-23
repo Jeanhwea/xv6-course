@@ -9,7 +9,7 @@
 #define NUM_THREADS 5
 #define NUM_INCRESE 100000
 
-register int count = 0;
+int count = 0;
 
 void *run(void *t)
 {

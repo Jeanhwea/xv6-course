@@ -44,7 +44,8 @@ x86 汇编 CPU 执行流程分析
 #+END_EXAMPLE
 
 * 锁 Lock
-Spin Lock
+Spin Lock 自旋锁
+
 [[file:../../study/os/xv6-public/spinlock.h]]
 #+BEGIN_SRC c
   // Mutual exclusion lock.
@@ -59,7 +60,7 @@ Spin Lock
   };
 #+END_SRC
 
-Sleep Lock
+Sleep Lock 睡眠锁
 [[file:../../study/os/xv6-public/sleeplock.h]]
 
 xv6 中的锁
