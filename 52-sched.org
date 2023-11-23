@@ -21,6 +21,7 @@ sched() 主要目的是要将进程上下文切换到 mycpu()->scheduler
 
 * 调度流程
 1. 获取 ptable.lock, 释放其他锁
-   - 这里保持 swtch 时, 进程 p 的上下文不会被修改
+   - 这里保持 swtch 时, 进程 p 的 state 和 context 不会被修改
+   - 释放其他锁确保在进程切换时不会出现死锁
 2. 修改 p->state = RUNNABLE
 3. 调用 sched()
