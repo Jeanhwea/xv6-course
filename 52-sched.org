@@ -37,4 +37,6 @@ sched() 主要目的是要将进程上下文切换到 mycpu()->scheduler
 3. 否则出现上下文切换 swtch
    - 这时会在 forkret 中释放 ptable.lock 锁
    - 后续如果进程调用 ~sched()~, 根据之前的推导则又持有锁
+     + 通常在 ~yield()~ 中获取
+     + 也有在 ~sleep()~ 中获取, 通过 spinlock 转换成 ptable.lock
    - 如此反复，不会出现死锁
