@@ -18,3 +18,9 @@ sched() 主要目的是要将进程上下文切换到 mycpu()->scheduler
    - 并且修改了 p->state 状态
    - 调用 sched() 来调度进程
 3. 传递 intena 位,因为 intena 是 thread 的属性，而非 CPU 的
+
+* 调度流程
+1. 获取 ptable.lock, 释放其他锁
+   - 这里保持 swtch 时, 进程 p 的上下文不会被修改
+2. 修改 p->state = RUNNABLE
+3. 调用 sched()
