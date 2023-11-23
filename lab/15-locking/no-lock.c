@@ -1,10 +1,11 @@
 #include <assert.h>
+#include <stdatomic.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <pthread.h>
 
 #define NUM_THREADS 5
 #define NUM_INCRESE 100000

@@ -40,7 +40,6 @@ int main()
 	}
 
 	// print result
-	// int c = atomic_load(&myAtomicInt);
 	printf("Main: count=%d\n", atomic_load(&count));
 	return 0;
 }
