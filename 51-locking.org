@@ -43,3 +43,8 @@ x86 汇编 CPU 执行流程分析
 #+END_EXAMPLE
 
 * 锁 Lock
+Spin Lock
+[[file:../../study/os/xv6-public/spinlock.h]]
+
+Sleep Lock
+[[file:../../study/os/xv6-public/sleeplock.h]]
