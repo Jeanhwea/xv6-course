@@ -4,6 +4,7 @@
 #+DATE: <2023-11-23 Thu>
 #+STARTUP: overview num indent
 #+OPTIONS: ^:nil
+#+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 
 * 数据竞争
@@ -45,6 +46,40 @@ x86 汇编 CPU 执行流程分析
 * 锁 Lock
 Spin Lock
 [[file:../../study/os/xv6-public/spinlock.h]]
+#+BEGIN_SRC c
+  // Mutual exclusion lock.
+  struct spinlock {
+    uint locked;       // Is the lock held?
+
+    // For debugging:
+    char *name;        // Name of lock.
+    struct cpu *cpu;   // The cpu holding the lock.
+    uint pcs[10];      // The call stack (an array of program counters)
+                       // that locked the lock.
+  };
+#+END_SRC
 
 Sleep Lock
 [[file:../../study/os/xv6-public/sleeplock.h]]
+
+xv6 中的锁
+#+BEGIN_SRC sh :results output
+  rg initlock $PWD
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+/data/gitana/study/os/xv6-public/kalloc.c:  initlock(&kmem.lock, "kmem");
+/data/gitana/study/os/xv6-public/spinlock.c:initlock(struct spinlock *lk, char *name)
+/data/gitana/study/os/xv6-public/fs.c:  initlock(&icache.lock, "icache");
+/data/gitana/study/os/xv6-public/proc.c:  initlock(&ptable.lock, "ptable");
+/data/gitana/study/os/xv6-public/sleeplock.c:  initlock(&lk->lk, "sleep lock");
+/data/gitana/study/os/xv6-public/defs.h:void            initlock(struct spinlock*, char*);
+/data/gitana/study/os/xv6-public/console.c:  initlock(&cons.lock, "console");
+/data/gitana/study/os/xv6-public/bio.c:  initlock(&bcache.lock, "bcache");
+/data/gitana/study/os/xv6-public/ide.c:  initlock(&idelock, "ide");
+/data/gitana/study/os/xv6-public/pipe.c:  initlock(&p->lock, "pipe");
+/data/gitana/study/os/xv6-public/file.c:  initlock(&ftable.lock, "ftable");
+/data/gitana/study/os/xv6-public/log.c:  initlock(&log.lock, "log");
+/data/gitana/study/os/xv6-public/trap.c:  initlock(&tickslock, "time");
+#+end_example
