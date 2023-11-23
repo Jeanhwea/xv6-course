@@ -22,6 +22,31 @@
    - 1 buf = 1 sector, 真实情景中 1 buf = 多 sector
    - flag 标记数据是否是最新的 B_VALID/B_DIRTY
 
+
+查看 IDE 控制器
+#+BEGIN_EXAMPLE
+  (qemu) info pci
+    Bus  0, device   0, function 0:
+      Host bridge: PCI device 8086:1237
+        PCI subsystem 1af4:1100
+        id ""
+    Bus  0, device   1, function 0:
+      ISA bridge: PCI device 8086:7000
+        PCI subsystem 1af4:1100
+        id ""
+    Bus  0, device   1, function 1:
+      IDE controller: PCI device 8086:7010
+        PCI subsystem 1af4:1100
+        BAR4: I/O at 0xc040 [0xc04f].
+        id ""
+    Bus  0, device   1, function 3:
+      Bridge: PCI device 8086:7113
+        PCI subsystem 1af4:1100
+        IRQ 9, pin A
+        id ""
+  ....
+#+END_EXAMPLE
+
 * 磁盘设计思路 iderw
 1. 磁盘的访问相对于 CPU 的指令计算速度来说非常慢
 2. ide 驱动维护一个 idequeue 的缓存队列
