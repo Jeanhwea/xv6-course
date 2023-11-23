@@ -61,35 +61,35 @@ x86 汇编 CPU 执行流程分析
 #+END_SRC
 
 #+BEGIN_SRC sh :results output :exports both
-  rg initlock $PWD | sort
+  rg -n initlock $PWD | sort
 #+END_SRC
 
 #+RESULTS:
 #+begin_example
-/data/gitana/study/os/xv6-public/bio.c:  initlock(&bcache.lock, "bcache");
-/data/gitana/study/os/xv6-public/console.c:  initlock(&cons.lock, "console");
-/data/gitana/study/os/xv6-public/defs.h:void            initlock(struct spinlock*, char*);
-/data/gitana/study/os/xv6-public/file.c:  initlock(&ftable.lock, "ftable");
-/data/gitana/study/os/xv6-public/fs.c:  initlock(&icache.lock, "icache");
-/data/gitana/study/os/xv6-public/ide.c:  initlock(&idelock, "ide");
-/data/gitana/study/os/xv6-public/kalloc.c:  initlock(&kmem.lock, "kmem");
-/data/gitana/study/os/xv6-public/log.c:  initlock(&log.lock, "log");
-/data/gitana/study/os/xv6-public/pipe.c:  initlock(&p->lock, "pipe");
-/data/gitana/study/os/xv6-public/proc.c:  initlock(&ptable.lock, "ptable");
-/data/gitana/study/os/xv6-public/sleeplock.c:  initlock(&lk->lk, "sleep lock");
-/data/gitana/study/os/xv6-public/spinlock.c:initlock(struct spinlock *lk, char *name)
-/data/gitana/study/os/xv6-public/trap.c:  initlock(&tickslock, "time");
+/data/gitana/study/os/xv6-public/bio.c:43:  initlock(&bcache.lock, "bcache");
+/data/gitana/study/os/xv6-public/console.c:289:  initlock(&cons.lock, "console");
+/data/gitana/study/os/xv6-public/defs.h:130:void            initlock(struct spinlock*, char*);
+/data/gitana/study/os/xv6-public/file.c:22:  initlock(&ftable.lock, "ftable");
+/data/gitana/study/os/xv6-public/fs.c:176:  initlock(&icache.lock, "icache");
+/data/gitana/study/os/xv6-public/ide.c:55:  initlock(&idelock, "ide");
+/data/gitana/study/os/xv6-public/kalloc.c:34:  initlock(&kmem.lock, "kmem");
+/data/gitana/study/os/xv6-public/log.c:60:  initlock(&log.lock, "log");
+/data/gitana/study/os/xv6-public/pipe.c:37:  initlock(&p->lock, "pipe");
+/data/gitana/study/os/xv6-public/proc.c:26:  initlock(&ptable.lock, "ptable");
+/data/gitana/study/os/xv6-public/sleeplock.c:16:  initlock(&lk->lk, "sleep lock");
+/data/gitana/study/os/xv6-public/spinlock.c:13:initlock(struct spinlock *lk, char *name)
+/data/gitana/study/os/xv6-public/trap.c:26:  initlock(&tickslock, "time");
 #+end_example
 
 ** Sleep Lock 睡眠锁
 [[file:../../study/os/xv6-public/sleeplock.h]]
 
 #+BEGIN_SRC sh :results output :exports both
-  rg initsleeplock $PWD | sort
+  rg -n initsleeplock $PWD | sort
 #+END_SRC
 
 #+RESULTS:
-: /data/gitana/study/os/xv6-public/bio.c:    initsleeplock(&b->lock, "buffer");
-: /data/gitana/study/os/xv6-public/defs.h:void            initsleeplock(struct sleeplock*, char*);
-: /data/gitana/study/os/xv6-public/fs.c:    initsleeplock(&icache.inode[i].lock, "inode");
-: /data/gitana/study/os/xv6-public/sleeplock.c:initsleeplock(struct sleeplock *lk, char *name)
+: /data/gitana/study/os/xv6-public/bio.c:51:    initsleeplock(&b->lock, "buffer");
+: /data/gitana/study/os/xv6-public/defs.h:139:void            initsleeplock(struct sleeplock*, char*);
+: /data/gitana/study/os/xv6-public/fs.c:178:    initsleeplock(&icache.inode[i].lock, "inode");
+: /data/gitana/study/os/xv6-public/sleeplock.c:14:initsleeplock(struct sleeplock *lk, char *name)
