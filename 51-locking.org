@@ -6,7 +6,7 @@
 #+OPTIONS: ^:nil
 
 
-* 同步问题: 锁逻辑
+* 数据竞争
 count 自增
 1. 无锁 [[file:lab/15-locking/no-lock.c]]
 2. 有锁 [[file:lab/15-locking/lock.c]]
@@ -41,3 +41,5 @@ x86 汇编 CPU 执行流程分析
          |   |   |   |   |   |   |   |
          -----------------------------
 #+END_EXAMPLE
+
+* 锁 Lock
