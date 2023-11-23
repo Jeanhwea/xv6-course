@@ -6,22 +6,35 @@
 #+OPTIONS: ^:nil
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
+* 说明
+1. driver hardware
+2. disk/memory/mouse/keyboard
 
-* 磁盘驱动
-1. xv6 使用的时 IDE 磁盘驱动，有别于目前比较流行的 SCSI 和 SATA 盘
-2. 磁盘控制器初始化 ideinit
-   - ioapicenable 开启 IDE 磁盘，但是只打开最后一个处理器中断 (ncpu-1)
-   - idewait 获取 busy 状态位 (IDE_BSY), 如果是 IDE_READY 表示磁盘就绪
-3. 读写 IDE 磁盘 idestart, 根据标志位更新一个锁住的缓冲区
-   - 如果 B_DIRTY 被设置，iderw 将缓冲区的内容写到磁盘
-   - 如果 B_VALID 没有被设置，iderw 从磁盘中读出数据到缓冲区
-4. struct buf 表示缓存的数据结构 [[file:../../study/os/xv6-public/buf.h]]
-   - dev 设备号
-   - blockno 块号
-   - data 数据缓存, BSIZE=512
-   - 1 buf = 1 sector, 真实情景中 1 buf = 多 sector
-   - flag 标记数据是否是最新的 B_VALID/B_DIRTY
-
+* 思路
+1. idequeue 缓冲队列
+   - 磁盘慢, r/w 发送请求
+2. 响应, 中断响应函数
+3. struct buf 表示一块数据
+   1) prev/next 双向链表
+   2) qnext 请求缓冲队列
+   3) data
+      + BSIZE 512
+      + xv6 1 data = 1 sector, 1 data = N sector
+   4) sector 扇区
+      + SECTOR_SIZE 512
+4. iderw
+   - idestart 发送磁盘请求 r/w
+   - r/w
+     - flag dirty write
+     - otherwise  read
+5. ideintr
+   - 中断响应 insl 0x1f0
+6. read
+   - idestart read_cmd
+   - ideintr  insl 0x1f0
+7. write
+   - idestart write_cmd && outsl 0x1f0
+   - ideintr  b->flags &= ~B_DIRTY
 
 查看 IDE 控制器
 #+BEGIN_EXAMPLE
