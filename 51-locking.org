@@ -45,7 +45,6 @@ x86 汇编 CPU 执行流程分析
 
 * 锁 Lock
 ** Spin Lock 自旋锁
-
 [[file:../../study/os/xv6-public/spinlock.h]]
 #+BEGIN_SRC c
   // Mutual exclusion lock.
