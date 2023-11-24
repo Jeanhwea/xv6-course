@@ -9,8 +9,8 @@
 
 * 数据竞争
 count 自增
-1. 无锁 [[file:lab/15-locking/no-lock.c]]
-2. 有锁 [[file:lab/15-locking/lock.c]]
+1. 无锁
+2. 有锁
 
 * 汇编指令执行简述
 #+BEGIN_SRC asm
@@ -81,6 +81,9 @@ x86 汇编 CPU 执行流程分析
 /data/gitana/study/os/xv6-public/trap.c:26:  initlock(&tickslock, "time");
 #+end_example
 
+1. acquire 获取锁
+2. release 释放锁
+
 ** Sleep Lock 睡眠锁
 [[file:../../study/os/xv6-public/sleeplock.h]]
 
@@ -99,7 +102,7 @@ Sleep Lock 死锁场景
 #+BEGIN_EXAMPLE
   S: Sleep Lock
   X: Spin Lock
-  a: aquire
+  a: acquire
   r: release
 
   TIME
