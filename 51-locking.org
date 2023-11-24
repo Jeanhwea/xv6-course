@@ -93,3 +93,27 @@ x86 汇编 CPU 执行流程分析
 : /data/gitana/study/os/xv6-public/defs.h:139:void            initsleeplock(struct sleeplock*, char*);
 : /data/gitana/study/os/xv6-public/fs.c:178:    initsleeplock(&icache.inode[i].lock, "inode");
 : /data/gitana/study/os/xv6-public/sleeplock.c:14:initsleeplock(struct sleeplock *lk, char *name)
+
+
+Sleep Lock 死锁场景
+#+BEGIN_EXAMPLE
+  S: Sleep Lock
+  X: Spin Lock
+  a: aquire
+  r: release
+
+  TIME
+  --------------------------- long time -------------------------------->
+  T1:(S)| (S/a)  |    (S/r)             (S/a)                   |
+     (X)|        |                         (X/a)                |
+        |        |                           x                  |
+        |        |                           x                  |
+        |        |                           x                  |
+        |        |                           x                  |
+  T2:(S)|        |                           (S/a)              |
+     (X)|        |(X/a)                      x                  |
+        |        |                           x                  |
+        |        |                           x                  |
+        |        |                           x                  |
+        |        |                           x                  |
+#+END_EXAMPLE
