@@ -7,11 +7,20 @@
 
 
 * 如何系统地学习 makefile 和 ld 链接脚本
-1. make https://www.gnu.org/software/make/
-2. binutils https://sourceware.org/binutils/docs/
+1. GNU project by RMS(author)
+2. make https://www.gnu.org/software/make/
+3. binutils https://sourceware.org/binutils/docs/
 
 * 视频 33 中 swtch 中 bt 输出变化是为什么
-ebp
+x86 ebp
+
+#+BEGIN_EXAMPLE
+           |   ... ...    |
+           | return addr  |
+    ebp -> | prev ebp     |
+           |    ... ...   |
+    esp -> |    ... ...   |
+#+END_EXAMPLE
 
 * 视频 42 中 initcode 系统调用 exec 如何切换到 _init 地址空间
 1. initcode 到 _init 的切换流程
