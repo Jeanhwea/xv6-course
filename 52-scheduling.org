@@ -38,7 +38,7 @@ sched() 主要目的是要将进程上下文切换到 mycpu()->scheduler
 1. yield 获取 ptable.lock
 2. 然后通过调用 sched() 主动释放 CPU
 
-* 调度中锁的使用
+* 调度中锁循环
 1. 在遍历 ptable 是先获取 ptable.lock
 2. 如果没有可调度的进程 (RUNNABLE), 则 Round Robin 结束后释放锁
 3. 否则出现上下文切换 swtch
