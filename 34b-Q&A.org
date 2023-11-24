@@ -13,4 +13,5 @@
 * 视频 33 中 swtch 中 bt 输出变化是为什么
 ebp
 
-* 视频 42 中 initcode 系统调用 exec 如何切换到 _init
+* 视频 42 中 initcode 系统调用 exec 如何切换到 _init 地址空间
+1. initcode 到 _init 的切换流程
