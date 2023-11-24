@@ -27,3 +27,8 @@
    - 获取 p->lock
    - 尝试读取数据 p->data, 写入 addr 处
    - 唤醒写进程
+3. pipe 实现中使用不同的读写 chan ,
+   - 读 chan 是 p->nread
+   - 写 chan 是 p->nwrite
+   - 目的是提高效率
+   - 防止 for 循环中造成读写进程等待同一个 chan 的争抢
