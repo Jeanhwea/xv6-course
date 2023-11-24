@@ -32,6 +32,12 @@ sched() 主要目的是要将进程上下文切换到 mycpu()->scheduler
 2. 一旦 sched 让出 CPU 后续进入 kernel thread 的点在 ~scheduler()~ 函数的调度
 3. 这也是 swtch 的两个调用的地方
 
+** yield 主动让出 CPU
+[[file:../../study/os/xv6-public/proc.c::yield(void)]]
+
+1. yield 获取 ptable.lock
+2. 然后通过调用 sched() 主动释放 CPU
+
 * 调度中锁的使用
 1. 在遍历 ptable 是先获取 ptable.lock
 2. 如果没有可调度的进程 (RUNNABLE), 则 Round Robin 结束后释放锁
