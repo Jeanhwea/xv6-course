@@ -52,7 +52,12 @@ sched() 主要目的是要将进程上下文切换到 mycpu()->scheduler
 sleep 和 wakeup 是一对系统调用，其工作方式如下
 1. sleep 设置 p->state = SLEEPING, 然后调用 sched 释放 CPU
    - 让进程在任意的 chan 上休眠，称之为等待队列（wait channel）
+     + chan 一般就是资源的内核地址
+     + 用于唤醒时查找到对于 chan 上的进程, Multiplexing
+   - sleep 需要设置一个等待的锁 lk
+     + 锁交换 lk <-> ptable.lock
+     + 如果 lk == ptable.lock 跳过锁交换过程
    - sleep 让调用进程休眠，释放所占 CPU
-3. wakeup(chan) 则唤醒在 chan 上休眠的所有进程
+2. wakeup(chan) 则唤醒在 chan 上休眠的所有进程
    - 让他们的 sleep 调用返回
    - 如果没有进程在 chan 上等待唤醒，wakeup 就什么也不做
