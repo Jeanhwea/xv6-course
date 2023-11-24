@@ -22,5 +22,89 @@ x86 ebp
     esp -> |    ... ...   |
 #+END_EXAMPLE
 
+frame 0:
+scheduler ebp=0x80115488
+#+BEGIN_EXAMPLE
+           | ... ...    |
+           | 0x8010303f |
+    ebp -> | 0x801154a8 | 0x80115488
+           |  ... ...   |
+    esp -> |  ... ...   |
+#+END_EXAMPLE
+
+frame 1:
+mpmain ebp=0x80115488
+#+BEGIN_EXAMPLE
+           | ... ...    |
+           | 0x8010318c |
+    ebp -> | 0x801154c8 | 0x801154a8
+           |  ... ...   |
+    esp -> |  ... ...   |
+#+END_EXAMPLE
+
+frame 2:
+main ebp=0x80115488
+#+BEGIN_EXAMPLE
+           | ... ...    |
+           | 0x00000000 |
+    ebp -> | 0x00007bf8 | 0x801154c8
+           |  ... ...   |
+    esp -> |  ... ...   |
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+(gdb) backtrace
+#0  scheduler () at proc.c:324
+#1  0x8010303f in mpmain () at main.c:57
+#2  0x8010318c in main () at main.c:37
+#+END_EXAMPLE
+
+违反 x86 call convention
+#+BEGIN_EXAMPLE
+  (gdb) bt
+  #0  swtch () at swtch.S:25
+  #1  0x00000000 in ?? ()
+  Backtrace stopped: previous frame inner to this frame (corrupt stack?)
+  (gdb) p/x $esp
+  $3 = 0x8dffff9c
+  (gdb) p/x $ebp
+  $4 = 0x80115488
+#+END_EXAMPLE
+
 * 视频 42 中 initcode 系统调用 exec 如何切换到 _init 地址空间
 1. initcode 到 _init 的切换流程
+2. 切换到 0x0
+#+BEGIN_EXAMPLE
+(gdb) bt
+#0  exec (path=0x1c "", argv=0x8dfffed0) at exec.c:104
+#1  0x801055aa in sys_exec () at sysfile.c:418
+#2  0x80104a89 in syscall () at syscall.c:139
+#3  0x80105aad in trap (tf=0x8dffffb4) at trap.c:42
+#4  0x8010584f in alltraps () at trapasm.S:20
+#+END_EXAMPLE
+
+alltraps 里面的 通过汇编执行下一条指令来
+#+BEGIN_SRC asm
+    pushl %esp
+    call trap
+    addl $4, %esp
+
+    # Return falls through to trapret...
+  .globl trapret
+  trapret:
+    popal
+    popl %gs
+    popl %fs
+    popl %es
+    popl %ds
+    addl $0x8, %esp  # trapno and errcode
+    iret
+#+END_SRC
+
+esp => 0x00000000
+next PC = 0
+#+BEGIN_EXAMPLE
+  (gdb) x/4x $esp
+  0x8dffffec:     0x00000000      0x0000001b      0x00000202      0x00002fe4
+  (gdb)
+#+END_EXAMPLE
