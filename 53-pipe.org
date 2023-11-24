@@ -1,0 +1,29 @@
+#+TITLE: 管道
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-24 Fri>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+#+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
+
+
+* struct pipe
+[[file:../../study/os/xv6-public/pipe.c::struct spinlock lock;]]
+
+管道结构体数据结构定义
+1. p->lock 锁
+2. 读写的文件描述符: readopen, writeopen
+3. 读写字节数: nread, nwrite
+4. data 数据缓冲器, 循环缓冲
+   - 空 nwrite == nread
+   - 满 nwrite == nread+PIPESIZE
+
+* 管道读写
+1. pipewrite
+   - 获取 p->lock
+   - 尝试将 addr 的数据写入 p->data
+   - 唤醒读进程
+2. piperead
+   - 获取 p->lock
+   - 尝试读取数据 p->data, 写入 addr 处
+   - 唤醒写进程
