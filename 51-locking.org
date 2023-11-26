@@ -14,34 +14,49 @@ count 自增
 
 * 汇编指令执行简述
 #+BEGIN_SRC asm
-  inc $eax
+  add $0x1,%edx
+  inc $edx
 #+END_SRC
 
-x86 汇编 CPU 执行流程分析
-1. Fetch Instruction
-2. Decode Instruction
-3. Memory Access
-4. Execute
-5. Write Back
+组成原理 / 体系结构
 
+x86 汇编 CPU 执行流程分析
+1. Fetch Instruction 取指令
+2. Decode Instruction 解码
+3. Memory Access 访问内存
+4. Execute 执行
+5. Write Back 回写
+
+1. 每个操作 一个指令周期
+2. 流水线 pipeline
+
+count = 4
+
+t3: count=4
+t4: count=4 CPU1 写入
+t5: count=5 CPU2 写入
+t6: count=5
+...
 #+BEGIN_EXAMPLE
       t: 0   1   2   3   4   5   6
          -----------------------------
   CPU1:  |F  |   |   |   |   |   |   |
          |   |D  |   |   |   |   |   |
-         |   |   |M  |   |   |   |   |
-         |   |   |   |E  |   |   |   |
-         |   |   |   |   |W  |   |   |
+         |   |   |M/4|   |   |   |   |
+         |   |   |   |E/5|   |   |   |
+         |   |   |   |   |W/5|   |   |
          |   |   |   |   |   |   |   |
          -----------------------------
   CPU2:  |   |F  |   |   |   |   |   |
          |   |   |D  |   |   |   |   |
-         |   |   |   |M  |   |   |   |
-         |   |   |   |   |E  |   |   |
-         |   |   |   |   |   |W  |   |
+         |   |   |   |M/4|   |   |   |
+         |   |   |   |   |E/5|   |   |
+         |   |   |   |   |   |W/5|   |
          |   |   |   |   |   |   |   |
          -----------------------------
 #+END_EXAMPLE
+
+- 指令不是原子的
 
 * 锁 Lock
 ** Spin Lock 自旋锁
