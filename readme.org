@@ -46,7 +46,7 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
   4) [[file:44-multi-core-boot.org][多核处理器启动流程]] | [[https://www.bilibili.com/video/BV1Kb4y1u7zg/][视频 44]]
   5) [[file:45-disk-driver.org][磁盘驱动]] | [[https://www.bilibili.com/video/BV1nC4y1P7yh/][视频 45]]
 - 锁与调度
-  1) [[file:51-locking.org][同步与锁]]
+  1) [[file:51-locking.org][同步与锁]] | [[https://www.bilibili.com/video/BV1Lc411Q7Wr/][视频 51]]
   2) 调度初探
   3) 调度再谈
 - 文件系统
