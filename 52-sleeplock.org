@@ -1,0 +1,44 @@
+#+TITLE: sleeplock 与死锁
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-26 Sun>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+#+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
+
+* Sleep Lock 睡眠锁
+[[file:../../study/os/xv6-public/sleeplock.h]]
+
+#+BEGIN_SRC sh :results output :exports both
+  rg -n initsleeplock $PWD | sort
+#+END_SRC
+
+#+RESULTS:
+: /data/gitana/study/os/xv6-public/bio.c:51:    initsleeplock(&b->lock, "buffer");
+: /data/gitana/study/os/xv6-public/defs.h:139:void            initsleeplock(struct sleeplock*, char*);
+: /data/gitana/study/os/xv6-public/fs.c:178:    initsleeplock(&icache.inode[i].lock, "inode");
+: /data/gitana/study/os/xv6-public/sleeplock.c:14:initsleeplock(struct sleeplock *lk, char *name)
+
+
+Sleep Lock 死锁场景
+#+BEGIN_EXAMPLE
+  S: Sleep Lock
+  X: Spin Lock
+  a: acquire
+  r: release
+
+  TIME
+  --------------------------- Long Time --------------------------->
+  T1:(S)| (S/a)  |    (S/r)      ...       (S/a)           |
+     (X)|        |               ...          (X/a)        |
+        |        |               ...            x          |
+        |        |               ...            x          |
+        |        |               ...            x          |
+        |        |               ...            x          |
+  T2:(S)|        |               ...            (S/a)      |
+     (X)|        |(X/a)          ...            x          |
+        |        |               ...            x          |
+        |        |               ...            x          |
+        |        |               ...            x          |
+        |        |               ...            x          |
+#+END_EXAMPLE
