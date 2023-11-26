@@ -33,7 +33,7 @@ x86 汇编 CPU 执行流程分析
 count = 4
 
 t3: count=4
-t4: count=4 CPU1 写入
+t4: count=5 CPU1 写入
 t5: count=5 CPU2 写入
 t6: count=5
 ...
