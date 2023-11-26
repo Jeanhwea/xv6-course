@@ -6,6 +6,11 @@
 #+OPTIONS: ^:nil
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
+* Spin Lock 回顾
+1. acquire
+2. release
+3. 并发编程
+
 * Sleep Lock 睡眠锁
 [[file:../../study/os/xv6-public/sleeplock.h]]
 
@@ -19,8 +24,7 @@
 : /data/gitana/study/os/xv6-public/fs.c:178:    initsleeplock(&icache.inode[i].lock, "inode");
 : /data/gitana/study/os/xv6-public/sleeplock.c:14:initsleeplock(struct sleeplock *lk, char *name)
 
-
-Sleep Lock 死锁场景
+* Sleep Lock 死锁场景
 #+BEGIN_EXAMPLE
   S: Sleep Lock
   X: Spin Lock
