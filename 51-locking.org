@@ -57,6 +57,31 @@ t6: count=5
 #+END_EXAMPLE
 
 - 指令不是原子的
+- lock 在 x86 原子
+- atomic instruction
+  #+BEGIN_EXAMPLE
+     lock addl $0x1,0x0(%eax)
+  #+END_EXAMPLE
+
+  lock
+#+BEGIN_EXAMPLE
+      t: 0   1   2   3   4   5   6
+         -----------------------------
+  CPU1:  |F  |   |   |   |   |   |   |
+         |   |D  |   |   |   |   |   |
+         |   |   |M/4|   |   |   |   |
+         |   |   |   |E/5|   |   |   |
+         |   |   |   |   |W/5|   |   |
+         |   |   |   |   |   |   |   |
+         -----------------------------
+  CPU2:  |   |   |   |   |   |F  |   |   |   |   |   |
+         |   |   |   |   |   |   |D  |   |   |   |   |
+         |   |   |   |   |   |   |   |M/4|   |   |   |
+         |   |   |   |   |   |   |   |   |E/5|   |   |
+         |   |   |   |   |   |   |   |   |   |W/5|   |
+         |   |   |   |   |   |   |   |   |   |   |   |
+         -----------------------------
+#+END_EXAMPLE
 
 * 锁 Lock
 ** Spin Lock 自旋锁
@@ -96,7 +121,11 @@ t6: count=5
 #+end_example
 
 1. acquire 获取锁
+   - CAS: Compare And Swap
+   - xchg: ~lock; xchgl %0, %1~
+   - pushcli() 关中断
 2. release 释放锁
+   - popcli() 开中断
 
 ** Sleep Lock 睡眠锁
 [[file:../../study/os/xv6-public/sleeplock.h]]

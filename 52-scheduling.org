@@ -1,4 +1,4 @@
-#+TITLE: 调度
+#+TITLE: 系统调度
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-23 Thu>
