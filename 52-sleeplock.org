@@ -10,8 +10,20 @@
 1. acquire
 2. release
 3. 并发编程
+   - mutex
+   - atomic
 
 * Sleep Lock 睡眠锁
+1. 磁盘 IDE 读写
+   - 慢
+   - 依赖 interrupt
+2. disk 竞争
+   - spinlock ???
+     + while loop
+3. sleeplock 睡眠锁
+   - spinlock 内涵
+   - locked 记录是否上锁
+
 [[file:../../study/os/xv6-public/sleeplock.h]]
 
 #+BEGIN_SRC sh :results output :exports both
@@ -25,16 +37,21 @@
 : /data/gitana/study/os/xv6-public/sleeplock.c:14:initsleeplock(struct sleeplock *lk, char *name)
 
 * Sleep Lock 死锁场景
+1. 死锁 deadlock
+2. 经典案例
+   - 生产者/消费者
+   - 哲学家
 #+BEGIN_EXAMPLE
   S: Sleep Lock
   X: Spin Lock
   a: acquire
   r: release
 
+  分析流程:
   TIME
   --------------------------- Long Time --------------------------->
-  T1:(S)| (S/a)  |    (S/r)      ...       (S/a)           |
-     (X)|        |               ...          (X/a)        |
+  T1:(S)|  (S/a) |     (S/r)     ...      (S/a)            |
+     (X)|        |               ...         (X/a)         |
         |        |               ...            x          |
         |        |               ...            x          |
         |        |               ...            x          |
@@ -45,4 +62,13 @@
         |        |               ...            x          |
         |        |               ...            x          |
         |        |               ...            x          |
+
+                                                T1: hold S, wait X
+                                                T2: hold X, wait S
 #+END_EXAMPLE
+
+* Sleep Lock 实现
+1. 获取锁 acquiresleep
+2. 释放锁 releasesleep
+3. acquiresleep/releasesleep
+   - 包裹 spinlock: acquire/release
