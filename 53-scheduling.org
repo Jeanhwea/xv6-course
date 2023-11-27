@@ -6,6 +6,18 @@
 #+OPTIONS: ^:nil
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
+* 多路复用 Multiplexing
+场景:
+当一个进程等待磁盘请求时， xv6 使之进入睡眠状态，
+然后调度执行另一个进程。
+另外，当一个进程耗尽了它在处理器上运行的时间片（10w 指令）后，
+xv6 使用时钟中断强制它停止运行，这样调度器才能调度运行其他进程
+
+1. 简单地使用时钟中断处理程序来驱动上下文切换
+2. 可能出现多个 CPU 同时切换进程的情况，那么我们必须使用一个带锁的方案来避免竞争
+3. 进程退出时必须释放其占用内存与资源，
+   - 但由于它本身在使用自己的资源（譬如其内核栈）
+   - 所以不能由该进程本身释放其占有的所有资源
 
 * 调度 sched / scheduler
 ** sched()
@@ -19,18 +31,6 @@ sched() 主要目的是要将进程上下文切换到 mycpu()->scheduler
    - 并且修改了 p->state 状态
    - 调用 sched() 来调度进程
 3. 传递 intena 位,因为 intena 是 thread 的属性，而非 CPU 的
-
-** 调度流程
-1. 获取 ptable.lock, 释放其他锁
-   - 这里保证在调用 swtch 时, 进程 p 的 state 和 context 不会被修改
-   - 释放其他锁确保在进程切换时不会出现死锁
-2. 修改 p->state = RUNNABLE
-3. 调用 sched()
-
-** kernel/user 状态切换点
-1. kernel thread 唯一让出 CPU 的执行点就是 ~sched()~
-2. 一旦 sched 让出 CPU 后续进入 kernel thread 的点在 ~scheduler()~ 函数的调度
-3. 这也是 swtch 的两个调用的地方
 
 ** yield 主动让出 CPU
 [[file:../../study/os/xv6-public/proc.c::yield(void)]]
