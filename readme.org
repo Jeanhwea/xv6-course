@@ -47,8 +47,8 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
   5) [[file:45-disk-driver.org][磁盘驱动]] | [[https://www.bilibili.com/video/BV1nC4y1P7yh/][视频 45]]
 - 锁与调度
   1) [[file:51-locking.org][同步与锁]] | [[https://www.bilibili.com/video/BV1Lc411Q7Wr/][视频 51]]
-  2) [[file:52-sleeplock.org][sleeplock 与死锁]]
-  3) 调度、睡眠与唤醒
+  2) [[file:52-sleeplock.org][sleeplock 与死锁]] | [[https://www.bilibili.com/video/BV1eM411o7cK/][视频 52]]
+  3) [[file:53-scheduling.org][调度、睡眠与唤醒]]
   4) 管道、进程控制
 - 文件系统
   1) 基本数据结构
