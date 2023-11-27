@@ -32,3 +32,13 @@
    - 写 chan 是 p->nwrite
    - 目的是提高效率
    - 防止 for 循环中造成读写进程等待同一个 chan 的争抢
+
+* 进程控制: exit/wait/kill
+** wait
+~wait()~ 等待子进程
+
+** exit
+进程正常退出
+
+** kill
+杀死进程
