@@ -14,19 +14,24 @@
 xv6 使用时钟中断强制它停止运行，这样调度器才能调度运行其他进程
 
 1. 简单地使用时钟中断处理程序来驱动上下文切换
-2. 可能出现多个 CPU 同时切换进程的情况，那么我们必须使用一个带锁的方案来避免竞争
+   - p1 时间长, timer, yield
+2. 可能出现多个 CPU 同时切换进程的情况
+   - 那么我们必须使用一个带锁的方案来避免竞争
 3. 进程退出时必须释放其占用内存与资源，
    - 但由于它本身在使用自己的资源（譬如其内核栈）
    - 所以不能由该进程本身释放其占有的所有资源
+     - 父进程
+     - parent
+       - child -> init
 
-* sched()
+* sched()/scheduler
 sched() 主要目的是要将进程上下文切换到 mycpu()->scheduler
 1. 通常一段程序代码的执行被称为 thread
    - 如果在内核态执行，为 kernel thread
    - 否则在用户态执行，为 user thread
 2. sched() 调用的条件是：
-   - 进程释放其他持有的锁
    - 持有 ptable.lock
+   - 进程释放其他持有的锁
    - 并且修改了 p->state 状态
    - 调用 sched() 来调度进程
 3. 传递 intena 位,因为 intena 是 thread 的属性，而非 CPU 的
@@ -47,11 +52,18 @@ sched() 主要目的是要将进程上下文切换到 mycpu()->scheduler
      + 也有在 ~sleep()~ 中获取, 通过 spinlock 转换成 ptable.lock
    - 如此反复，不会出现死锁
 
+ ptable.lock
+ k => u: scheduler (acquire) = swtch => forkret (release)
+ u => k: yield  (acquire) => sched(swtch) => (release)
+ swtch
+
 * Sleep & Wakeup
 sleep 和 wakeup 是一对系统调用，其工作方式如下
 1. sleep 设置 p->state = SLEEPING, 然后调用 sched 释放 CPU
    - 让进程在任意的 chan 上休眠，称之为等待队列（wait channel）
      + chan 一般就是资源的内核地址
+       - disk I/O
+       - console
      + 用于唤醒时查找到对于 chan 上的进程, Multiplexing
    - sleep 需要设置一个等待的锁 lk
      + 锁交换 lk <-> ptable.lock
