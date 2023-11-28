@@ -18,7 +18,6 @@
 5. 解决读写磁盘速度慢的问题
    - 通过 in-memory cache 来提高系统的读写效率
 
-
 * xv6 文件系统
 1. xv6-fs 七层结构
    - File descriptor
@@ -37,3 +36,10 @@
 5. inode 提供文件操作, 每个 inode 有唯一编号 inum
    - 一个 inode 保护多个 block
    - 这样的 inode 可表示一个文件
+6. Directory 实现目录结构 dirent
+   - 它可以表示一个目录
+   - 本质上是 inode 序列
+   - name 记录目录名称
+7. Pathname 表示一个文件路径 ~/etc/my.cnf~
+8. File descriptor 是文件名符号
+   - 标记操作系统的资源: pipe/device/files 等
