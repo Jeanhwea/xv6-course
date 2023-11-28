@@ -9,27 +9,35 @@
 
 * init 进程
 1. init 第一个进程
-   - initproc
+   - initproc pid=1
 
 * fork -> exec -> exit
 进程正常退出
-1. fork
-   - 申请 proc
+1. fork()
+   - 申请 sturct proc
    - 复制父进程数据
-   - p->tf-eax = 0, 子进程返回 0
-2. exec 替换地址空间 sh(11) => ls(11)
+     + pgdir
+     + tf
+     + p->parent
+   - p->tf->eax = 0, 子进程返回 0
+2. exec() 替换地址空间 sh(11) => ls(11)
+   - 参考之前的讲解
 3. exit()
    - ls 有子进程 a, b, c
      + a, b, c 的父进程设置成 init
+     + p->parent = initproc
    - curpoc->state = ZOMBIE
    - sched() 让位 CPU 调度
 
 * wait
 ~wait()~ 等待子进程
+- ZOMBIE
+  + 标记子进程退出了
+  + 告知父进程可以进行回收资源
 - 回收子进程的 kstack
 - 内核页面 vm
 
 * kill
 杀死进程
-1. p->killed = 1
-2. trap() 检测 killed 标识, 然后调用 exit()
+1. kill()  p->killed = 1
+2. trap() 检测 mycpu()->killed 标识, 然后调用 exit()
