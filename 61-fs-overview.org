@@ -20,7 +20,7 @@
 
 
 * xv6 文件系统
-1. 七层结构
+1. xv6-fs 七层结构
    - File descriptor
    - Pathname
    - Directory
@@ -28,3 +28,12 @@
    - Logging
    - Buffer cache
    - Disk
+2. Disk 读写磁盘, 直接操作磁盘
+3. Buffer Cache 管理 buf 结构
+   - 与磁盘同步数据
+   - 确保多进程同时只能有一个进程进行操作
+4. Logging 允许多个 block 同时操作
+   - 多个 block 同时操作形成 transaction
+5. inode 提供文件操作, 每个 inode 有唯一编号 inum
+   - 一个 inode 保护多个 block
+   - 这样的 inode 可表示一个文件
