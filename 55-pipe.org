@@ -16,18 +16,12 @@
 :     185     185    1497
 
 ls(9)
-  - a stdin
-  - b stdout
-  - Event1: w/非满(n=1) = do write 1 byte => wakeup
-  - Event2: w/非满(n=1) = do write 1 byte => wakeup
+  - stdin
+  - stdout xxx
 wc(10)
-  - c stdin
-  - d stdout
-  - Event0: r/空 => sleep
-  - Event3: r/空 (n=1)=> sleep
-ls | wc
-  - ls.b -> wc.c
-unix
+  - stdin  yyy
+  - stdout
+
 
 * struct pipe
 [[file:../../study/os/xv6-public/pipe.c::struct spinlock lock;]]
@@ -54,3 +48,16 @@ unix
    - 写 chan 是 p->nwrite
    - 目的是提高效率
    - 防止 for 循环中造成读写进程等待同一个 chan 的争抢
+
+
+pipe 读写调试过程:
+#+BEGIN_EXAMPLE
+  E1: w nr=0 nw=1
+  E2: w nr=0 nw=1
+  ...
+  E6: w nr=0 nw=6
+  E7: r nr=0 nw=6
+  E8: w nr=6 nw=7
+  E9: r nr=6 nw=8
+  ...
+#+END_EXAMPLE
