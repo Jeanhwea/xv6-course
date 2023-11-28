@@ -14,10 +14,12 @@ int main(int argc, char *argv[])
 
 	if (pid == 0) {
 		sleep(10);
+		printf("child exiting\n");
 		exit(0);
 	} else {
 		sleep(30);
 		wait(NULL);
+		printf("parent exiting\n");
 	}
 	return 0;
 }
