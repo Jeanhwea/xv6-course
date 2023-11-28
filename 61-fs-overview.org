@@ -1,0 +1,30 @@
+#+TITLE: 文件系统概览
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-28 Tue>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+#+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
+
+
+* 文件系统
+1. on-disk 结构
+   - 树形结构
+   - 文件/目录
+2. crash recovery
+   - 突然断电后重启后依然可以正常工作
+4. 多进程同时读写
+   - 协调并发操作问题
+5. 解决读写磁盘速度慢的问题
+   - 通过 in-memory cache 来提高系统的读写效率
+
+
+* xv6 文件系统
+1. 七层结构
+   - File descriptor
+   - Pathname
+   - Directory
+   - inode
+   - Logging
+   - Buffer cache
+   - Disk
