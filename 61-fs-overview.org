@@ -18,8 +18,26 @@
 5. 解决读写磁盘速度慢的问题
    - 通过 in-memory cache 来提高系统的读写效率
 
-* xv6 文件系统
-1. xv6-fs 七层结构
+* xv6 文件系统逻辑结构
+#+BEGIN_EXAMPLE
+  |-----------------|
+  | File descriptor |
+  |-----------------|
+  |    Pathname     |
+  |-----------------|
+  |    Directory    |
+  |-----------------|
+  |      inode      |
+  |-----------------|
+  |     Logging     |
+  |-----------------|
+  |   Buffer cache  |
+  |-----------------|
+  |       Disk      |
+  |-----------------|
+#+END_EXAMPLE
+
+1. xv6-fs 七层逻辑结构
    - File descriptor
    - Pathname
    - Directory
@@ -43,3 +61,23 @@
 7. Pathname 表示一个文件路径 ~/etc/my.cnf~
 8. File descriptor 是文件名符号
    - 标记操作系统的资源: pipe/device/files 等
+
+* xv6 文件系统物理结构
+#+BEGIN_SRC sh
+  make fs.img | grep nmeta
+#+END_SRC
+
+#+RESULTS:
+: nmeta 59 (boot, super, log blocks 30 inode blocks 26, bitmap blocks 1) blocks 941 total 1000
+
+#+BEGIN_EXAMPLE
+  -----------------------------------------------------------
+  | boot | super | log ...  | inode ... | bitmap | data ...
+  -----------------------------------------------------------
+  0      1       2
+#+END_EXAMPLE
+
+1. boot 没有使用，一般用于装启动引导
+2. super 时 superblock 记录文件的元信息
+3. 接着是第 2 个扇区, 记录了若干 log
+4. 然后 inode, bitmap, data
