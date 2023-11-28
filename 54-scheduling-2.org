@@ -33,7 +33,7 @@
    - 目的是提高效率
    - 防止 for 循环中造成读写进程等待同一个 chan 的争抢
 
-* 进程控制: exit/wait/kill
+* 进程控制: fork/exit/wait/kill
 ** fork -> exec -> exit
 进程正常退出
 
