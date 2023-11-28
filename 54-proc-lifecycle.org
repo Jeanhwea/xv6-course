@@ -1,0 +1,35 @@
+#+TITLE: 进程生命周期
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-11-24 Fri>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+#+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
+
+
+* init 进程
+1. init 第一个进程
+   - initproc
+
+* fork -> exec -> exit
+进程正常退出
+1. fork
+   - 申请 proc
+   - 复制父进程数据
+   - p->tf-eax = 0, 子进程返回 0
+2. exec 替换地址空间 sh(11) => ls(11)
+3. exit()
+   - ls 有子进程 a, b, c
+     + a, b, c 的父进程设置成 init
+   - curpoc->state = ZOMBIE
+   - sched() 让位 CPU 调度
+
+* wait
+~wait()~ 等待子进程
+- 回收子进程的 kstack
+- 内核页面 vm
+
+* kill
+杀死进程
+1. p->killed = 1
+2. trap() 检测 killed 标识, 然后调用 exit()

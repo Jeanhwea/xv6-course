@@ -1,4 +1,4 @@
-#+TITLE: 管道、进程控制
+#+TITLE: 管道
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-11-24 Fri>
@@ -6,6 +6,28 @@
 #+OPTIONS: ^:nil
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
+
+* pipe 概念介绍
+#+BEGIN_SRC sh
+  ls | wc
+#+END_SRC
+
+#+RESULTS:
+:     185     185    1497
+
+ls(9)
+  - a stdin
+  - b stdout
+  - Event1: w/非满(n=1) = do write 1 byte => wakeup
+  - Event2: w/非满(n=1) = do write 1 byte => wakeup
+wc(10)
+  - c stdin
+  - d stdout
+  - Event0: r/空 => sleep
+  - Event3: r/空 (n=1)=> sleep
+ls | wc
+  - ls.b -> wc.c
+unix
 
 * struct pipe
 [[file:../../study/os/xv6-public/pipe.c::struct spinlock lock;]]
@@ -32,13 +54,3 @@
    - 写 chan 是 p->nwrite
    - 目的是提高效率
    - 防止 for 循环中造成读写进程等待同一个 chan 的争抢
-
-* 进程控制: fork/exit/wait/kill
-** fork -> exec -> exit
-进程正常退出
-
-** wait
-~wait()~ 等待子进程
-
-** kill
-杀死进程
