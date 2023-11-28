@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	}
 
 	if (pid == 0) {
-		char *argv[] = { "ls", "-l" };
+		char *argv[] = { "ls", "-l", NULL };
 		char *envs[] = { NULL };
 		execve("/bin/ls", argv, envs);
 		exit(0);
