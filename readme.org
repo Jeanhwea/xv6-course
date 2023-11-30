@@ -50,7 +50,7 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
   2) [[file:52-sleeplock.org][sleeplock 与死锁]] | [[https://www.bilibili.com/video/BV1eM411o7cK/][视频 52]]
   3) [[file:53-scheduling.org][调度、睡眠与唤醒]] | [[https://www.bilibili.com/video/BV1KN4y127NB/][视频 53]]
   4) [[file:54-proc-lifecycle.org][进程生命周期]] | [[https://www.bilibili.com/video/BV1zG411i7fs][视频 54]]
-  5) [[file:55-pipe.org][管道]]
+  5) [[file:55-pipe.org][管道]] | [[https://www.bilibili.com/video/BV1Lj411j7Fe/][视频 55]]
 - 文件系统
   1) 基本数据结构
 
