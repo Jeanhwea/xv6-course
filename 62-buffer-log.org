@@ -10,9 +10,10 @@
 * 数据结构
 #+BEGIN_SRC dot :exports results :file ./img/dinode.png
   digraph {
-  dinode {
-  label = "<f0> type | <f1> major | <f2> minor | <f3> nlink"
-  }
+    dinode [
+      label = "<f0> type | <f1> major | <f2> minor | <f3> nlink"
+      shape = "record"
+    ];
   }
 #+END_SRC
 
