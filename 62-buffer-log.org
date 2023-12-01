@@ -15,6 +15,7 @@
     ];
     subgraph cluster_dinode {
       label = "dinode"
+      shape = "none"
       dinode [
         label = "type|major|minor|nlink|size|<f1>addr1|...|<f2>addr12|<f3>indirect"
         shape = "record"
@@ -38,6 +39,7 @@
 
     subgraph cluster_indrnode {
       label = "indirect data"
+      shape = "none"
       indrnode [
         label = "<f1>addr1|...|<f2>addr128"
         shape = "record"
