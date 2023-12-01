@@ -7,6 +7,18 @@
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 
+* 数据结构
+#+BEGIN_SRC dot :exports results :file ./img/dinode.png
+  digraph {
+  dinode {
+  label = "<f0> type | <f1> major | <f2> minor | <f3> nlink"
+  }
+  }
+#+END_SRC
+
+#+RESULTS:
+[[file:./img/dinode.png]]
+
 * Buffer Cache
 
 * Log
