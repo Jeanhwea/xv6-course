@@ -37,7 +37,7 @@
     ];
 
     subgraph cluster_indrnode {
-      lable = "indirect data"
+      label = "indirect data"
       indrnode [
         label = "<f1>addr1|...|<f2>addr128"
         shape = "record"
