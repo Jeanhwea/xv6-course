@@ -10,8 +10,38 @@
 * 数据结构
 #+BEGIN_SRC dot :exports results :file ./img/dinode.png
   digraph {
+    graph [
+      rankdir = "LR"
+    ];
     dinode [
-      label = "<f0> type | <f1> major | <f2> minor | <f3> nlink"
+      label = "type | major | minor | nlink | size | <f0> addr1 | ... | <f1> addr12 | <f2> indirect"
+      shape = "record"
+    ];
+    dinode:f0 -> data01;
+    data01 [
+      label = "data"
+      shape = "record"
+    ];
+    dinode:f1 -> data12;
+    data12 [
+      label = "data"
+      shape = "record"
+    ];
+
+    dinode:f2 -> indrnode;
+    indrnode [
+      label = "<f1> addr1 | ... | <f2> addr128"
+      shape = "record"
+    ];
+
+    indrnode:f1 -> idata01;
+    idata01 [
+      label = "data"
+      shape = "record"
+    ];
+    indrnode:f2 -> idata128;
+    idata128 [
+      label = "data"
       shape = "record"
     ];
   }
