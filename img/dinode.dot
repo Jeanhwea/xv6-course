@@ -1,10 +1,15 @@
 digraph {
+  fontname="Helvetica,Arial,sans-serif"
+  node [fontname="Helvetica,Arial,sans-serif"];
+  edge [fontname="Helvetica,Arial,sans-serif"];
+  ratio = auto
   graph [
     rankdir = "LR"
   ];
   subgraph cluster_dinode {
-    label = "dinode"
-    shape = "none"
+    label = dinode
+    style = filled
+    color = lightgray
     dinode [
       label = "type|major|minor|nlink|size|<f1>addr1|...|<f2>addr12|<f3>indirect"
       shape = "record"
@@ -28,7 +33,8 @@ digraph {
 
   subgraph cluster_indrnode {
     label = "indirect data"
-    style = "invis"
+    style = filled
+    color = lightgray
     indrnode [
       label = "<f1>addr1|...|<f2>addr128"
       shape = "record"
