@@ -14,7 +14,7 @@
       rankdir = "LR"
     ];
     dinode [
-      label = "dinode|type|major|minor|nlink|size|<f1>addr1|...|<f2>addr12|<f3>indirect"
+      label = "dinode struct |type|major|minor|nlink|size|<f1>addr1|...|<f2>addr12|<f3>indirect"
       shape = "record"
     ];
     dinode:f1 -> data01;
