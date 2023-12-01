@@ -14,23 +14,23 @@
       rankdir = "LR"
     ];
     dinode [
-      label = "type | major | minor | nlink | size | <f0> addr1 | ... | <f1> addr12 | <f2> indirect"
+      label = "type|major|minor|nlink|size|<f1>addr1|...|<f2>addr12|<f3>indirect"
       shape = "record"
     ];
-    dinode:f0 -> data01;
+    dinode:f1 -> data01;
     data01 [
       label = "data"
       shape = "record"
     ];
-    dinode:f1 -> data12;
+    dinode:f2 -> data12;
     data12 [
       label = "data"
       shape = "record"
     ];
 
-    dinode:f2 -> indrnode;
+    dinode:f3 -> indrnode;
     indrnode [
-      label = "<f1> addr1 | ... | <f2> addr128"
+      label = "<f1>addr1|...|<f2>addr128"
       shape = "record"
     ];
 
