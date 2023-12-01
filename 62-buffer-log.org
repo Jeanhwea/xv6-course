@@ -13,15 +13,17 @@
     graph [
       rankdir = "LR"
     ];
-    dinode [
-      label = "type|major|minor|nlink|size|<f1>addr1|...|<f2>addr12|<f3>indirect"
-      shape = "record"
-    ];
-    dinode:s -> dinode0 [style="invis"];
-    dinode0 [
-      label = "dinode"
-      shape = none
-    ];
+    subgraph cluster_dinode {
+      dinode [
+        label = "type|major|minor|nlink|size|<f1>addr1|...|<f2>addr12|<f3>indirect"
+        shape = "record"
+      ];
+      dinode:s -> dinode_text [style="invis"];
+      dinode_text [
+        label = "dinode"
+        shape = none
+      ];
+    }
     dinode:f1 -> data01;
     data01 [
       label = "data"
@@ -33,16 +35,18 @@
       shape = "record"
     ];
 
-    indrnode [
-      label = "<f1>addr1|...|<f2>addr128"
-      shape = "record"
-    ];
-    dinode:f3 -> indrnode;
-    indrnode:s -> indrnode0 [style="invis"];
-    indrnode0 [
-      label = "indirect data"
-      shape = none
-    ];
+    subgraph cluster_indrnode {
+      indrnode [
+        label = "<f1>addr1|...|<f2>addr128"
+        shape = "record"
+      ];
+      dinode:f3 -> indrnode;
+      indrnode:s -> indrnode0 [style="invis"];
+      indrnode0 [
+        label = "indirect data"
+        shape = none
+      ];
+    }
 
     indrnode:f1 -> idata01;
     idata01 [
