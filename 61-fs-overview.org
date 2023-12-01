@@ -19,8 +19,8 @@
    - 通过 in-memory cache 来提高系统的读写效率
 
 * xv6 文件系统逻辑结构
-#+BEGIN_EXAMPLE
-  |-----------------|
+#+BEGIN_SRC ditaa :file ./img/fs-arch.png
+  +-----------------+
   | File descriptor |
   |-----------------|
   |    Pathname     |
@@ -34,8 +34,11 @@
   |   Buffer cache  |
   |-----------------|
   |       Disk      |
-  |-----------------|
-#+END_EXAMPLE
+  +-----------------+
+#+END_SRC
+
+#+RESULTS:
+[[file:./img/fs-arch.png]]
 
 1. xv6-fs 七层逻辑结构
    - File descriptor
