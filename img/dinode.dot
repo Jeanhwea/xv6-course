@@ -7,7 +7,7 @@ digraph {
     rankdir = "LR"
   ];
   subgraph cluster_dinode {
-    label = dinode
+    label = "dinode struct"
     style = filled
     color = lightgray
     dinode [
