@@ -9,12 +9,11 @@ digraph {
   subgraph cluster_dinode {
     label = "dinode struct"
     style = filled
-    color = lightgray
+    color = lightblue
     dinode [
       shape=plain
       label=<
         <table border="0" cellborder="1" cellspacing="0" cellpadding="4">
-          <tr><td><b>dinode</b></td></tr>
           <tr><td>type</td></tr>
           <tr><td>major</td></tr>
           <tr><td>minor</td></tr>
