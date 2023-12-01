@@ -33,6 +33,11 @@
       shape = "record"
     ];
 
+    indrnode0 [
+      label = "indirect data"
+      shape = none
+    ];
+    indrnode0 -> indrnode:n [style="invis"];
     dinode:f3 -> indrnode;
     indrnode [
       label = "<f1>addr1|...|<f2>addr128"
