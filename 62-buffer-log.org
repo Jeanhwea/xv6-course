@@ -17,7 +17,7 @@
       label = "dinode"
       shape = none
     ];
-    dinode0 -> dinode:n;
+    dinode0 -> dinode:n [style="invis"];
     dinode [
       label = "type|major|minor|nlink|size|<f1>addr1|...|<f2>addr12|<f3>indirect"
       shape = "record"
