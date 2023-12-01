@@ -11,9 +11,23 @@ digraph {
     style = filled
     color = lightgray
     dinode [
-      label = "type|major|minor|nlink|size|<f1>addr1|...|<f2>addr12|<f3>indirect"
-      shape = "record"
+      label=<
+        <table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+          <tr><td><b>dinode</b></td></tr>
+          <tr><td>type</td></tr>
+          <tr><td>major</td></tr>
+          <tr><td>minor</td></tr>
+          <tr><td>nlink</td></tr>
+          <tr><td>size</td></tr>
+          <tr><td port="f1">addr1</td></tr>
+          <tr><td>...</td></tr>
+          <tr><td port="f1">addr12</td></tr>
+          <tr><td port="f3">indirect</td></tr>
+        </table>
+      >
+      shape=plain
     ];
+
     // dinode:s -> dinode_text [style="invis"];
     // dinode_text [
     //   label = "dinode"
