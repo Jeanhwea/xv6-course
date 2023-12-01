@@ -8,64 +8,7 @@
 
 
 * 数据结构
-#+BEGIN_SRC dot :exports results :file ./img/dinode.png
-  digraph {
-    graph [
-      rankdir = "LR"
-    ];
-    subgraph cluster_dinode {
-      label = "dinode"
-      shape = "none"
-      dinode [
-        label = "type|major|minor|nlink|size|<f1>addr1|...|<f2>addr12|<f3>indirect"
-        shape = "record"
-      ];
-      // dinode:s -> dinode_text [style="invis"];
-      // dinode_text [
-      //   label = "dinode"
-      //   shape = none
-      // ];
-    }
-    dinode:f1 -> data01;
-    data01 [
-      label = "data"
-      shape = "record"
-    ];
-    dinode:f2 -> data12;
-    data12 [
-      label = "data"
-      shape = "record"
-    ];
 
-    subgraph cluster_indrnode {
-      label = "indirect data"
-      style = "invis"
-      indrnode [
-        label = "<f1>addr1|...|<f2>addr128"
-        shape = "record"
-      ];
-      dinode:f3 -> indrnode;
-      // indrnode:s -> indrnode0 [style="invis"];
-      // indrnode0 [
-      //   label = "indirect data"
-      //   shape = none
-      // ];
-    }
-
-    indrnode:f1 -> idata01;
-    idata01 [
-      label = "data"
-      shape = "record"
-    ];
-    indrnode:f2 -> idata128;
-    idata128 [
-      label = "data"
-      shape = "record"
-    ];
-  }
-#+END_SRC
-
-#+RESULTS:
 [[file:./img/dinode.png]]
 
 * Buffer Cache
