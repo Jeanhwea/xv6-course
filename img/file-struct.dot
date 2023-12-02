@@ -1,44 +1,21 @@
 digraph file_struct {
-  rankdir = LR;
+  rankdir=LR;
   node [shape=record];
 
   subgraph cluster_file {
-    label=<<b>file</b>>; style = filled; color = lightgray
+    label=<<b>file</b>>; style=filled; color=lightgray;
     file [label="enum type|int ref|char readable|char writable|<p>struct pipe *pipe|<i>struct inode *ip|uint off"];
   }
-
   subgraph cluster_pipe {
-    label =<<b>pipe</b>>; style = filled; color = white
+    label =<<b>pipe</b>>; style=filled; color=white;
     pipe [label="sleeplock lock|data|nread|nwrite|readopen|writeopen"]
   }
-
   subgraph cluster_inode {
-    label =<<b>inode</b>>; style = filled; color = white
+    label =<<b>inode</b>>; style=filled; color=white;
     inode [label="uint dev|uint inum|int ref|struct sleeplock lock|int valid|short type|short major|short minor|short nlink|uint size|uint addrs"];
   }
 
   file:p -> pipe;
   file:i -> inode;
 
-  {rank=same pipe inode dinode}
-  subgraph cluster_dinode {
-    label =<<b>dinode</b>>; style = filled; color = white;
-    dinode [label="short type|short major|short minor|short nlink|uint size|<d1>addr1|...|<d2>addr12|<i>indirect"];
-  }
-  subgraph cluster_indirect {
-    label =<<b>indirect addrs</b>>; style = filled; color = white;
-    indirect [label="<i1>addr1|...|<i2>addr128"];
-  }
-
-  {rank=same data1, data2, idata1, idata2}
-  data1  [label="data"];
-  data2  [label="data"];
-  idata1 [label="data"];
-  idata2 [label="data"];
-
-  dinode:d1 -> data1;
-  dinode:d2 -> data2;
-  dinode:i -> indirect;
-  indirect:i1 -> idata1;
-  indirect:i2 -> idata2;
 }
