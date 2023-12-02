@@ -3,7 +3,7 @@ digraph dinode_struct {
   node [shape=record];
 
   subgraph cluster_dinode {
-    label =<<b>dinode</b>>; style=filled; color=white;
+    label =<<b>dinode struct</b>>; style=filled; color=white;
     dinode [label="short type|short major|short minor|short nlink|uint size|{uint data|<d1>addr1|...|<d2>addr12|<ind>indirect}"];
   }
   subgraph cluster_indirect {
