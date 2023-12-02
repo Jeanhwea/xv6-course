@@ -1,0 +1,17 @@
+digraph structs {
+  rankdir = LR;
+  node [shape=record, style=filled];
+
+  key [label="Key", shape=box, fillcolor="#8ec5cc"]
+  string [label="<f0>is string", width=2, fillcolor="#f5c18e"];
+  hashtable [label="{key1|key2}|{value1|value2}", width=2, fillcolor="#9dd69f"]
+  linklist [label="{<f0> C | B | B | A}", width=2, fillcolor="#c4f8f5"]
+  set [label="{C | B | D | A}", width=2, fillcolor="#fac4f5"]
+  sortset [label="{C\n1 | B\n2.6 | D\n500 | A\n500}",width=2, fillcolor="#fac4d5"];
+
+  key:e -> string:f0 [minlen=2];
+  key:e -> hashtable:w [minlen=2];
+  key:e -> linklist:f0 [minlen=2];
+  key:e -> set:w [minlen=2];
+  key:e -> sortset:w [minlen=2];
+}
