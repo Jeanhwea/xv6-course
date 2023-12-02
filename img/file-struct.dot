@@ -8,7 +8,7 @@ digraph file_struct {
   }
   subgraph cluster_pipe {
     label =<<b>pipe</b>>; style=filled; color=white;
-    pipe [label="sleeplock lock|data|nread|nwrite|readopen|writeopen"]
+    pipe [label="struct sleeplock lock|char data[]|uint nread|uint nwrite|int readopen|int writeopen"];
   }
   subgraph cluster_inode {
     label =<<b>inode</b>>; style=filled; color=white;
