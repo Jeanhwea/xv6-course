@@ -18,6 +18,25 @@
 5. 解决读写磁盘速度慢的问题
    - 通过 in-memory cache 来提高系统的读写效率
 
+#+BEGIN_SRC sh
+  lsblk -f
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+NAME                      FSTYPE      FSVER    LABEL UUID                                   FSAVAIL FSUSE% MOUNTPOINTS
+sda
+├─sda1
+├─sda2                    ext4        1.0            e956e553-25fe-4a85-97f8-f084e5eb25d0      1.5G    13% /boot
+└─sda3                    LVM2_member LVM2 001       J7BATi-xwv8-jjeE-D3gl-LWLr-1RIc-WheXOt
+  ├─ubuntu--vg-ubuntu--lv ext4        1.0            86b5ef6e-95f5-48c4-b7d0-7ccc32dad828     37.9G    56% /
+  └─ubuntu--vg-data--lv   ext4        1.0            1a1d35fe-cfc5-4ae6-a0bf-b7cdbef6d4e2     46.8G    83% /data
+sdb
+└─sdb1                    ext4        1.0            14dadaca-04d2-4f1f-9565-b40e1437df32     27.4G     2% /mnt/lfs
+sdc
+sr0
+#+end_example
+
 * xv6 文件系统逻辑结构
 #+BEGIN_SRC ditaa :file ./img/fs-arch.png
   +-----------------+
