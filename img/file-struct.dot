@@ -19,8 +19,8 @@ digraph file_struct {
 
   file:p -> pipe;
   file:i -> inode;
-  {rank=same pipe inode dinode}
 
+  {rank=same pipe inode dinode}
   subgraph cluster_dinode {
     label =<<b>dinode</b>>; style = filled; color = white;
     dinode [label="short type|short major|short minor|short nlink|uint size|<d1>addr1|...|<d2>addr12|<i>indirect"];
@@ -29,6 +29,7 @@ digraph file_struct {
     label =<<b>indirect addrs</b>>; style = filled; color = white;
     indirect [label="<i1>addr1|...|<i2>addr128"];
   }
+
   {rank=same data1, data2, idata1, idata2}
   data1  [label="data"];
   data2  [label="data"];
