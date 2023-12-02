@@ -52,7 +52,7 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
   4) [[file:54-proc-lifecycle.org][进程生命周期]] | [[https://www.bilibili.com/video/BV1zG411i7fs][视频 54]]
   5) [[file:55-pipe.org][管道]] | [[https://www.bilibili.com/video/BV1Lj411j7Fe/][视频 55]]
 - 文件系统
-  1) [[file:61-fs-overview.org][文件系统概览]]
+  1) [[file:61-fs-overview.org][文件系统概览]] | [[https://www.bilibili.com/video/BV1ac411S7dL/][视频 61]]
 
 * 答疑
 1. 12a 答疑一 [[file:12a-Q&A.org]] | [[https://www.bilibili.com/video/BV1a94y1G7HV/][视频 12a]]

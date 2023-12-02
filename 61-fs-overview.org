@@ -11,11 +11,12 @@
 1. 解决 on-disk 存储结构
    - 树形结构
    - 文件/目录
-2. crash recovery
+2. crash recovery 崩溃恢复
    - 突然断电后重启后依然可以正常工作
-4. 多进程同时读写
+   - xv6
+3. 多进程同时读写
    - 协调并发操作问题
-5. 解决读写磁盘速度慢的问题
+4. 解决读写磁盘速度慢的问题
    - 通过 in-memory cache 来提高系统的读写效率
 
 #+BEGIN_SRC sh
@@ -67,21 +68,27 @@ sr0
    - Logging
    - Buffer cache
    - Disk
-2. Disk 读写磁盘, 直接操作磁盘
-3. Buffer Cache 管理 buf 结构
+2. 读代码/研究
+   - 自底而上 / 选这个
+   - 自顶而下
+3. Disk 读写磁盘, 直接操作磁盘, ide.c
+4. Buffer Cache 管理 buf 结构
    - 与磁盘同步数据
    - 确保多进程同时只能有一个进程进行操作
-4. Logging 允许多个 block 同时操作
+5. Logging 允许多个 block 同时操作
    - 多个 block 同时操作形成 transaction
-5. inode 提供文件操作, 每个 inode 有唯一编号 inum
+6. inode 提供文件操作, 每个 inode 有唯一编号 inum
    - 一个 inode 保护多个 block
    - 这样的 inode 可表示一个文件
-6. Directory 实现目录结构 dirent
+   - unix
+7. Directory 实现目录结构 dirent
    - 它可以表示一个目录
    - 本质上是 inode 序列
    - name 记录目录名称
-7. Pathname 表示一个文件路径 ~/etc/my.cnf~
-8. File descriptor 是文件名符号
+8. Pathname 表示一个文件路径 ~/etc/my.cnf~
+9. File descriptor 是文件描述符
+   - read(fd,...)
+     + stdin(0), stdout(1), stderr(2)
    - 标记操作系统的资源: pipe/device/files 等
 
 * xv6 文件系统物理结构
@@ -99,7 +106,11 @@ sr0
   0      1       2
 #+END_EXAMPLE
 
+
 1. boot 没有使用，一般用于装启动引导
+   - 扇区 sector 512/ boot / MBR
 2. super 时 superblock 记录文件的元信息
 3. 接着是第 2 个扇区, 记录了若干 log
-4. 然后 inode, bitmap, data
+   - nlog
+4. 然后 inode, bitmap
+5. data
