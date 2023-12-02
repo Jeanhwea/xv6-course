@@ -8,7 +8,7 @@
 
 
 * 文件系统
-1. on-disk 结构
+1. 解决 on-disk 存储结构
    - 树形结构
    - 文件/目录
 2. crash recovery
