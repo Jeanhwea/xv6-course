@@ -1,14 +1,14 @@
-#+TITLE: Buffer 和 Log
+#+TITLE: inode 层介绍
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
-#+DATE: <2023-11-28 Tue>
+#+DATE: <2023-12-03 Sun>
 #+STARTUP: overview num indent
 #+OPTIONS: ^:nil
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 
 * 数据结构
-#+BEGIN_SRC ditaa :file ./img/dinode-struct.png :cmdline -E -s 1.5
+#+BEGIN_SRC ditaa :file ./img/ditaa-dinode-struct.png :cmdline -E -s 1.5
   dinode
   +---------------+
   |    type       |
@@ -40,8 +40,4 @@
 #+END_SRC
 
 #+RESULTS:
-[[file:./img/dinode-struct.png]]
-
-* Buffer Cache
-
-* Log
+[[file:./img/ditaa-dinode-struct.png]]
