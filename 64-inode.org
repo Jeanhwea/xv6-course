@@ -7,7 +7,11 @@
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 
-* 数据结构
+* Block 分配器
+1. balloc
+2. bfree
+
+* inode 数据结构
 #+BEGIN_SRC ditaa :file ./img/ditaa-dinode-struct.png :cmdline -E -s 1.5
   dinode
   +---------------+
@@ -41,3 +45,5 @@
 
 #+RESULTS:
 [[file:./img/ditaa-dinode-struct.png]]
+
+* 实现代码分析
