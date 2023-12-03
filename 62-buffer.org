@@ -19,6 +19,8 @@
 * Disk 层回顾
 1. ide.c
 
+[[file:img/idequeue.pdf]]
+
 * Buffer Cache
 1. 同步对磁盘的访问
    - 目的是对于每一个块，同一时间只有一份拷贝放在内存中
