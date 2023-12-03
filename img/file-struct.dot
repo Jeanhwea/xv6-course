@@ -3,19 +3,20 @@ digraph file_struct {
   node [shape=record];
 
   subgraph cluster_file {
-    label=<<b>file</b>>; style=filled; color=lightgray;
+    label=<<b>file</b>>; style=filled; color=white;
     file [label="enum type|int ref|char readable|char writable|<p>struct pipe *pipe|<i>struct inode *ip|uint off"];
   }
   subgraph cluster_pipe {
-    label =<<b>pipe</b>>; style=filled; color=lightgray;
+    label =<<b>pipe</b>>; style=filled; color=white;
     pipe [label="struct sleeplock lock|char data[]|uint nread|uint nwrite|int readopen|int writeopen"];
   }
   subgraph cluster_inode {
     label =<<b>inode</b>>; style=filled; color=lightgray;
-    inode [label="uint dev|uint inum|int ref|struct sleeplock lock|int valid|short type|short major|short minor|short nlink|uint size|uint addrs"];
+    inode [label="inode struct|uint dev|uint inum|int ref|struct sleeplock lock|int valid|short type|short major|short minor|short nlink|uint size|uint addrs"];
+    dinode [label="dinode struct|short type|short major|short minor|short nlink|uint size|uint addrs"];
+    inode -> dinode [style=invis];
   }
 
   file:p -> pipe;
   file:i -> inode;
-
 }
