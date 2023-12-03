@@ -11,10 +11,10 @@ digraph bcache_LRU {
 
   subgraph cluster_bufs {
     label=<<b>buf[30]</b>>; style=filled; color=lightgray;
-    buf1[label="<a>buf[0] |dev|blockno|<p>*prev|<n>*next"];
-    buf2[label="<a>buf[1] |dev|blockno|<p>*prev|<n>*next"];
-    buf3[label="<a>buf[?] |dev|blockno|<p>*prev|<n>*next"];
-    buf9[label="<a>buf[29]|dev|blockno|<p>*prev|<n>*next"];
+    buf1[label="<a>buf[0]  |dev|blockno|<p>*prev|<n>*next"];
+    buf2[label="<a>buf[1]  |dev|blockno|<p>*prev|<n>*next"];
+    buf3[label="<a>buf[...]|dev|blockno|<p>*prev|<n>*next"];
+    buf9[label="<a>buf[29] |dev|blockno|<p>*prev|<n>*next"];
   }
 
   // {rank=same buf1 buf2 buf9}
