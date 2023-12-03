@@ -92,7 +92,7 @@ sr0
    - 标记操作系统的资源: pipe/device/files 等
 
 * xv6 文件系统物理结构
-#+BEGIN_SRC sh
+#+BEGIN_SRC sh :exports both
   make fs.img | grep nmeta
 #+END_SRC
 
