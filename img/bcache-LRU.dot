@@ -1,0 +1,29 @@
+digraph bcache_LRU {
+  rankdir=LR;
+  node [shape=record];
+
+  subgraph cluster_bcache {
+    label=<<b>bcache</b>>; style=filled; color=lightgray;
+    bcache[label="lock|<b>buf[...]|{<h>head|<p>*prev|<n>*next}"];
+  }
+  // bcache:b -> cluster_bufs;
+
+
+  subgraph cluster_bufs {
+    label=<<b>buf[...]</b>>; style=filled; color=lightgray;
+    buf1[label="<a>buf[0] |dev|blockno|<p>*prev|<n>*next"];
+    buf2[label="<a>buf[?] |dev|blockno|<p>*prev|<n>*next"];
+    buf3[label="<a>buf[29]|dev|blockno|<p>*prev|<n>*next"];
+  }
+
+  // {rank=same buf1 buf2 buf3}
+
+  // bcache:n -> buf1:w;
+  buf1:n   -> buf2:n;
+  buf2:n   -> buf3:n;
+  buf3:n   -> bcache:h;
+
+  buf3:p -> buf2:a;
+  buf2:p -> buf1:a;
+  // buf1:p -> bcache:h;
+}
