@@ -6,6 +6,15 @@
 #+OPTIONS: ^:nil
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
+* mkfs
+[[file:../../study/os/xv6-public/mkfs.c]]
+
+#+BEGIN_SRC sh :exports both
+  make fs.img | grep nmeta
+#+END_SRC
+
+#+RESULTS:
+: nmeta 59 (boot, super, log blocks 30 inode blocks 26, bitmap blocks 1) blocks 941 total 1000
 
 * Buffer Cache
 

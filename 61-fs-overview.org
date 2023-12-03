@@ -92,12 +92,6 @@ sr0
    - 标记操作系统的资源: pipe/device/files 等
 
 * xv6 文件系统物理结构
-#+BEGIN_SRC sh :exports both
-  make fs.img | grep nmeta
-#+END_SRC
-
-#+RESULTS:
-: nmeta 59 (boot, super, log blocks 30 inode blocks 26, bitmap blocks 1) blocks 941 total 1000
 
 #+BEGIN_SRC ditaa :exports results :file ./img/fs-phy.png :cmdline -s 2
   +------+-------+----------+-----------+--------+----------+
