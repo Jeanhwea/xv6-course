@@ -39,7 +39,7 @@ sr0
 #+end_example
 
 * xv6 文件系统逻辑结构
-#+BEGIN_SRC ditaa :file ./img/fs-arch.png :cmdline -s 2
+#+BEGIN_SRC ditaa :exports result :file ./img/fs-arch.png :cmdline -s 2
   +-----------------+
   | File descriptor |
   +-----------------+
