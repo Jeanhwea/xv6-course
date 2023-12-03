@@ -8,7 +8,7 @@
 
 * Log
 1. 简单的日志系统来解决文件操作过程当中崩溃所导致的问题
-   - 一个系统调用并不直接导致对磁盘上文件系统的写操作
+   - 一个系统调用 read/write 并不直接导致对磁盘上文件系统的写操作
    - xv6 会把一个对磁盘写操作的描述包装成一个日志写在磁盘中
    - 最后写入一个特殊的提交记录到磁盘上
    - 所有写成果后日志就会删除
@@ -21,10 +21,42 @@
      + 可能会重复之前已经进行了的对磁盘文件系统的写操作
    - 写提交日志块对 xv6 的 logging 层来说是原子操作，所以只可能出现上述两种情况
 
+#+BEGIN_SRC ditaa
+  +------+-------+-----------------+-----------+--------+----------------------------+
+  | boot | super | log1, log2 ...  | inode ... | bitmap | data, data1, ... data2 ... |
+  +------+-------+-----------------+-----------+--------+----------------------------+
+  0      1       2
+#+END_SRC
+
+情景一: write: N
+#+BEGIN_SRC ditaa
+  +------+-------+-----------------+-----------+--------+----------------------------------+
+  | boot | super | log1, log2 ...  | inode ... | bitmap | data, data1(y), ... data2(n) ... |
+  +------+-------+-----------------+-----------+--------+----------------------------------+
+  0      1       2
+#+END_SRC
+
+情景二: write: Y
+#+BEGIN_SRC ditaa
+  +------+-------+-----------------+-----------+--------+----------------------------------+
+  | boot | super | log1, log2 ...  | inode ... | bitmap | data, data1(y), ... data2(y) ... |
+  +------+-------+-----------------+-----------+--------+----------------------------------+
+  0      1       2
+#+END_SRC
+
 * 代码分析
-1. 日志结构体 struct log
-   - 包含多个 block
-2. log 的物理结构
+1. 调用 log 操作的序列 begin_op/end_op
+   - begin_op() 开启事务
+   - end_op() 提交事务
+   #+BEGIN_SRC c
+     begin_op();
+     // ...
+     end_op();
+   #+END_SRC
+2. outstanding 支持多个系统调用同时提交 group commit
+3. 日志结构体 struct log
+   - 包含多个 block/ log header
+4. log 的物理结构
    #+BEGIN_EXAMPLE
      //   header block, containing block #s for block A, B, C, ...
      //   block A
@@ -32,9 +64,24 @@
      //   block C
      //   ...
    #+END_EXAMPLE
-3. 调用 log 操作的序列 begin_op/end_op
-   #+BEGIN_SRC c
-     begin_op();
-     // ...
-     end_op();
-   #+END_SRC
+5. recover_from_log 完成崩溃恢复
+   - redo 重做
+6. commit 提交
+   - 写 log
+   - write_head 写入 log header
+   - install_trans: 回写 log 到 data
+   - log.lh.n = 0/write_head => 清理 log header
+
+#+BEGIN_SRC ditaa
+  +------+-------+--------------
+  | boot | super | log header
+  +------+-------+--------------
+  0      0x200   0x400
+#+END_SRC
+
+#+BEGIN_SRC ditaa
+  +------+-------+-----------------+-----------+--------+----------------------------------+
+  | boot | super | log1, log2, log3| inode ... | bitmap | data, data1(y), ... data2(y) ... data3(y)... |
+  +------+-------+-----------------+-----------+--------+----------------------------------+
+  0      1       2
+#+END_SRC
