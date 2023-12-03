@@ -21,13 +21,23 @@
 
 * Buffer Cache
 1. 同步对磁盘的访问
-   - 目的是对于每一个块，同一时间只有一份拷贝放在内存中并且只有一个内核线程使用这份拷贝
+   - 目的是对于每一个块，同一时间只有一份拷贝放在内存中
+   - 并且只有一个内核线程使用这份拷贝
 2. 缓存常用的块以提升性能
    - bcache 管理
    - LRU 最近访问缓存
 
 * bio.c 代码分析
 1. bget 获取一个 (dev,blockno) 对于的 buf
+   - 如果 cached, return b
+   - 否则 return 一个未使用的 buf
 2. bread
+   - 做检查 b->flags & B_VALID) == 0
+   - 调用 iderw
 3. bwrite
+   - 置 B_DIRTY
+   - 调用 iderw 写入数据
 4. brelse
+   - 获取锁 bcache.lock
+   - refcnt--
+   - 将当前的 block 移到 LRU 的前面
