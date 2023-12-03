@@ -20,3 +20,21 @@
      + 恢复程序会重演所有的写操作
      + 可能会重复之前已经进行了的对磁盘文件系统的写操作
    - 写提交日志块对 xv6 的 logging 层来说是原子操作，所以只可能出现上述两种情况
+
+* 代码分析
+1. 日志结构体 struct log
+   - 包含多个 block
+2. log 的物理结构
+   #+BEGIN_EXAMPLE
+     //   header block, containing block #s for block A, B, C, ...
+     //   block A
+     //   block B
+     //   block C
+     //   ...
+   #+END_EXAMPLE
+3. 调用 log 操作的序列 begin_op/end_op
+   #+BEGIN_SRC c
+     begin_op();
+     // ...
+     end_op();
+   #+END_SRC
