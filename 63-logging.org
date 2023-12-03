@@ -6,32 +6,10 @@
 #+OPTIONS: ^:nil
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
-* mkfs
-[[file:../../study/os/xv6-public/mkfs.c]]
-
-#+BEGIN_SRC sh :exports both
-  make fs.img | grep nmeta
-#+END_SRC
-
-#+RESULTS:
-: nmeta 59 (boot, super, log blocks 30 inode blocks 26, bitmap blocks 1) blocks 941 total 1000
-
-* Buffer Cache
-1. 同步对磁盘的访问
-   - 目的是对于每一个块，同一时间只有一份拷贝放在内存中并且只有一个内核线程使用这份拷贝
-2. 缓存常用的块以提升性能
-   - bcache 管理
-   - LRU
-3. bio.c
-   - bget 获取一个 (dev,blockno) 对于的 buf
-   - bread
-   - bwrite
-   - brelse
-
 * Log
 1. 简单的日志系统来解决文件操作过程当中崩溃所导致的问题
    - 一个系统调用并不直接导致对磁盘上文件系统的写操作
-   - xv6会把一个对磁盘写操作的描述包装成一个日志写在磁盘中
+   - xv6 会把一个对磁盘写操作的描述包装成一个日志写在磁盘中
    - 最后写入一个特殊的提交记录到磁盘上
    - 所有写成果后日志就会删除
 2. 为什么日志可以保证 xv6 崩溃恢复
