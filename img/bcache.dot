@@ -1,4 +1,4 @@
-digraph bcache_LRU {
+digraph bcache {
   // rankdir=LR;
   node [shape=record];
 

@@ -19,15 +19,18 @@
 * Disk 层回顾
 1. ide.c
 
-[[file:img/idequeue.pdf]]
+[[file:img/idequeue.png]]
 
 * Buffer Cache
+
 1. 同步对磁盘的访问
    - 目的是对于每一个块，同一时间只有一份拷贝放在内存中
    - 并且只有一个内核线程使用这份拷贝
 2. 缓存常用的块以提升性能
    - bcache 管理
    - LRU 最近访问缓存
+
+[[file:img/bcache.png]]
 
 * bio.c 代码分析
 1. bget 获取一个 (dev,blockno) 对于的 buf
