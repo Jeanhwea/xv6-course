@@ -99,12 +99,15 @@ sr0
 #+RESULTS:
 : nmeta 59 (boot, super, log blocks 30 inode blocks 26, bitmap blocks 1) blocks 941 total 1000
 
-#+BEGIN_EXAMPLE
-  -----------------------------------------------------------
-  | boot | super | log ...  | inode ... | bitmap | data ...
-  -----------------------------------------------------------
+#+BEGIN_SRC ditaa :exports results :file ./img/fs-phy.png :cmdline -s 2
+  +------+-------+----------+-----------+--------+----------+
+  | boot | super | log ...  | inode ... | bitmap | data ... |
+  +------+-------+----------+-----------+--------+----------+
   0      1       2
-#+END_EXAMPLE
+#+END_SRC
+
+#+RESULTS:
+[[file:./img/fs-phy.png]]
 
 
 1. boot 没有使用，一般用于装启动引导
