@@ -1,0 +1,24 @@
+digraph idequeue {
+  // rankdir=LR;
+  node [shape=record];
+
+  subgraph cluster_queue {
+    label=<<b>ide</b>>; style=filled; color=lightgray;
+    idelock[label="idelock"];
+    idequeue[label="<h>idequeue"];
+  }
+  // bcache:b -> cluster_bufs;
+
+  subgraph cluster_bufs {
+    label=<<b>ide request bufs</b>>; style=filled; color=lightgray;
+    buf1[label="<a>buf[0]  |dev|blockno|<n>*qnext"];
+    buf2[label="<a>buf[1]  |dev|blockno|<n>*qnext"];
+    buf3[label="<a>buf[...]|dev|blockno|<n>*qnext"];
+    buf9[label="<a>buf[29] |dev|blockno|<n>*qnext"];
+  }
+
+  idequeue:h -> buf1:a [color=red];
+  buf1:n     -> buf2:a [color=black];
+  buf2:n     -> buf3:a [color=black];
+  buf3:n     -> buf9:a [color=black];
+}
