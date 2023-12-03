@@ -9,10 +9,6 @@ digraph idequeue {
   }
   // bcache:b -> cluster_bufs;
 
-  subgraph cluster_bcache {
-    label=<<b>bcache</b>>; style=filled; color=lightgray;
-    bcache[label="lock|<b>buf[30]|<h>head|{<p>*prev|<n>*next}"];
-  }
   subgraph cluster_bufs {
     label=<<b>buf[30]</b>>; style=filled; color=lightgray;
     buf1[label="<a>buf[0]  |<n>*qnext      |dev|blockno|*prev|*next"];
@@ -25,4 +21,9 @@ digraph idequeue {
 
   idequeue:h -> buf2:a [color=red];
   buf2:n     -> buf9:a [color=red];
+
+  // subgraph cluster_bcache {
+  //   label=<<b>bcache</b>>; style=filled; color=lightgray;
+  //   bcache[label="lock|<b>buf[30]|<h>head|{<p>*prev|<n>*next}"];
+  // }
 }
