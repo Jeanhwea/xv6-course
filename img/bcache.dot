@@ -3,32 +3,31 @@ digraph bcache {
   node [shape=record];
 
   subgraph cluster_bcache {
-    label=<<b>bcache</b>>; style=filled; color=lightgray;
+    label=<<b>bcache</b>>; style=filled; color=white;
     bcache[label="lock|<b>buf[30]|<h>head|{<n>*next|<p>*prev}"];
   }
-  // bcache:b -> cluster_bufs;
+  // cluster_bcache -> cluster_bufs;
 
 
   subgraph cluster_bufs {
-    label=<<b>buf[30]</b>>; style=filled; color=lightgray;
-    buf1[label="<a>buf[0]  |*qnext|dev|blockno|<n>*next|<p>*prev"];
-    buf2[label="<a>buf[1]  |*qnext|dev|blockno|<n>*next|<p>*prev"];
+    label=<<b>buf[30]</b>>; style=filled; color=white;
+    buf1[label="<a>buf[29] |*qnext|dev|blockno|<n>*next|<p>*prev"];
+    buf2[label="<a>buf[28] |*qnext|dev|blockno|<n>*next|<p>*prev"];
     buf3[label="<a>buf[...]|*qnext|dev|blockno|<n>*next|<p>*prev"];
-    buf9[label="<a>buf[29] |*qnext|dev|blockno|<n>*next|<p>*prev"];
+    buf9[label="<a>buf[0]  |*qnext|dev|blockno|<n>*next|<p>*prev"];
   }
 
   // {rank=same buf1 buf2 buf9}
 
-  buf1:n -> buf2:a   [color=magenta];
-  buf2:n -> buf3:a   [color=magenta];
-  buf3:n -> buf9:a   [color=magenta];
-  buf9:n -> bcache:h [color=magenta];
+  buf1:n -> buf2:a    [color=sienna style=solid];
+  buf2:n -> buf3:a    [color=sienna style=solid];
+  buf3:n -> buf9:a    [color=sienna style=solid];
+  buf9:n -> bcache:h  [color=sienna style=solid];
+  bcache:n -> buf1:ne [color=sienna style=solid];
 
-  buf9:p -> buf3     [color=blue];
-  buf3:p -> buf2     [color=blue];
-  buf2:p -> buf1     [color=blue];
-  buf1:p -> bcache:h [color=blue];
-
-  bcache:n -> buf1:ne [color=magenta];
-  bcache:p -> buf9:se [color=blue   ];
+  buf9:p -> buf3      [color=black style=dashed];
+  buf3:p -> buf2      [color=black style=dashed];
+  buf2:p -> buf1      [color=black style=dashed];
+  buf1:p -> bcache:h  [color=black style=dashed];
+  bcache:p -> buf9:se [color=black style=dashed];
 }
