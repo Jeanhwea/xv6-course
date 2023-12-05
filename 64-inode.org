@@ -16,7 +16,7 @@
 4. balloc 分配一个新的磁盘块 block
 5. bfree 释放一个磁盘块
 
-* 实现代码分析
+* inode 内存操作
 1. inode 描述一个匿名的文件
 2. 分配
    - ialloc() 分配 inode
@@ -30,7 +30,7 @@
    - ilock() 从磁盘读取 inode 数据, 并设置 ip->valid=1
    - iput() 当 ip->ref=0 时, 清理 ip->valid
 
-* dinode 数据结构
+* inode 磁盘存储
 #+BEGIN_SRC ditaa :file ./img/ditaa-dinode-struct.png :cmdline -E -s 1.5
   dinode
   +---------------+
@@ -64,3 +64,5 @@
 
 #+RESULTS:
 [[file:./img/ditaa-dinode-struct.png]]
+
+1. bmap
