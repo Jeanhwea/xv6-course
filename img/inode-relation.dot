@@ -18,11 +18,13 @@ digraph inode_relation {
   }
   subgraph cluster_data {
     label =<<b>virtual memory</b>>; style=filled; color=lightgray;
-    data2  [label="data"];
-    data1  [label="data"];
-    idata1 [label="data"];
-    idataX [label="data"];
-    idata2 [label="data"];
+    data2  [label="block #1"];
+    data1  [label="block #3"];
+    data4  [label="block #4"];
+    idata1 [label="block #2"];
+    data7  [label="block #7"];
+    idataX [label="block #8"];
+    idata2 [label="block #5"];
   }
 
   dinode:d1 -> data1;
