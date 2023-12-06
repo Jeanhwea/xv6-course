@@ -1,7 +1,0 @@
-#+TITLE: directory 层介绍
-#+AUTHOR: Jinghui Hu
-#+EMAIL: hujinghui@buaa.edu.cn
-#+DATE: <2023-12-08 Fri>
-#+STARTUP: overview num indent
-#+OPTIONS: ^:nil
-#+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public

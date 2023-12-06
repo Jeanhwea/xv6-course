@@ -1,0 +1,19 @@
+#+TITLE: directory 层和 pathname 层
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-12-08 Fri>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+#+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
+
+* directory 层
+1. dirent 结构体 directory entry
+   - inum 查找 inode
+   - name 目录名
+2. dirlookup 在 dp 中查找 name 对应的 inode
+   - 如果存在, 返回 inode
+3. dirlink 往 dp 中写入新的 inode 数据
+   - inum
+   - name
+
+* path 层
