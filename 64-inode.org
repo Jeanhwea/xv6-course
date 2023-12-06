@@ -41,6 +41,15 @@ inode 例子
   3933261 -rw-rw-r-- 2 mes mes 0 Dec  6 15:44 aaa
   3933263 -rw-rw-r-- 1 mes mes 0 Dec  6 15:44 bbb
   3933261 -rw-rw-r-- 2 mes mes 0 Dec  6 15:44 ccc
+  /tmp/test $ stat ccc
+    File: ccc
+    Size: 0               Blocks: 0          IO Block: 4096   regular empty file
+  Device: fd00h/64768d    Inode: 3933261     Links: 2
+  Access: (0664/-rw-rw-r--)  Uid: ( 1000/     mes)   Gid: ( 1000/     mes)
+  Access: 2023-12-06 15:44:02.257552590 +0800
+  Modify: 2023-12-06 15:44:02.257552590 +0800
+  Change: 2023-12-06 15:44:23.713551331 +0800
+   Birth: 2023-12-06 15:44:02.257552590 +0800
   /tmp/test $
 #+END_EXAMPLE
 
