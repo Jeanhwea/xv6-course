@@ -17,7 +17,7 @@ digraph inode_relation {
     indirect [label="<i1>addr1|...|<ix>addrX|...|<i2>addr128"];
   }
   subgraph cluster_data {
-    label =<<b>block pool</b>>; style=filled; color=lightgray;
+    label =<<b>blocks in memory</b>>; style=filled; color=lightgray;
     data2  [label="block #1"];
     data1  [label="block #3"];
     data4  [label="block #4"];
