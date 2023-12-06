@@ -7,17 +7,9 @@
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 
-* Block 分配器
-1. 文件和目录的内容都存放在磁盘块 block 中
-2. block 都是从空闲池中获取的数据
-   - 磁盘中有一个 block 空闲位图 freebitmap
-   - 每一位表示一个 block 是否空闲
-3. sb.size 表示文件系统块总数
-4. BSIZE
-   - 通常 block 要比 buf 大
-   - 但是 xv6 中, 1 block = 1 buf = BSIZE = 512
-5. balloc 分配一个新的磁盘块 block
-6. bfree 释放一个磁盘块
+* inode 数据结构
+
+[[file:img/inode-relation.dot.png]]
 
 inode 例子
 #+BEGIN_EXAMPLE
@@ -53,6 +45,27 @@ inode 例子
   /tmp/test $
 #+END_EXAMPLE
 
+1. dinode
+   - type: file/directory/device
+   - nlink link 数量
+   - size 文件大小
+   - addrs 数据块地址
+2. inode
+   - inum
+   - ref 内存中引用 inode 计数
+
+* block 分配器
+1. 文件和目录的内容都存放在磁盘块 block 中
+2. block 都是从空闲池中获取的数据
+   - 磁盘中有一个 block 空闲位图 freebitmap
+   - 每一位表示一个 block 是否空闲
+3. sb.size 表示文件系统块总数
+4. BSIZE
+   - 通常 block 要比 buf 大
+   - 但是 xv6 中, 1 block = 1 buf = BSIZE = 512
+5. balloc 分配一个新的磁盘块 block
+6. bfree 释放一个磁盘块
+
 * inode 内存操作
 1. inode 描述一个匿名的文件
 2. 分配
@@ -66,18 +79,10 @@ inode 例子
 4. 合法性 ip->valid
    - ilock() 从磁盘读取 inode 数据, 并设置 ip->valid=1
    - iput() 当 ip->ref=0 时, 清理 ip->valid
+5. bmap
 
 * inode 读写
 1. readi 读取 inode 数据
+   - iget() 获取 inode
+   - ilock() 读取数据
 2. writei 写入 inode 数据
-
-* inode 数据结构
-
-[[file:img/inode-relation.dot.png]]
-
-1. dinode
-   - type: file/directory/device
-   - nlink link 数量
-   - size 文件大小
-   - addrs 数据块地址
-2. bmap
