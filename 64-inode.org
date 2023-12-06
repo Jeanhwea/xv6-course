@@ -71,40 +71,9 @@ inode 例子
 1. readi 读取 inode 数据
 2. writei 写入 inode 数据
 
-* dinode 磁盘存储
-#+BEGIN_SRC ditaa :file ./img/ditaa-dinode-struct.png :cmdline -E -s 1.5
-  dinode
-  +---------------+
-  |    type       |
-  +---------------+
-  |    major      |
-  +---------------+
-  |    minor      |
-  +---------------+
-  |    nlink      |
-  +---------------+
-  |    size       |
-  +---------------+                       +------+
-  |    addr1      |---------------------->| data |
-  +---------------+                       +------+
-  |     ...       |                       |      |
-  +---------------+                       +------+
-  |    addr12     |---------------------->| data |
-  +---------------+                       +------+
-  |   indirect    |                       |      |
-  +---------------+                       |      |
-        |             indirect data       |      |
-        +----------->  +---------+        +------+
-                       |  addr1  |------->| data |
-                       |---------|        +------+
-                       |  ...    |        |      |
-                       |---------|        +------+
-                       | addr128 |------->| data |
-                       +---------+        +------+
-#+END_SRC
+* inode 数据结构
 
-#+RESULTS:
-[[file:./img/ditaa-dinode-struct.png]]
+[[file:img/inode-relation.dot.png]]
 
 1. dinode
    - type: file/directory/device
