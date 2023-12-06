@@ -17,14 +17,14 @@ digraph inode_relation {
     indirect [label="<i1>addr1|...|<ix>addrX|...|<i2>addr128"];
   }
   subgraph cluster_data {
-    label =<<b>blocks in memory</b>>; style=filled; color=lightgray;
-    data2  [label="block #1"];
-    data1  [label="block #3"];
-    data4  [label="block #4"];
-    idata1 [label="block #2"];
-    data7  [label="block #7"];
-    idataX [label="block #8"];
-    idata2 [label="block #5"];
+    label =<<b>data in disk</b>>; style=filled; color=lightgray;
+    data2  [label="data #1"];
+    data1  [label="data #3"];
+    data4  [label="data #4"];
+    idata1 [label="data #2"];
+    data7  [label="data #7"];
+    idataX [label="data #8"];
+    idata2 [label="data #5"];
   }
 
   dinode:d1 -> data1;
