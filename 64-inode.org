@@ -68,8 +68,8 @@ inode 例子
    - iput() 当 ip->ref=0 时, 清理 ip->valid
 
 * inode 读写
-1. readi
-2. writei
+1. readi 读取 inode 数据
+2. writei 写入 inode 数据
 
 * dinode 磁盘存储
 #+BEGIN_SRC ditaa :file ./img/ditaa-dinode-struct.png :cmdline -E -s 1.5
