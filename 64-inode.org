@@ -50,6 +50,8 @@ inode 例子
    - nlink link 数量
    - size 文件大小
    - addrs 数据块地址
+     - direct 6kB (NDIRECT*BSIZE)
+     - indirect 64kB (NINDIRECT*BSIZE)
 2. inode
    - inum
    - ref 内存中引用 inode 计数
