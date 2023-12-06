@@ -30,7 +30,11 @@
    - ilock() 从磁盘读取 inode 数据, 并设置 ip->valid=1
    - iput() 当 ip->ref=0 时, 清理 ip->valid
 
-* inode 磁盘存储
+* inode 读写
+1. readi
+2. writei
+
+* dinode 磁盘存储
 #+BEGIN_SRC ditaa :file ./img/ditaa-dinode-struct.png :cmdline -E -s 1.5
   dinode
   +---------------+
@@ -65,4 +69,9 @@
 #+RESULTS:
 [[file:./img/ditaa-dinode-struct.png]]
 
-1. bmap
+1. dinode
+   - type: file/directory/device
+   - nlink link 数量
+   - size 文件大小
+   - addrs 数据块地址
+2. bmap
