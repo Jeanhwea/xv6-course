@@ -6,8 +6,8 @@ digraph inode_relation {
     label =<<b>inode struct</b> (in memory)>; style=filled; color=white;
     inode [label="uint dev|uint inum|int ref|struct sleeplock lock|int valid|<f0>short type|short major|short minor|short nlink|uint size|<f9>uint addrs"];
   }
-  inode:f0 -> dinode:f0 [label=copy style=dashed arrowhead=none];
-  inode:f9 -> dinode:f9 [label=copy style=dashed arrowhead=none];
+  inode:f0 -> dinode:f0 [label=copy arrowhead=inv color=blue];
+  inode:f9 -> dinode:f9 [label=copy arrowhead=inv color=blue];
   subgraph cluster_dinode {
     label =<<b>dinode struct</b> (on disk)>; style=filled; color=white;
     dinode [label="<f0>short type|short major|short minor|short nlink|uint size|{<f9>uint addrs|<d1>addr1|...|<d2>addr12|<ind>indirect}"];
