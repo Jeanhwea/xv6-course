@@ -17,3 +17,6 @@
    - name
 
 * path 层
+1. namei 通过 path 查询 inode
+2. nameiparent 查询上级目录
+3. namex

@@ -1,0 +1,18 @@
+#+TITLE: 文件描述符层
+#+AUTHOR: Jinghui Hu
+#+EMAIL: hujinghui@buaa.edu.cn
+#+DATE: <2023-12-08 Fri>
+#+STARTUP: overview num indent
+#+OPTIONS: ^:nil
+#+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
+
+
+* fd
+1. file 数据结构
+2. 全局文件表 ftable
+
+* 文件操作
+1. filealloc/filedup
+2. fileclose
+3. fileread
+4. filewrite
