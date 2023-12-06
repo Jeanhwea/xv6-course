@@ -2,15 +2,19 @@ IMG_DIR := img
 
 DOTS    := $(shell find $(IMG_DIR) -name *.dot)
 PDFS    := $(DOTS:%=%.pdf)
+PNGS    := $(DOTS:%=%.png)
 
 
 all: build images
 
-images: $(PDFS)
-	echo $(PDFS)
+images: $(PDFS) $(PNGS)
+
 
 %.dot.pdf: %.dot
 	dot -Tpdf $< -o $@
+
+%.dot.png: %.dot
+	dot -Tpng $< -o $@
 
 build:
 	make -C lab
