@@ -13,8 +13,11 @@
    - 磁盘中有一个 block 空闲位图 freebitmap
    - 每一位表示一个 block 是否空闲
 3. sb.size 表示文件系统块总数
-4. balloc 分配一个新的磁盘块 block
-5. bfree 释放一个磁盘块
+4. BSIZE
+   - 通常 block 要比 buf 大
+   - 但是 xv6 中, 1 block = 1 buf = BSIZE = 512
+5. balloc 分配一个新的磁盘块 block
+6. bfree 释放一个磁盘块
 
 * inode 内存操作
 1. inode 描述一个匿名的文件
