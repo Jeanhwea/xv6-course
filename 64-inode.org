@@ -19,6 +19,31 @@
 5. balloc 分配一个新的磁盘块 block
 6. bfree 释放一个磁盘块
 
+inode 例子
+#+BEGIN_EXAMPLE
+  /tmp $ mkdir test
+  /tmp $ cd test
+  /tmp/test $ ls
+  /tmp/test $ touch aaa
+  /tmp/test $ ll -i
+  total 0
+  3933261 -rw-rw-r-- 1 mes mes 0 Dec  6 15:44 aaa
+  /tmp/test $ touch bbb
+  /tmp/test $ ll -i
+  total 0
+  3933261 -rw-rw-r-- 1 mes mes 0 Dec  6 15:44 aaa
+  3933263 -rw-rw-r-- 1 mes mes 0 Dec  6 15:44 bbb
+  /tmp/test $ ln aaa ccc
+  /tmp/test $ ls -i
+  3933261 aaa  3933263 bbb  3933261 ccc
+  /tmp/test $ ll -i
+  total 0
+  3933261 -rw-rw-r-- 2 mes mes 0 Dec  6 15:44 aaa
+  3933263 -rw-rw-r-- 1 mes mes 0 Dec  6 15:44 bbb
+  3933261 -rw-rw-r-- 2 mes mes 0 Dec  6 15:44 ccc
+  /tmp/test $
+#+END_EXAMPLE
+
 * inode 内存操作
 1. inode 描述一个匿名的文件
 2. 分配
