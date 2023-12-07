@@ -1,4 +1,4 @@
-#+TITLE: inode 层介绍
+#+TITLE: inode 层
 #+AUTHOR: Jinghui Hu
 #+EMAIL: hujinghui@buaa.edu.cn
 #+DATE: <2023-12-03 Sun>

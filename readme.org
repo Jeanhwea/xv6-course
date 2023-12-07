@@ -55,6 +55,7 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
   1) [[file:61-fs-overview.org][文件系统概览]] | [[https://www.bilibili.com/video/BV1ac411S7dL/][视频 61]]
   2) [[file:62-buffer.org][Disk 和 Buffer]] | [[https://www.bilibili.com/video/BV1Lu4y1V73q/][视频 62]]
   3) [[file:63-logging.org][Log 层]] | [[https://www.bilibili.com/video/BV1QN411L7S4/][视频 63]]
+  4) [[file:64-inode.org][inode 层]]
 
 * 答疑
 1. 12a 答疑一 [[file:12a-Q&A.org]] | [[https://www.bilibili.com/video/BV1a94y1G7HV/][视频 12a]]
