@@ -2,15 +2,19 @@ digraph ds2_struct {
   rankdir = LR;
   node [shape=record];
 
-  file [
-    label=<
-      <table border="0" cellborder="1" cellspacing="0">
-        <tr><td bgcolor="lightgray" border="0"><b>inode</b></td></tr>
-        <tr><td>hello 2</td></tr>
-        <tr><td>hello 3</td></tr>
-        <tr><td>hello 4</td></tr>
-        <tr><td>hello 5</td></tr>
-      </table>
-    >
+  wt [
+    shape=plain;
+    label=<<table border="0" cellborder="0" cellspacing="0" cellpadding="0">
+      <tr><td bgcolor="white" border="0"><b>WorkTask</b></td></tr>
+      <tr><td>
+        <table align="left" border="0" cellborder="1" cellspacing="0" cellpadding="0">
+          <tr><td align="center">uint dev</td></tr>
+          <tr><td align="center">uint inum</td></tr>
+          <tr><td align="center">int ref</td></tr>
+          <tr><td align="center">struct sleeplock lock</td></tr>
+          <tr><td align="center">int valid</td></tr>
+        </table>
+      </td></tr>
+    </table>>
   ];
 }
