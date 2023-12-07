@@ -1,0 +1,16 @@
+digraph ds2_struct {
+  rankdir = LR;
+  node [shape=record, style=filled];
+
+  file [
+    label=<
+      <table border="0" cellborder="1" cellspacing="0">
+        <tr><td>hello 1</td></tr>
+        <tr><td>hello 2</td></tr>
+        <tr><td>hello 3</td></tr>
+        <tr><td>hello 4</td></tr>
+        <tr><td>hello 5</td></tr>
+      </table>
+    >
+  ];
+}
