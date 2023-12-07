@@ -9,10 +9,16 @@
 
 * fd
 1. file 数据结构
+   - ref 结构体的引用计数
+   - readable 读权限
+   - writable 写权限
+   - off 文件偏移
 2. 全局文件表 ftable
 
 * 文件操作
-1. filealloc/filedup
-2. fileclose
-3. fileread
-4. filewrite
+1. filealloc/filedup/fileclose
+   - filealloc 分配一个 ref=0 的 file struct
+   - filedup 增加 ref
+   - fileclose 减少 ref, 释放资源
+2. fileread 读取文件内容
+3. filewrite 写入文件内容
