@@ -22,3 +22,8 @@
    - fileclose 减少 ref, 释放资源
 2. fileread 读取文件内容
 3. filewrite 写入文件内容
+
+* 文件相关的系统调用
+[[file:../../study/os/xv6-public/sysfile.c]]
+
+1. sys_link
