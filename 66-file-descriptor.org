@@ -23,7 +23,7 @@
 2. fileread 读取文件内容
 3. filewrite 写入文件内容
 
-* 文件相关的系统调用
+* 文件系统调用 sysfile.c
 [[file:../../study/os/xv6-public/sysfile.c]]
 
 1. sys_link
