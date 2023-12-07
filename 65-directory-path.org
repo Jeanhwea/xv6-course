@@ -6,6 +6,7 @@
 #+OPTIONS: ^:nil
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
+
 * directory 层
 1. dirent 结构体 directory entry
    - inum 查找 inode
@@ -20,3 +21,5 @@
 1. namei 通过 path 查询 inode
 2. nameiparent 查询上级目录
 3. namex
+   - 如果 / 开头, 跳转到根目录, 否则从当前目录开始搜索
+   - dirlookup 递归查找是否是当前目录
