@@ -13,13 +13,17 @@
    - name 目录名
 2. dirlookup 在 dp 中查找 name 对应的 inode
    - 如果存在, 返回 inode
+   - 同时写入偏移 poff
 3. dirlink 往 dp 中写入新的 inode 数据
    - inum
    - name
 
 * path 层
-1. namei 通过 path 查询 inode
-2. nameiparent 查询上级目录
-3. namex
+1. path 目录结构
+   - /aa/bb/a
+   - char *
+2. namei 通过 path 查询 inode
+3. nameiparent 查询上级目录
+4. namex
    - 如果 / 开头, 跳转到根目录, 否则从当前目录开始搜索
    - dirlookup 递归查找是否是当前目录
