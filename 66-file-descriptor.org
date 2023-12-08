@@ -7,7 +7,7 @@
 #+PROPERTY: header-args:sh :results output :dir ../../study/os/xv6-public
 
 
-* fd
+* fd 文件描述符
 1. file 数据结构
    - ref 结构体的引用计数
    - readable 读权限
@@ -16,6 +16,8 @@
 2. 全局文件表 ftable
 
 * 文件操作
+[[file:../../study/os/xv6-public/file.c]]
+
 1. filealloc/filedup/fileclose
    - filealloc 分配一个 ref=0 的 file struct
    - filedup 增加 ref
