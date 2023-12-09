@@ -9,11 +9,19 @@
 
 * fd 文件描述符
 1. file 数据结构
+   - type 实现 unix 的一切皆文件
+     1) FD_NONE
+     2) FD_PIPE 管道
+     3) FD_INODE
+        - T_DIR 目录
+        - T_FILE 文件
+        - T_DEV 设备
    - ref 结构体的引用计数
    - readable 读权限
    - writable 写权限
    - off 文件偏移
 2. 全局文件表 ftable
+   - NFILE 100  // open files per system
 
 * 文件操作
 [[file:../../study/os/xv6-public/file.c]]
@@ -23,7 +31,17 @@
    - filedup 增加 ref
    - fileclose 减少 ref, 释放资源
 2. fileread 读取文件内容
+   - readable
+   - ilock 读取 ip 的数据
+   - readi 读取 inode 数据
+   - iunlock 释放 ip 资源
 3. filewrite 写入文件内容
+   - writable
+   - begin_op
+   - ilock 读取 ip 的数据
+   - writei 写入 inode 数据
+   - iunlock 释放 ip 资源
+   - end_op
 
 * 文件系统调用 sysfile.c
 [[file:../../study/os/xv6-public/sysfile.c]]
