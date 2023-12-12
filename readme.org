@@ -59,6 +59,9 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
   5) [[file:65-directory-path.org][directory 层和 pathname 层]] | [[https://www.bilibili.com/video/BV1YC4y1R7Bn/][视频 65]]
   6) [[file:66-file-descriptor.org][文件描述符层]] | [[https://www.bilibili.com/video/BV1ec41117jr/][视频 66]]
 
+* 总结
+1. 10 月
+
 * 答疑
 1. 12a 答疑一 [[file:12a-Q&A.org]] | [[https://www.bilibili.com/video/BV1a94y1G7HV/][视频 12a]]
 2. 34a 答疑二 [[file:34a-Q&A.org]] | [[https://www.bilibili.com/video/BV1eb4y1M7ie/][视频 34a]]
