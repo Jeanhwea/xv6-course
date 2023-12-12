@@ -60,7 +60,7 @@ XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且�
   6) [[file:66-file-descriptor.org][文件描述符层]] | [[https://www.bilibili.com/video/BV1ec41117jr/][视频 66]]
 
 * 总结
-1. 10 月
+1. 开始录制时间 2023 年
 
 * 答疑
 1. 12a 答疑一 [[file:12a-Q&A.org]] | [[https://www.bilibili.com/video/BV1a94y1G7HV/][视频 12a]]
