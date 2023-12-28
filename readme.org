@@ -13,6 +13,11 @@
 - Github [[https://github.com/Jeanhwea/xv6-course][link]]
 - Gitee 镜像 [[https://gitee.com/jeanhwea/course-xv6][link]]
 
+* 捐赠
+好心的捐赠大佬可以备注一下： xv6+昵称，下面会记录一下，感谢！
+
+1. V*i 2023-12-27
+
 * 简介
 
 XV6 是 MIT 开发的一个教学用的完整的类 Unix 操作系统，并且在 MIT 的操作系统课程
